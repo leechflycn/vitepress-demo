@@ -1,0 +1,26 @@
+
+> vitepress-demo@1.0.0 docs:dev
+> vitepress dev docs --host 0.0.0.0 --port 5173
+
+✘ [ERROR] Syntax error '"'
+
+    docs/.vitepress/config.js:4:10:
+      4 │   title: \"老冯的技术小站\",
+        ╵           ^
+
+failed to load config from /home/leechfly/vitepress-demo/docs/.vitepress/config.js
+failed to start server. error:
+Build failed with 1 error:
+docs/.vitepress/config.js:4:10: ERROR: Syntax error '"'
+Error: Build failed with 1 error:
+docs/.vitepress/config.js:4:10: ERROR: Syntax error '"'
+    at failureErrorWithLog (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:943:7)
+    at /home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/leechfly/vitepress-demo/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:561:12)
