@@ -6,13 +6,15 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: 'Docker教程', link: '/docker-install' }
+      { text: 'Docker教程', link: '/docker-install' },
+      { text: '业务合作', link: '/openclaw-service' }
     ],
     sidebar: [
       {
         text: '近期更新',
         items: [
-          { text: 'Docker 安装与配置', link: '/docker-install' }
+          { text: 'Docker 安装与配置', link: '/docker-install' },
+          { text: '🦞 OpenClaw AI 部署与定制', link: '/openclaw-service' }
         ]
       }
     ]
