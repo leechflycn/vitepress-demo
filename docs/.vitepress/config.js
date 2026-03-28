@@ -8,7 +8,6 @@ export default defineConfig({
       { text: "首页", link: "/" },
       { text: "IT 折腾日记", items: [
         { text: "硬件与 NAS", link: "/hardware/pve-samba" },
-        { text: "网络与代理", link: "/tools/network-pitfalls" },
         { text: "账号风控", link: "/tools/risk-control" },
         { text: "建站避坑", link: "/tools/cloudflare-cdn" }
       ]},
@@ -28,7 +27,6 @@ export default defineConfig({
         {
           text: "网络与建站",
           items: [
-            { text: "旁路由透明代理避坑", link: "/tools/network-pitfalls" },
             { text: "账号风控：TG与服务器", link: "/tools/risk-control" },
             { text: "域名托管与 CDN 加速", link: "/tools/cloudflare-cdn" }
           ]

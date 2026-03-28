@@ -15,11 +15,11 @@ hero:
 
 features:
   - title: "🛠️ 硬件与系统折腾"
-    details: "PVE 虚拟机搭建、NAS 存储方案、软路由配置实战与避坑。"
+    details: "PVE 虚拟机搭建、NAS 存储方案配置实战与避坑。"
     link: /hardware/pve-samba
-  - title: "🌐 网络、代理与风控"
-    details: "旁路由透明代理排坑，TG账号与服务器风控防封指南。"
-    link: /tools/network-pitfalls
+  - title: "🌐 账号安全与风控"
+    details: "TG账号养号技巧与服务器防风控防封指南。"
+    link: /tools/risk-control
   - title: "🤖 AI 私有化部署"
     details: "OpenClaw 自动化助手本地部署方案，大模型 API 接入配置。"
     link: /openclaw-service
