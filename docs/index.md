@@ -17,9 +17,9 @@ features:
   - title: "🛠️ 硬件与系统折腾"
     details: "PVE 虚拟机搭建、NAS 存储方案、软路由配置实战与避坑。"
     link: /hardware/pve-samba
-  - title: "🌐 网络与代理"
-    details: "旁路由 OpenClash 透明代理原理，VPS建站、CDN 加速及避坑指南。"
-    link: /tools/openclash-proxy
+  - title: "🌐 网络、代理与风控"
+    details: "旁路由透明代理排坑，TG账号与服务器风控防封指南。"
+    link: /tools/network-pitfalls
   - title: "🤖 AI 私有化部署"
     details: "OpenClaw 自动化助手本地部署方案，大模型 API 接入配置。"
     link: /openclaw-service
