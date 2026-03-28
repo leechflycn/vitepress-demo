@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-  title: "老冯的技术小站",
+  title: "影子的电脑小白技术分享平台",
   description: "视频教程配套代码和笔记分享",
   themeConfig: {
     nav: [
