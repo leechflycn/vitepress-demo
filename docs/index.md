@@ -3,13 +3,24 @@ layout: home
 
 hero:
   name: "老冯的技术小站"
-  text: "OpenClaw AI 部署与定制"
-  tagline: B站看视频，这里抄代码！让 AI 接管你的重复性工作。
+  text: "影子的折腾日记"
+  tagline: "从零折腾软路由、PVE与AI本地部署，B站视频配套代码避坑指南"
   actions:
     - theme: brand
-      text: 🚀 了解 OpenClaw 部署服务
-      link: /openclaw-service
+      text: "🚀 开始探索"
+      link: /tutorials/docker-install
     - theme: alt
-      text: 来看最新的 Docker 教程
-      link: /docker-install
+      text: "🦞 OpenClaw 定制服务"
+      link: /openclaw-service
+
+features:
+  - title: "🛠️ 硬件与系统折腾"
+    details: "PVE 虚拟机搭建、NAS 存储方案、软路由配置实战与避坑。"
+    link: /hardware/pve-samba
+  - title: "🌐 网络与代理"
+    details: "旁路由 OpenClash 透明代理原理，VPS建站、CDN 加速及避坑指南。"
+    link: /tools/openclash-proxy
+  - title: "🤖 AI 私有化部署"
+    details: "OpenClaw 自动化助手本地部署方案，大模型 API 接入配置。"
+    link: /openclaw-service
 ---
