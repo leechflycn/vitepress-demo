@@ -12,6 +12,7 @@ export default defineConfig({
         { text: "建站避坑", link: "/tools/cloudflare-cdn" }
       ]},
       { text: "Docker 教程", link: "/tutorials/docker-install" },
+            { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
       { text: "🦞 部署服务", link: "/openclaw-service" }
     ],
     sidebar: {
@@ -19,7 +20,8 @@ export default defineConfig({
         {
           text: "教程与配套代码",
           items: [
-            { text: "Docker 安装与配置", link: "/tutorials/docker-install" }
+            { text: "Docker 安装与配置", link: "/tutorials/docker-install" },
+            { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" }
           ]
         }
       ],
