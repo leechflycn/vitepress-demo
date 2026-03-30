@@ -13,7 +13,6 @@ export default defineConfig({
       ]},
       { text: "Docker 教程", link: "/tutorials/docker-install" },
             { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
-            { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
       { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
       { text: "🦞 部署服务", link: "/openclaw-service" }
     ],
@@ -33,7 +32,8 @@ export default defineConfig({
           text: "网络与建站",
           items: [
             { text: "账号风控：TG与服务器", link: "/tools/risk-control" },
-            { text: "域名托管与 CDN 加速", link: "/tools/cloudflare-cdn" }
+            { text: "域名托管与 CDN 加速", link: "/tools/cloudflare-cdn" },
+            { text: "小白必看：如何给独立博客发帖", link: "/tools/vitepress-publish" }
           ]
         }
       ],
