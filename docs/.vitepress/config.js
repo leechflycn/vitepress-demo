@@ -13,6 +13,8 @@ export default defineConfig({
       ]},
       { text: "Docker 教程", link: "/tutorials/docker-install" },
             { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
+            { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
+      { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
       { text: "🦞 部署服务", link: "/openclaw-service" }
     ],
     sidebar: {
@@ -21,7 +23,8 @@ export default defineConfig({
           text: "教程与配套代码",
           items: [
             { text: "Docker 安装与配置", link: "/tutorials/docker-install" },
-            { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" }
+            { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
+            { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" }
           ]
         }
       ],
