@@ -17,20 +17,20 @@ hero:
       link: /openclaw-service
 
 features:
-  - title: "📚 最新文章与避坑指南"
-    details: "这里汇总了频道最新发布的所有图文教程，小白实操，一看就会。"
+  - title: "📚 避坑指南"
+    details: "频道最新发布的所有图文教程，小白实操，一看就会。"
     link: /tools/vitepress-publish
     icon: 📝
   - title: "🛠️ 硬件与系统"
-    details: "PVE 虚拟机搭建、NAS 存储方案配置实战与避坑指南。"
+    details: "PVE 虚拟机搭建、NAS 存储方案配置实战与避坑。"
     link: /hardware/pve-samba
     icon: 🖥️
   - title: "🌐 网络与建站"
-    details: "旁路由透明代理配置，域名托管与 Cloudflare CDN 加速防风控。"
+    details: "旁路由配置，域名托管与 Cloudflare CDN 加速防风控。"
     link: /tools/cloudflare-cdn
     icon: ☁️
   - title: "🤖 AI 私有化"
-    details: "OpenClaw 自动化助手本地部署方案，大模型 API 接入实战。"
+    details: "OpenClaw 本地部署方案，大模型 API 接入实战。"
     link: /openclaw-service
     icon: 🧠
 ---
@@ -38,42 +38,66 @@ features:
 <style>
 .recent-posts {
   max-width: 1152px;
-  margin: 0 auto;
-  padding: 24px;
+  margin: 40px auto;
+  padding: 0 24px;
 }
 .recent-posts h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
   color: var(--vp-c-text-1);
+  text-align: center;
 }
-.post-list {
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.post-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  padding: 24px;
+  background-color: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-bg-soft);
+  border-radius: 12px;
+  transition: border-color 0.25s, background-color 0.25s;
+  text-decoration: none !important;
 }
-.post-item {
+.post-card:hover {
+  border-color: var(--vp-c-brand-1);
+}
+.post-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  background-color: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  transition: all 0.25s;
-}
-.post-item:hover {
-  background-color: var(--vp-c-bg-mute);
-  transform: translateY(-2px);
+  align-items: flex-start;
+  margin-bottom: 12px;
 }
 .post-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--vp-c-brand-1);
-  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  line-height: 1.4;
 }
 .post-date {
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-mute);
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+.post-excerpt {
   font-size: 14px;
   color: var(--vp-c-text-2);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.read-more {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
 }
 
 .visitor-stats {
@@ -82,28 +106,56 @@ features:
   color: var(--vp-c-text-2);
   font-size: 14px;
   border-top: 1px solid var(--vp-c-divider);
-  padding-top: 20px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 </style>
 
 <div class="recent-posts">
-  <h2>📖 最新折腾记录</h2>
-  <div class="post-list">
-    <a href="/tools/vitepress-publish.html" class="post-item">
-      <span class="post-title">📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？</span>
-      <span class="post-date">最新发布</span>
+  <h2>📖 最新文章</h2>
+  <div class="post-grid">
+    <a href="/tools/vitepress-publish.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">小白实操：如何给自己的独立博客发布新文章？</span>
+        <span class="post-date">建站</span>
+      </div>
+      <div class="post-excerpt">
+        当你成功搭建了极简清爽的独立博客，肯定会面临一个问题：“我自己平时怎么发新文章呢？” 不用懂代码，不用懂运维。你只需要像写日记一样准备 .md 文件，然后靠 3 句魔法命令，网站就会全自动更新...
+      </div>
+      <span class="read-more">阅读全文 →</span>
     </a>
-    <a href="/tutorials/docker-install.html" class="post-item">
-      <span class="post-title">🐳 3分钟装好 Docker (附国内可用镜像源)</span>
-      <span class="post-date">基础环境</span>
+    
+    <a href="/tutorials/docker-install.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">3分钟装好 Docker (附国内可用镜像源)</span>
+        <span class="post-date">Docker</span>
+      </div>
+      <div class="post-excerpt">
+        这是B站刚发布视频的配套代码。由于网络原因，我推荐大家使用国内镜像源的一键安装脚本。装完之后别忘了把它跑起来，并且设置为每次开机都自动运行，一键复制粘贴到终端即可...
+      </div>
+      <span class="read-more">阅读全文 →</span>
     </a>
-    <a href="/hardware/pve-samba.html" class="post-item">
-      <span class="post-title">🖥️ PVE 虚拟机搭建与 NAS 存储架构</span>
-      <span class="post-date">硬件架构</span>
+
+    <a href="/hardware/pve-samba.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">PVE 虚拟机搭建与 NAS 存储架构避坑</span>
+        <span class="post-date">硬件</span>
+      </div>
+      <div class="post-excerpt">
+        从零折腾 PVE 虚拟机底层架构，以及如何利用 CasaOS 和易有云等工具，打造个人家庭数据中心 NAS 存储。分享局域网共享设置与异地远程访问踩坑记录...
+      </div>
+      <span class="read-more">阅读全文 →</span>
     </a>
-    <a href="/tools/cloudflare-cdn.html" class="post-item">
-      <span class="post-title">☁️ Cloudflare CDN 加速防风控避坑指南</span>
-      <span class="post-date">网站运营</span>
+
+    <a href="/tools/cloudflare-cdn.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">Cloudflare CDN 加速与防封指南</span>
+        <span class="post-date">网络</span>
+      </div>
+      <div class="post-excerpt">
+        免费二级域名锁死 NS 记录无法绑 Cloudflare 的惨痛教训。分享网站如何接入 CDN 提速，以及服务器 IP 防火墙设置、防风控、防封端口的终极保姆级解决方案...
+      </div>
+      <span class="read-more">阅读全文 →</span>
     </a>
   </div>
 </div>

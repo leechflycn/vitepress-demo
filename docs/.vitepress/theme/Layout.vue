@@ -8,7 +8,7 @@ const { isDark, frontmatter } = useData()
 const container = ref(null)
 
 const initComments = () => {
-  if (!container.value || frontmatter.value.comments === false) return
+  if (!container.value || frontmatter.value.comments === false || frontmatter.value.layout === 'home') return
   container.value.innerHTML = ''
   const script = document.createElement('script')
   script.src = 'https://utteranc.es/client.js'
@@ -38,7 +38,7 @@ watch(isDark, () => {
 <template>
   <DefaultTheme.Layout>
     <template #doc-after>
-      <div ref="container" class="comments-container"></div>
+      <div v-if="frontmatter.layout !== 'home'" ref="container" class="comments-container"></div>
     </template>
   </DefaultTheme.Layout>
 </template>
