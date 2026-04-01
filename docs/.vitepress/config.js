@@ -12,8 +12,9 @@ export default defineConfig({
         { text: "建站避坑", link: "/tools/cloudflare-cdn" }
       ]},
       { text: "Docker 教程", link: "/tutorials/docker-install" },
-            { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
+      { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
       { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
+      { text: "飞书机器人 (急救龙虾) 教程", link: "/tutorials/feishu-bot-setup" },
       { text: "🦞 部署服务", link: "/openclaw-service" }
     ],
     sidebar: {
@@ -23,7 +24,8 @@ export default defineConfig({
           items: [
             { text: "Docker 安装与配置", link: "/tutorials/docker-install" },
             { text: "零基础搞定 NAS 外网访问！", link: "/tutorials/nas-remote" },
-            { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" }
+            { text: "手机随时访问 NAS (易有云)", link: "/tutorials/nas-phone-access" },
+            { text: "飞书机器人注册与配置全通关指南", link: "/tutorials/feishu-bot-setup" }
           ]
         }
       ],
