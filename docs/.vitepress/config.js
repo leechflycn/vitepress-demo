@@ -36,7 +36,7 @@ export default defineConfig({
             { text: "账号风控：TG与服务器", link: "/tools/risk-control" },
             { text: "域名托管与 CDN 加速", link: "/tools/cloudflare-cdn" },
             { text: "小白必看：如何给独立博客发帖", link: "/tools/vitepress-publish" }
-      { text: "实战：如何优雅更换博客域名", link: "/tools/domain-migration" },
+            , { text: "实战：如何优雅更换博客域名", link: "/tools/domain-migration" }
           ]
         }
       ],
