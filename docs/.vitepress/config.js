@@ -1,8 +1,8 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
-  title: "影子的电脑小白技术分享平台",
-  description: "视频教程配套代码和笔记分享",
+  title: "leechbox",
+  description: "影子的折腾日常",
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
