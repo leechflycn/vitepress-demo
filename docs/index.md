@@ -114,6 +114,17 @@ features:
 <div class="recent-posts">
   <h2>📖 最新文章</h2>
   <div class="post-grid">
+<a href="/tutorials/openclaw-recovery.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
+        <span class="post-date">AI 私有化</span>
+      </div>
+      <div class="post-excerpt">
+        当你深度依赖的本地 AI 助理因为改错代码崩溃失联时，千万别慌。分享一套纯物理层的故障排查排障与“时光机”数据回滚急救方案...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+
 <a href="/hardware/oect-hdparm-sleep.html" class="post-card">
       <div class="post-header">
         <span class="post-title">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战</span>
