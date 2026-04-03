@@ -114,6 +114,17 @@ features:
 <div class="recent-posts">
   <h2>📖 最新文章</h2>
   <div class="post-grid">
+<a href="/hardware/oect-hdparm-sleep.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战</span>
+        <span class="post-date">硬件</span>
+      </div>
+      <div class="post-excerpt">
+        闲置网心云 OECT 刷入 Armbian + CasaOS 做家用 NAS，外挂 2T 硬盘却 24 小时狂转不休眠？利用 hdparm 与 udev 规则，彻底治愈硬盘的“不眠之症”...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+
     <a href="/tools/vitepress-publish.html" class="post-card">
       <div class="post-header">
         <span class="post-title">小白实操：如何给自己的独立博客发布新文章？</span>
