@@ -147,6 +147,17 @@ features:
       <span class="read-more">阅读全文 →</span>
     </a>
 
+    <a href="/tools/twikoo-rss.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">给静态博客加上灵魂：旁路部署 Twikoo 评论系统实战</span>
+        <span class="post-date">建站</span>
+      </div>
+      <div class="post-excerpt">
+        静态博客天然不支持动态交互，但借助 Twikoo 我们可以把这块动态拼图补上。本文记录了在 PVE 独立开通 LXC 容器部署后端，以及 VitePress 前端挂载与生成 RSS 订阅源的全过程。
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+
     <a href="/tools/vitepress-publish.html" class="post-card">
       <div class="post-header">
         <span class="post-title">小白实操：如何给自己的独立博客发布新文章？</span>
