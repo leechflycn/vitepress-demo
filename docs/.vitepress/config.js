@@ -48,6 +48,7 @@ export default defineConfig({
         {
           text: '教程与配套代码',
           items: [
+            { text: '告别纯文本！AI 助理双核记忆系统实战', link: '/tutorials/ai-memory-system' },
             { text: 'Docker 安装与配置', link: '/tutorials/docker-install' },
             { text: '零基础搞定 NAS 外网访问！', link: '/tutorials/nas-remote' },
             { text: '手机随时访问 NAS (易有云)', link: '/tutorials/nas-phone-access' },
