@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>leechbox</title>
+        <link>https://leechbox.xyz/</link>
+        <description>影子的折腾日常</description>
+        <lastBuildDate>Sat, 04 Apr 2026 20:37:23 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>zh-CN</language>
+        <copyright>Copyright © 2026 影子的电脑小白技术分享平台</copyright>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/hardware/oect-hdparm-sleep.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/hardware/oect-hdparm-sleep.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="oect-armbian-挂载外置硬盘不休眠的排障与修复实战" tabindex="-1">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战 <a class="header-anchor" href="#oect-armbian-挂载外置硬盘不休眠的排障与修复实战" aria-label="Permalink to &quot;OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战&quot;">&ZeroWidthSpace;</a></h1>
+<p>前几天搞定了一台闲置的网心云 OECT，底层刷入了 Armbian 25.5.1，并在上面跑起了 CasaOS。为了把它改造成家用轻量 NAS 和备份中心，我将一块 2T 西数硬盘外挂了上去（目前作为 PVE 和 OpenClaw 的滚动备份盘）。</p>
+<p>但很快发现一个问题：这块 2T 硬盘它<strong>不休眠</strong>。不管有没有数据读写，它就像打了鸡血一样全天候运转。虽然做 NAS 的盘本该如此，但这毕竟是家用闲置设备的废物利用，没必要让它 24 小时空转消耗寿命，听着也烦。</p>
+<p>所以今天花了一点时间，把这个“不眠之症”给治了。在此记录一下排查与修复的过程。</p>
+<h2 id="_1-确认病因-谁在阻止硬盘休眠" tabindex="-1">1. 确认病因：谁在阻止硬盘休眠？ <a class="header-anchor" href="#_1-确认病因-谁在阻止硬盘休眠" aria-label="Permalink to &quot;1. 确认病因：谁在阻止硬盘休眠？&quot;">&ZeroWidthSpace;</a></h2>
+<p>Linux 下控制硬盘休眠最常见的工具是 <code>hdparm</code>。</p>
+<p>一开始我直接尝试用 <code>hdparm -y /dev/sda</code> 让它强制进入待机模式，结果发现：它确实停转了，但<strong>不到 10 秒钟，又重新启动了</strong>。</p>
+<p>这说明系统里有后台进程在频繁读写（或者唤醒）这块硬盘。常见嫌疑犯包括：</p>
+<ul>
+<li>系统日志守护进程 (syslog, journald 等)</li>
+<li>SMART 监控 (smartd)</li>
+<li>CasaOS 或挂载在上面的 Docker 容器 (比如易有云 <code>linkease</code>) 定时扫描</li>
+</ul>
+<h2 id="_2-排查抓鬼-揪出幕后黑手" tabindex="-1">2. 排查抓鬼：揪出幕后黑手 <a class="header-anchor" href="#_2-排查抓鬼-揪出幕后黑手" aria-label="Permalink to &quot;2. 排查抓鬼：揪出幕后黑手&quot;">&ZeroWidthSpace;</a></h2>
+<p>为了找出具体是哪个进程在唤醒硬盘，我们可以借助 <code>fatrace</code> 或者 <code>iotop</code>，也可以通过开启内核的 block dump。</p>
+<p>最简单的办法，用 <code>iotop -o</code> 观察。</p>
+<p>结果发现，主要是我在上面跑的 <code>linkease</code> (易有云) Docker 容器，以及 CasaOS 本身的某些状态轮询在作祟。</p>
+<p>由于这台设备的主要用途是每天凌晨 04:00 和 05:00 接收 PVE 与主控机的备份压缩包，平时白天它的读写需求极低，我决定采用一种更强硬且智能的休眠策略。</p>
+<h2 id="_3-制定休眠策略-hdparm-规则" tabindex="-1">3. 制定休眠策略：hdparm 规则 <a class="header-anchor" href="#_3-制定休眠策略-hdparm-规则" aria-label="Permalink to &quot;3. 制定休眠策略：hdparm 规则&quot;">&ZeroWidthSpace;</a></h2>
+<p>最终，我选择配置 <code>hdparm</code> 规则，设定硬盘在空闲 10 分钟（600秒）后自动停转待机。</p>
+<h3 id="_3-1-测试休眠指令" tabindex="-1">3.1 测试休眠指令 <a class="header-anchor" href="#_3-1-测试休眠指令" aria-label="Permalink to &quot;3.1 测试休眠指令&quot;">&ZeroWidthSpace;</a></h3>
+<p>先用命令测试（假设你的硬盘是 <code>/dev/sda</code>）：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hdparm</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -S</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 120</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /dev/sda</span></span></code></pre>
+</div><p><em>注：<code>-S</code> 后面的数字是休眠时间，单位是 5 秒（120 x 5 = 600 秒，即 10 分钟）。</em></p>
+<h3 id="_3-2-固化配置到-udev-规则" tabindex="-1">3.2 固化配置到 udev 规则 <a class="header-anchor" href="#_3-2-固化配置到-udev-规则" aria-label="Permalink to &quot;3.2 固化配置到 udev 规则&quot;">&ZeroWidthSpace;</a></h3>
+<p>因为每次重启或者重新插拔硬盘，<code>hdparm</code> 的设置可能会失效。最好的办法是写进 udev 规则里，让它成为系统底层铁律。</p>
+<p>创建并编辑规则文件：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nano</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /etc/udev/rules.d/50-hdparm.rules</span></span></code></pre>
+</div><p>填入以下内容：</p>
+<div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span>ACTION=="add|change", KERNEL=="sda", ATTR{queue/rotational}=="1", RUN+="/sbin/hdparm -S 120 /dev/sda"</span></span></code></pre>
+</div><p>这个规则的意思是：当系统检测到添加或改变一个旋转型（非 SSD）硬盘设备 <code>sda</code> 时，自动执行休眠设定（空闲 10 分钟停转）。</p>
+<p>保存后，重新加载 udev 规则：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> udevadm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> control</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --reload-rules</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> udevadm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> trigger</span></span></code></pre>
+</div><h2 id="_4-优化-减少无谓的唤醒" tabindex="-1">4. 优化：减少无谓的唤醒 <a class="header-anchor" href="#_4-优化-减少无谓的唤醒" aria-label="Permalink to &quot;4. 优化：减少无谓的唤醒&quot;">&ZeroWidthSpace;</a></h2>
+<p>光设置了休眠还不够，为了防止刚休眠就被唤醒，我还做了一点优化：</p>
+<ul>
+<li>将一些不需要频繁写盘的日志路径迁移到了内存文件系统 (tmpfs)。</li>
+<li>在 CasaOS 中，非必要的应用如果在后台频繁扫描 <code>/mnt/Storage1</code>（我的 2T 硬盘挂载点），就将其休眠或者调整扫描周期。</li>
+</ul>
+<h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
+<p>折腾完之后，现在这块 2T 西数硬盘终于学会了“劳逸结合”。平时安安静静地待机停转，到了凌晨 4、5 点接收备份任务时再自动苏醒干活。</p>
+<p>废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="oect-armbian-挂载外置硬盘不休眠的排障与修复实战" tabindex="-1">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战 <a class="header-anchor" href="#oect-armbian-挂载外置硬盘不休眠的排障与修复实战" aria-label="Permalink to &quot;OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战&quot;">&ZeroWidthSpace;</a></h1>
+<p>前几天搞定了一台闲置的网心云 OECT，底层刷入了 Armbian 25.5.1，并在上面跑起了 CasaOS。为了把它改造成家用轻量 NAS 和备份中心，我将一块 2T 西数硬盘外挂了上去（目前作为 PVE 和 OpenClaw 的滚动备份盘）。</p>
+<p>但很快发现一个问题：这块 2T 硬盘它<strong>不休眠</strong>。不管有没有数据读写，它就像打了鸡血一样全天候运转。虽然做 NAS 的盘本该如此，但这毕竟是家用闲置设备的废物利用，没必要让它 24 小时空转消耗寿命，听着也烦。</p>
+<p>所以今天花了一点时间，把这个“不眠之症”给治了。在此记录一下排查与修复的过程。</p>
+<h2 id="_1-确认病因-谁在阻止硬盘休眠" tabindex="-1">1. 确认病因：谁在阻止硬盘休眠？ <a class="header-anchor" href="#_1-确认病因-谁在阻止硬盘休眠" aria-label="Permalink to &quot;1. 确认病因：谁在阻止硬盘休眠？&quot;">&ZeroWidthSpace;</a></h2>
+<p>Linux 下控制硬盘休眠最常见的工具是 <code>hdparm</code>。</p>
+<p>一开始我直接尝试用 <code>hdparm -y /dev/sda</code> 让它强制进入待机模式，结果发现：它确实停转了，但<strong>不到 10 秒钟，又重新启动了</strong>。</p>
+<p>这说明系统里有后台进程在频繁读写（或者唤醒）这块硬盘。常见嫌疑犯包括：</p>
+<ul>
+<li>系统日志守护进程 (syslog, journald 等)</li>
+<li>SMART 监控 (smartd)</li>
+<li>CasaOS 或挂载在上面的 Docker 容器 (比如易有云 <code>linkease</code>) 定时扫描</li>
+</ul>
+<h2 id="_2-排查抓鬼-揪出幕后黑手" tabindex="-1">2. 排查抓鬼：揪出幕后黑手 <a class="header-anchor" href="#_2-排查抓鬼-揪出幕后黑手" aria-label="Permalink to &quot;2. 排查抓鬼：揪出幕后黑手&quot;">&ZeroWidthSpace;</a></h2>
+<p>为了找出具体是哪个进程在唤醒硬盘，我们可以借助 <code>fatrace</code> 或者 <code>iotop</code>，也可以通过开启内核的 block dump。</p>
+<p>最简单的办法，用 <code>iotop -o</code> 观察。</p>
+<p>结果发现，主要是我在上面跑的 <code>linkease</code> (易有云) Docker 容器，以及 CasaOS 本身的某些状态轮询在作祟。</p>
+<p>由于这台设备的主要用途是每天凌晨 04:00 和 05:00 接收 PVE 与主控机的备份压缩包，平时白天它的读写需求极低，我决定采用一种更强硬且智能的休眠策略。</p>
+<h2 id="_3-制定休眠策略-hdparm-规则" tabindex="-1">3. 制定休眠策略：hdparm 规则 <a class="header-anchor" href="#_3-制定休眠策略-hdparm-规则" aria-label="Permalink to &quot;3. 制定休眠策略：hdparm 规则&quot;">&ZeroWidthSpace;</a></h2>
+<p>最终，我选择配置 <code>hdparm</code> 规则，设定硬盘在空闲 10 分钟（600秒）后自动停转待机。</p>
+<h3 id="_3-1-测试休眠指令" tabindex="-1">3.1 测试休眠指令 <a class="header-anchor" href="#_3-1-测试休眠指令" aria-label="Permalink to &quot;3.1 测试休眠指令&quot;">&ZeroWidthSpace;</a></h3>
+<p>先用命令测试（假设你的硬盘是 <code>/dev/sda</code>）：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> hdparm</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -S</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 120</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /dev/sda</span></span></code></pre>
+</div><p><em>注：<code>-S</code> 后面的数字是休眠时间，单位是 5 秒（120 x 5 = 600 秒，即 10 分钟）。</em></p>
+<h3 id="_3-2-固化配置到-udev-规则" tabindex="-1">3.2 固化配置到 udev 规则 <a class="header-anchor" href="#_3-2-固化配置到-udev-规则" aria-label="Permalink to &quot;3.2 固化配置到 udev 规则&quot;">&ZeroWidthSpace;</a></h3>
+<p>因为每次重启或者重新插拔硬盘，<code>hdparm</code> 的设置可能会失效。最好的办法是写进 udev 规则里，让它成为系统底层铁律。</p>
+<p>创建并编辑规则文件：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nano</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /etc/udev/rules.d/50-hdparm.rules</span></span></code></pre>
+</div><p>填入以下内容：</p>
+<div class="language-text vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">text</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span>ACTION=="add|change", KERNEL=="sda", ATTR{queue/rotational}=="1", RUN+="/sbin/hdparm -S 120 /dev/sda"</span></span></code></pre>
+</div><p>这个规则的意思是：当系统检测到添加或改变一个旋转型（非 SSD）硬盘设备 <code>sda</code> 时，自动执行休眠设定（空闲 10 分钟停转）。</p>
+<p>保存后，重新加载 udev 规则：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> udevadm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> control</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --reload-rules</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> udevadm</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> trigger</span></span></code></pre>
+</div><h2 id="_4-优化-减少无谓的唤醒" tabindex="-1">4. 优化：减少无谓的唤醒 <a class="header-anchor" href="#_4-优化-减少无谓的唤醒" aria-label="Permalink to &quot;4. 优化：减少无谓的唤醒&quot;">&ZeroWidthSpace;</a></h2>
+<p>光设置了休眠还不够，为了防止刚休眠就被唤醒，我还做了一点优化：</p>
+<ul>
+<li>将一些不需要频繁写盘的日志路径迁移到了内存文件系统 (tmpfs)。</li>
+<li>在 CasaOS 中，非必要的应用如果在后台频繁扫描 <code>/mnt/Storage1</code>（我的 2T 硬盘挂载点），就将其休眠或者调整扫描周期。</li>
+</ul>
+<h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
+<p>折腾完之后，现在这块 2T 西数硬盘终于学会了“劳逸结合”。平时安安静静地待机停转，到了凌晨 4、5 点接收备份任务时再自动苏醒干活。</p>
+<p>废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/hardware/pve-samba.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/hardware/pve-samba.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="pve-与-nas-数据中心折腾日记" tabindex="-1">PVE 与 NAS 数据中心折腾日记 <a class="header-anchor" href="#pve-与-nas-数据中心折腾日记" aria-label="Permalink to &quot;PVE 与 NAS 数据中心折腾日记&quot;">&ZeroWidthSpace;</a></h1>
+<p>本文记录了我将主控机硬盘转移到 PVE 宿主机上，通过 Samba 进行网络共享的心路历程和避坑指南。</p>
+<h2 id="需求" tabindex="-1">需求 <a class="header-anchor" href="#需求" aria-label="Permalink to &quot;需求&quot;">&ZeroWidthSpace;</a></h2>
+<p>把主控机（Windows 10）里面那些旧的、杂七杂八的机械硬盘拔出来，统统挂到 PVE 宿主机上，作为 NAS 数据中心。局域网内的设备全靠网络调取这些文件，方便管理和去重。</p>
+<h2 id="方案选型" tabindex="-1">方案选型 <a class="header-anchor" href="#方案选型" aria-label="Permalink to &quot;方案选型&quot;">&ZeroWidthSpace;</a></h2>
+<p>当时有考虑过专门装个 TrueNAS 虚拟机，但经过评估：</p>
+<ol>
+<li><strong>内存不够吃</strong>（ZFS 非常吃内存）。</li>
+<li><strong>直通硬盘步骤多</strong>且容易掉盘。</li>
+</ol>
+<p>最终决定：<strong>最朴素的 Samba</strong>
+不搞虚拟机，直接在 PVE 宿主机（底层 Debian）底层把 USB 硬盘盒挂载上，跑 Samba 共享服务。</p>
+<h2 id="硬盘格式化与挂载步骤" tabindex="-1">硬盘格式化与挂载步骤 <a class="header-anchor" href="#硬盘格式化与挂载步骤" aria-label="Permalink to &quot;硬盘格式化与挂载步骤&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li><strong>查硬盘</strong>: <code>lsblk</code> 命令确认新插入硬盘的 <code>/dev/sdX</code> 盘符</li>
+<li><strong>清理分区</strong>: <code>fdisk</code> 或 <code>parted</code> 清空所有 Windows 残留的分区。</li>
+<li><strong>格式化</strong>: <code>mkfs.ext4 /dev/sdX1</code>。</li>
+<li><strong>挂载</strong>: 写入 <code>/etc/fstab</code> 实现开机自动挂载到 <code>/mnt/data/</code>，并确保每次重启后都能自动挂载。</li>
+</ol>
+<h2 id="pve-数据与虚拟机备份策略-重要" tabindex="-1">PVE 数据与虚拟机备份策略 (重要) <a class="header-anchor" href="#pve-数据与虚拟机备份策略-重要" aria-label="Permalink to &quot;PVE 数据与虚拟机备份策略 (重要)&quot;">&ZeroWidthSpace;</a></h2>
+<p>一旦成了数据中心，备份必须提上日程。目前 PVE 上搭载了 Ubuntu (跑博客)、旁路由 OpenClash。</p>
+<ol>
+<li>
+<p><strong>虚拟机全量备份 (VZDump)</strong>:
+利用 PVE 自带的 <code>vzdump</code> 命令或通过 Web 面板，将所有虚拟机的全量镜像保存到 <code>/mnt/data/dump</code> 下，采用 <code>zstd</code> 高效压缩。
+我配置了 <code>/etc/pve/vzdump.cron</code>，每周全自动跑一次全量备份。</p>
+</li>
+<li>
+<p><strong>PVE 宿主机环境备份（防翻车）</strong>:
+千万别全盘备份 PVE 系统！如果坏了，用 U 盘重装只需要 3 分钟。
+真正要备份的是<strong>核心配置项</strong>，只要把以下三个目录打包备份好，重装系统后直接覆盖就能起死回生：</p>
+<ul>
+<li><code>/etc/pve/</code> （所有的虚拟机配置文件、硬盘分配清单）</li>
+<li><code>/etc/network/interfaces</code> （网桥和旁路由相关的网络配置）</li>
+<li><code>/etc/fstab</code> （你的 NAS 数据盘挂载记录）</li>
+</ul>
+</li>
+</ol>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="pve-与-nas-数据中心折腾日记" tabindex="-1">PVE 与 NAS 数据中心折腾日记 <a class="header-anchor" href="#pve-与-nas-数据中心折腾日记" aria-label="Permalink to &quot;PVE 与 NAS 数据中心折腾日记&quot;">&ZeroWidthSpace;</a></h1>
+<p>本文记录了我将主控机硬盘转移到 PVE 宿主机上，通过 Samba 进行网络共享的心路历程和避坑指南。</p>
+<h2 id="需求" tabindex="-1">需求 <a class="header-anchor" href="#需求" aria-label="Permalink to &quot;需求&quot;">&ZeroWidthSpace;</a></h2>
+<p>把主控机（Windows 10）里面那些旧的、杂七杂八的机械硬盘拔出来，统统挂到 PVE 宿主机上，作为 NAS 数据中心。局域网内的设备全靠网络调取这些文件，方便管理和去重。</p>
+<h2 id="方案选型" tabindex="-1">方案选型 <a class="header-anchor" href="#方案选型" aria-label="Permalink to &quot;方案选型&quot;">&ZeroWidthSpace;</a></h2>
+<p>当时有考虑过专门装个 TrueNAS 虚拟机，但经过评估：</p>
+<ol>
+<li><strong>内存不够吃</strong>（ZFS 非常吃内存）。</li>
+<li><strong>直通硬盘步骤多</strong>且容易掉盘。</li>
+</ol>
+<p>最终决定：<strong>最朴素的 Samba</strong>
+不搞虚拟机，直接在 PVE 宿主机（底层 Debian）底层把 USB 硬盘盒挂载上，跑 Samba 共享服务。</p>
+<h2 id="硬盘格式化与挂载步骤" tabindex="-1">硬盘格式化与挂载步骤 <a class="header-anchor" href="#硬盘格式化与挂载步骤" aria-label="Permalink to &quot;硬盘格式化与挂载步骤&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li><strong>查硬盘</strong>: <code>lsblk</code> 命令确认新插入硬盘的 <code>/dev/sdX</code> 盘符</li>
+<li><strong>清理分区</strong>: <code>fdisk</code> 或 <code>parted</code> 清空所有 Windows 残留的分区。</li>
+<li><strong>格式化</strong>: <code>mkfs.ext4 /dev/sdX1</code>。</li>
+<li><strong>挂载</strong>: 写入 <code>/etc/fstab</code> 实现开机自动挂载到 <code>/mnt/data/</code>，并确保每次重启后都能自动挂载。</li>
+</ol>
+<h2 id="pve-数据与虚拟机备份策略-重要" tabindex="-1">PVE 数据与虚拟机备份策略 (重要) <a class="header-anchor" href="#pve-数据与虚拟机备份策略-重要" aria-label="Permalink to &quot;PVE 数据与虚拟机备份策略 (重要)&quot;">&ZeroWidthSpace;</a></h2>
+<p>一旦成了数据中心，备份必须提上日程。目前 PVE 上搭载了 Ubuntu (跑博客)、旁路由 OpenClash。</p>
+<ol>
+<li>
+<p><strong>虚拟机全量备份 (VZDump)</strong>:
+利用 PVE 自带的 <code>vzdump</code> 命令或通过 Web 面板，将所有虚拟机的全量镜像保存到 <code>/mnt/data/dump</code> 下，采用 <code>zstd</code> 高效压缩。
+我配置了 <code>/etc/pve/vzdump.cron</code>，每周全自动跑一次全量备份。</p>
+</li>
+<li>
+<p><strong>PVE 宿主机环境备份（防翻车）</strong>:
+千万别全盘备份 PVE 系统！如果坏了，用 U 盘重装只需要 3 分钟。
+真正要备份的是<strong>核心配置项</strong>，只要把以下三个目录打包备份好，重装系统后直接覆盖就能起死回生：</p>
+<ul>
+<li><code>/etc/pve/</code> （所有的虚拟机配置文件、硬盘分配清单）</li>
+<li><code>/etc/network/interfaces</code> （网桥和旁路由相关的网络配置）</li>
+<li><code>/etc/fstab</code> （你的 NAS 数据盘挂载记录）</li>
+</ul>
+</li>
+</ol>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/</link>
+            <guid isPermaLink="false">https://leechbox.xyz/</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<div class="recent-posts">
+  <h2>📖 最新文章</h2>
+  <div class="post-grid">
+<a href="/tutorials/openclaw-recovery.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
+        <span class="post-date">AI 私有化</span>
+      </div>
+      <div class="post-excerpt">
+        当你深度依赖的本地 AI 助理因为改错代码崩溃失联时，千万别慌。分享一套纯物理层的故障排查排障与“时光机”数据回滚急救方案...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+<a href="/hardware/oect-hdparm-sleep.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战</span>
+        <span class="post-date">硬件</span>
+      </div>
+      <div class="post-excerpt">
+        闲置网心云 OECT 刷入 Armbian + CasaOS 做家用 NAS，外挂 2T 硬盘却 24 小时狂转不休眠？利用 hdparm 与 udev 规则，彻底治愈硬盘的“不眠之症”...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+<pre><code>&lt;a href=&quot;/tools/vitepress-publish.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;小白实操：如何给自己的独立博客发布新文章？&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;建站&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    当你成功搭建了极简清爽的独立博客，肯定会面临一个问题：“我自己平时怎么发新文章呢？” 不用懂代码，不用懂运维。你只需要像写日记一样准备 .md 文件，然后靠 3 句魔法命令，网站就会全自动更新...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/tutorials/docker-install.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;3分钟装好 Docker (附国内可用镜像源)&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;Docker&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    这是B站刚发布视频的配套代码。由于网络原因，我推荐大家使用国内镜像源的一键安装脚本。装完之后别忘了把它跑起来，并且设置为每次开机都自动运行，一键复制粘贴到终端即可...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/hardware/pve-samba.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;PVE 虚拟机搭建与 NAS 存储架构避坑&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;硬件&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    从零折腾 PVE 虚拟机底层架构，以及如何利用 CasaOS 和易有云等工具，打造个人家庭数据中心 NAS 存储。分享局域网共享设置与异地远程访问踩坑记录...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/tools/cloudflare-cdn.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;Cloudflare CDN 加速与防封指南&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;网络&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    免费二级域名锁死 NS 记录无法绑 Cloudflare 的惨痛教训。分享网站如何接入 CDN 提速，以及服务器 IP 防火墙设置、防风控、防封端口的终极保姆级解决方案...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+</code></pre>
+  </div>
+</div>
+<div class="visitor-stats">
+  <span id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+  |
+  <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
+</div>
+]]></description>
+            <content:encoded><![CDATA[<div class="recent-posts">
+  <h2>📖 最新文章</h2>
+  <div class="post-grid">
+<a href="/tutorials/openclaw-recovery.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
+        <span class="post-date">AI 私有化</span>
+      </div>
+      <div class="post-excerpt">
+        当你深度依赖的本地 AI 助理因为改错代码崩溃失联时，千万别慌。分享一套纯物理层的故障排查排障与“时光机”数据回滚急救方案...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+<a href="/hardware/oect-hdparm-sleep.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战</span>
+        <span class="post-date">硬件</span>
+      </div>
+      <div class="post-excerpt">
+        闲置网心云 OECT 刷入 Armbian + CasaOS 做家用 NAS，外挂 2T 硬盘却 24 小时狂转不休眠？利用 hdparm 与 udev 规则，彻底治愈硬盘的“不眠之症”...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+<pre><code>&lt;a href=&quot;/tools/vitepress-publish.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;小白实操：如何给自己的独立博客发布新文章？&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;建站&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    当你成功搭建了极简清爽的独立博客，肯定会面临一个问题：“我自己平时怎么发新文章呢？” 不用懂代码，不用懂运维。你只需要像写日记一样准备 .md 文件，然后靠 3 句魔法命令，网站就会全自动更新...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/tutorials/docker-install.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;3分钟装好 Docker (附国内可用镜像源)&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;Docker&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    这是B站刚发布视频的配套代码。由于网络原因，我推荐大家使用国内镜像源的一键安装脚本。装完之后别忘了把它跑起来，并且设置为每次开机都自动运行，一键复制粘贴到终端即可...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/hardware/pve-samba.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;PVE 虚拟机搭建与 NAS 存储架构避坑&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;硬件&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    从零折腾 PVE 虚拟机底层架构，以及如何利用 CasaOS 和易有云等工具，打造个人家庭数据中心 NAS 存储。分享局域网共享设置与异地远程访问踩坑记录...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+
+&lt;a href=&quot;/tools/cloudflare-cdn.html&quot; class=&quot;post-card&quot;&gt;
+  &lt;div class=&quot;post-header&quot;&gt;
+    &lt;span class=&quot;post-title&quot;&gt;Cloudflare CDN 加速与防封指南&lt;/span&gt;
+    &lt;span class=&quot;post-date&quot;&gt;网络&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;post-excerpt&quot;&gt;
+    免费二级域名锁死 NS 记录无法绑 Cloudflare 的惨痛教训。分享网站如何接入 CDN 提速，以及服务器 IP 防火墙设置、防风控、防封端口的终极保姆级解决方案...
+  &lt;/div&gt;
+  &lt;span class=&quot;read-more&quot;&gt;阅读全文 →&lt;/span&gt;
+&lt;/a&gt;
+</code></pre>
+  </div>
+</div>
+<div class="visitor-stats">
+  <span id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+  |
+  <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
+</div>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[零基础配置飞书机器人：内网穿透时代的终结（保姆级避坑指南）]]></title>
+            <link>https://leechbox.xyz/posts/feishu-bot-tutorial.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/posts/feishu-bot-tutorial.html</guid>
+            <pubDate>Sat, 04 Apr 2026 17:00:00 GMT</pubDate>
+            <description><![CDATA[<h1 id="零基础配置飞书机器人-内网穿透时代的终结" tabindex="-1">零基础配置飞书机器人：内网穿透时代的终结 <a class="header-anchor" href="#零基础配置飞书机器人-内网穿透时代的终结" aria-label="Permalink to &quot;零基础配置飞书机器人：内网穿透时代的终结&quot;">&ZeroWidthSpace;</a></h1>
+<p>说起做聊天机器人或者消息通知，很多人第一反应是 Telegram (TG)、微信或者钉钉。
+但在实际折腾了一圈之后，我发现 <strong>飞书</strong> 才是目前国内环境下，个人折腾“智能助理”的最优解。</p>
+<p>这不仅仅是因为它的富文本支持好，更是因为它解决了一个巨大的痛点：<strong>不需要公网 IP，也不需要搞复杂的内网穿透</strong>。</p>
+<h2 id="为什么要搞飞书机器人-背景故事" tabindex="-1">为什么要搞飞书机器人？（背景故事） <a class="header-anchor" href="#为什么要搞飞书机器人-背景故事" aria-label="Permalink to &quot;为什么要搞飞书机器人？（背景故事）&quot;">&ZeroWidthSpace;</a></h2>
+<p>前两天，我正在把家里的闲置硬件改造成服务器集群（PVE + 旁路由 + 各种虚拟机）。为了随时能监控这些服务的状态，或者用大模型驱动一个私人 AI 助理，我需要一个可靠的消息通知渠道。</p>
+<ul>
+<li><strong>微信</strong>：风控太严，动不动就封号，而且官方接口几乎不对个人开放。</li>
+<li><strong>Telegram</strong>：体验极佳，但需要稳定的翻墙节点。就在昨天，因为梯子炸了导致失联，找纯净 IP 节点找得焦头烂额。</li>
+<li><strong>其他平台</strong>：要么收费，要么要求你必须有一个能被外网访问的服务器地址（Webhook）来接收消息。</li>
+</ul>
+<p>就在我准备去买云服务器做内网穿透（FRP / Ngrok）的时候，我发现了飞书的 <strong>WebSocket 长连接模式</strong>。</p>
+<p>简单来说：只要你的内网机器（哪怕是躲在路由器后面的一台旧笔记本）能上网，它就能主动连上飞书的服务器。飞书一收到消息，就会顺着这根“网线”直接把数据塞回给你。<strong>不用开端口，不用买域名，极其优雅。</strong></p>
+<p>所以，有了这篇记录我踩坑过程的“保姆级教程”。</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="零基础配置飞书机器人-内网穿透时代的终结" tabindex="-1">零基础配置飞书机器人：内网穿透时代的终结 <a class="header-anchor" href="#零基础配置飞书机器人-内网穿透时代的终结" aria-label="Permalink to &quot;零基础配置飞书机器人：内网穿透时代的终结&quot;">&ZeroWidthSpace;</a></h1>
+<p>说起做聊天机器人或者消息通知，很多人第一反应是 Telegram (TG)、微信或者钉钉。
+但在实际折腾了一圈之后，我发现 <strong>飞书</strong> 才是目前国内环境下，个人折腾“智能助理”的最优解。</p>
+<p>这不仅仅是因为它的富文本支持好，更是因为它解决了一个巨大的痛点：<strong>不需要公网 IP，也不需要搞复杂的内网穿透</strong>。</p>
+<h2 id="为什么要搞飞书机器人-背景故事" tabindex="-1">为什么要搞飞书机器人？（背景故事） <a class="header-anchor" href="#为什么要搞飞书机器人-背景故事" aria-label="Permalink to &quot;为什么要搞飞书机器人？（背景故事）&quot;">&ZeroWidthSpace;</a></h2>
+<p>前两天，我正在把家里的闲置硬件改造成服务器集群（PVE + 旁路由 + 各种虚拟机）。为了随时能监控这些服务的状态，或者用大模型驱动一个私人 AI 助理，我需要一个可靠的消息通知渠道。</p>
+<ul>
+<li><strong>微信</strong>：风控太严，动不动就封号，而且官方接口几乎不对个人开放。</li>
+<li><strong>Telegram</strong>：体验极佳，但需要稳定的翻墙节点。就在昨天，因为梯子炸了导致失联，找纯净 IP 节点找得焦头烂额。</li>
+<li><strong>其他平台</strong>：要么收费，要么要求你必须有一个能被外网访问的服务器地址（Webhook）来接收消息。</li>
+</ul>
+<p>就在我准备去买云服务器做内网穿透（FRP / Ngrok）的时候，我发现了飞书的 <strong>WebSocket 长连接模式</strong>。</p>
+<p>简单来说：只要你的内网机器（哪怕是躲在路由器后面的一台旧笔记本）能上网，它就能主动连上飞书的服务器。飞书一收到消息，就会顺着这根“网线”直接把数据塞回给你。<strong>不用开端口，不用买域名，极其优雅。</strong></p>
+<p>所以，有了这篇记录我踩坑过程的“保姆级教程”。</p>
+<hr>
+<p>（以下为实战教程部分）</p>
+<h3 id="第一步-注册飞书与创建企业" tabindex="-1">第一步：注册飞书与创建企业 <a class="header-anchor" href="#第一步-注册飞书与创建企业" aria-label="Permalink to &quot;第一步：注册飞书与创建企业&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>打开官网</strong>：首先在浏览器打开 <a href="https://www.feishu.cn/" target="_blank" rel="noreferrer">飞书官网</a>。</li>
+<li><strong>手机号登录</strong>：点击右上角的“登录”，直接用你的手机号接收验证码登录。</li>
+<li><strong>创建企业</strong>：登录后，选择 <strong>“创建企业”</strong>（企业名称随便填，基础版永久免费）。</li>
+</ol>
+<p>---\n</p>
+<h3 id="第二步-在开放平台创建你的-机器人应用" tabindex="-1">第二步：在开放平台创建你的“机器人应用” <a class="header-anchor" href="#第二步-在开放平台创建你的-机器人应用" aria-label="Permalink to &quot;第二步：在开放平台创建你的“机器人应用”&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>进入开发者后台</strong>：在浏览器打开 <a href="https://open.feishu.cn/app" target="_blank" rel="noreferrer">飞书开放平台 (open.feishu.cn/app)</a>。</li>
+<li><strong>创建自建应用</strong>：点击 <strong>「创建企业自建应用」</strong> 这个大按钮。</li>
+<li><strong>填写应用信息</strong>：填好应用名称和描述，上传头像，点击 <strong>「创建」</strong>。</li>
+</ol>
+<p>---\n</p>
+<h3 id="第三步-给应用添加-机器人-灵魂" tabindex="-1">第三步：给应用添加“机器人”灵魂 <a class="header-anchor" href="#第三步-给应用添加-机器人-灵魂" aria-label="Permalink to &quot;第三步：给应用添加“机器人”灵魂&quot;">&ZeroWidthSpace;</a></h3>
+<p>刚创建好的应用只是个名字，我们需要赋予它作为“聊天机器人”的能力，它才能在飞书里出现。</p>
+<ol>
+<li>在应用的管理后台，看左侧菜单栏，找到并点击 <strong>「添加应用能力」</strong>。</li>
+<li>在右侧出现的卡片列表中，找到 <strong>「机器人」</strong>，然后点击它下面的 <strong>「添加」</strong> 按钮。</li>
+<li>添加完成后，左侧菜单会多出一个 <strong>「机器人」</strong> 的子选项。点击它，你就会看到机器人的专属配置面板，并且上方会提示你需要去开通权限。</li>
+</ol>
+<p>---\n</p>
+<h3 id="第四步-配置核心权限-🔥极易踩坑-必看" tabindex="-1">第四步：配置核心权限（🔥极易踩坑，必看！） <a class="header-anchor" href="#第四步-配置核心权限-🔥极易踩坑-必看" aria-label="Permalink to &quot;第四步：配置核心权限（🔥极易踩坑，必看！）&quot;">&ZeroWidthSpace;</a></h3>
+<p>机器人要能看懂你发的消息、能给你发图片，必须要有相应的“权限”。</p>
+<ol>
+<li>
+<p>看左侧菜单栏，点击 <strong>「权限管理」</strong>。</p>
+</li>
+<li>
+<p>此时你可以通过点击中间的 <strong>「开通权限」</strong> 按钮，唤出右侧的权限搜索抽屉。</p>
+</li>
+<li>
+<p><strong>【核心避坑】</strong>：在右侧抽屉的右上角搜索框里，依次搜索以下英文代码，并在下方出现的选项中<strong>打上勾</strong>。对于日常手机聊天、群组互动，<strong>以下是核心必开权限（缺一不可）</strong>：</p>
+<p><strong>【核心聊天能力】</strong></p>
+<ul>
+<li>🔍 <code>im:message:send_as_bot</code>（获取单聊、群组消息 —— <strong>最重要，必须开！</strong>）</li>
+<li>🔍 <code>im:message.p2p_msg:readonly</code>（接收单聊消息）</li>
+<li>🔍 <code>im:message.group_at_msg:readonly</code>（接收群聊中@我的消息）</li>
+<li>🔍 <code>im:message:readonly</code>（获取消息内容）</li>
+<li>🔍 <code>im:message</code>（获取和发送单聊、群组消息）</li>
+<li>🔍 <code>im:resource</code>（获取消息中的图片、文件）</li>
+</ul>
+<p><strong>【可选：如果你需要在群里拉它】</strong></p>
+<ul>
+<li>🔍 <code>im:chat</code>（获取和更新群组信息）</li>
+<li>🔍 <code>im:chat:read</code>（读取群组信息）</li>
+</ul>
+</li>
+</ol>
+<p>⚠️ <strong>【史诗级巨坑警告】</strong>：在飞书后台，你在这里勾选的权限只是<strong>暂存状态</strong>！如果不进行第六步的“发布新版本”，新权限永远不会生效！我昨天就在这卡了半个小时，死活收不到消息。</p>
+<p>---\n</p>
+<h3 id="第五步-开启-websocket-长连接-小白免公网-ip-秘籍" tabindex="-1">第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍） <a class="header-anchor" href="#第五步-开启-websocket-长连接-小白免公网-ip-秘籍" aria-label="Permalink to &quot;第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍）&quot;">&ZeroWidthSpace;</a></h3>
+<p>为了让机器人能秒回你的消息，并且<strong>完全不需要你去搞复杂的公网 IP 和内网穿透</strong>，我们需要开启飞书的 WebSocket 模式。</p>
+<ol>
+<li>看左侧菜单栏，找到并点击 <strong>「事件与回调」</strong>。</li>
+<li>在右侧的“事件配置”页面中，点击“订阅方式”旁边的小铅笔图标，<strong>将其修改为：「长连接（推荐）」</strong>。
+<em>正如官方提示：只要选了这个，你的局域网旧电脑或虚拟机就能直接秒收消息！</em></li>
+<li>模式切换好后，向下滚动页面，点击蓝色的 <strong>「添加事件」</strong> 按钮。</li>
+<li>在弹出的搜索框里，搜索并勾选你要让机器人监听的事件。
+<ul>
+<li><strong>必选核心事件：</strong> 搜索 <code>im.message.receive_v1</code>（中文名叫：接收消息 v1.0）。<strong>只有勾了这个，机器人才知道你说话了。</strong></li>
+</ul>
+</li>
+</ol>
+<p>---\n</p>
+<h3 id="第六步-发布应用-让所有配置真正生效" tabindex="-1">第六步：发布应用（让所有配置真正生效！） <a class="header-anchor" href="#第六步-发布应用-让所有配置真正生效" aria-label="Permalink to &quot;第六步：发布应用（让所有配置真正生效！）&quot;">&ZeroWidthSpace;</a></h3>
+<p><strong>⚠️ 再次警告：你刚才勾选的任何权限、配置的任何长连接，如果不发布新版本，统统是废纸！</strong></p>
+<ol>
+<li>看左侧菜单栏，一直向下滚，找到 <strong>「应用发布」</strong> 下的 <strong>「版本管理与发布」</strong>。</li>
+<li>点击页面右上角大大的蓝色 <strong>「创建版本」</strong> 按钮。</li>
+<li><strong>应用版本号</strong>：随便填（如 <code>1.0.0</code> 或递增 <code>1.0.1</code>）。</li>
+<li><strong>更新说明</strong>：随便填（如“更新基础聊天权限”）。</li>
+<li><strong>可用范围</strong>：选择你自己，或直接选“全部成员”。</li>
+<li>点击最下方的 <strong>「保存并申请发布」</strong>。</li>
+<li>因为你是超级管理员，系统会直接提示审核通过。<strong>至此，你配的所有权限才真正刻进机器人的灵魂里！</strong></li>
+</ol>
+<p>---\n</p>
+<h3 id="第七步-拿到机器人的-身份证-并启动配置" tabindex="-1">第七步：拿到机器人的“身份证”并启动配置 <a class="header-anchor" href="#第七步-拿到机器人的-身份证-并启动配置" aria-label="Permalink to &quot;第七步：拿到机器人的“身份证”并启动配置&quot;">&ZeroWidthSpace;</a></h3>
+<p>当你完成上一步的版本发布后，你的机器人已经是一个健全的灵魂了！现在我们只需要拿到它的“身份证”和“密码”。</p>
+<ol>
+<li>看左侧菜单栏，回到最上面的 <strong>「凭证与基础信息」</strong>。</li>
+<li>此时页面顶部应该会显示绿色的“当前修改均已发布”。在页面中间的“应用凭证”区域，你会看到两个核心信息：
+<ul>
+<li><strong>App ID</strong> (机器人的账号，一般是 <code>cli_</code> 开头)</li>
+<li><strong>App Secret</strong> (机器人的密码，点击旁边的小眼睛可以显示出来)</li>
+</ul>
+</li>
+<li>点击旁边的小图标，把这两串字符复制下来。</li>
+<li>将它们填入到你的 AI 框架对应的配置中即可。</li>
+</ol>
+<h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
+<p>其实搞定基础设施只是第一步。当这只“急救龙虾”在我的内网虚拟机里苏醒，并通过长连接向我发送第一条飞书消息时，那种闭环的爽感是难以言喻的。</p>
+<p>如果你也苦于微信的封禁和公网 IP 的昂贵，不妨试试这套方案。</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 & 场景定制]]></title>
+            <link>https://leechbox.xyz/openclaw-service.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/openclaw-service.html</guid>
+            <pubDate>Fri, 27 Mar 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[<h1 id="🦞-openclaw-小龙虾-ai私人助手-—-安装部署-场景定制" tabindex="-1">🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 &amp; 场景定制 <a class="header-anchor" href="#🦞-openclaw-小龙虾-ai私人助手-—-安装部署-场景定制" aria-label="Permalink to &quot;🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 &amp; 场景定制&quot;">&ZeroWidthSpace;</a></h1>
+<blockquote>
+<p>自己折腾一通宵，报错无数遍？请交给专业的人。不用查文档、不踩坑，告别各种启动不了/连不上/不干活。从此把每天重复的工作，交给AI去干。你的时间，应该花在更值钱的事情上。</p>
+</blockquote>
+<h2 id="👨‍💻-个人用户能用它做什么" tabindex="-1">👨‍💻 个人用户能用它做什么？ <a class="header-anchor" href="#👨‍💻-个人用户能用它做什么" aria-label="Permalink to &quot;👨‍💻 个人用户能用它做什么？&quot;">&ZeroWidthSpace;</a></h2>
+<ul>
+<li>💬 <strong>私人AI助手</strong>：为你自动解决电脑、网络等 IT 难题</li>
+<li>📰 <strong>自动资讯简报</strong>：每天自动帮你刷资讯，生成你关心的领域简报</li>
+<li>📅 <strong>日程管理</strong>：待办提醒、邮件自动分类处理</li>
+<li>🎓 <strong>学习辅助</strong>：论文阅读、知识整理、笔记生成</li>
+<li>🛒 <strong>电商追踪</strong>：比价跟踪、优惠预警、自动抢购提醒</li>
+<li>📱 <strong>自媒体运营</strong>：小红书、抖音、视频号、微博等平台自动养号</li>
+<li>💰 <strong>金融追踪</strong>：股票分析、行情预警、紧急通知等</li>
+</ul>
+<h2 id="🏢-企业-团队能用它做什么" tabindex="-1">🏢 企业/团队能用它做什么？ <a class="header-anchor" href="#🏢-企业-团队能用它做什么" aria-label="Permalink to &quot;🏢 企业/团队能用它做什么？&quot;">&ZeroWidthSpace;</a></h2>
+<ul>
+<li>📊 <strong>竞品监控</strong>：自动追踪对手动态，每天出分析报告</li>
+<li>🔔 <strong>舆情预警</strong>：关键词实时监控，负面信息秒级通知</li>
+<li>📝 <strong>内容生产</strong>：自动写文案、生成图片、剪辑视频</li>
+<li>📨 <strong>多渠道推送</strong>：结果自动发邮件 / 飞书 / 钉钉 / Telegram / WeChat</li>
+<li>🤖 <strong>智能客服</strong>：7×24在线自动应答，降本增效</li>
+<li>📈 <strong>数据采集</strong>：定时爬取行业数据，自动汇总分析</li>
+<li>🔗 <strong>系统对接</strong>：打通内部 OA/ERP/CRM，流程自动化</li>
+</ul>
+<blockquote>
+<p>不限行业 — 电商、金融、教育、医疗、制造、媒体、地产、法律……
+<strong>你说场景，我来实现。</strong></p>
+</blockquote>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="🦞-openclaw-小龙虾-ai私人助手-—-安装部署-场景定制" tabindex="-1">🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 &amp; 场景定制 <a class="header-anchor" href="#🦞-openclaw-小龙虾-ai私人助手-—-安装部署-场景定制" aria-label="Permalink to &quot;🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 &amp; 场景定制&quot;">&ZeroWidthSpace;</a></h1>
+<blockquote>
+<p>自己折腾一通宵，报错无数遍？请交给专业的人。不用查文档、不踩坑，告别各种启动不了/连不上/不干活。从此把每天重复的工作，交给AI去干。你的时间，应该花在更值钱的事情上。</p>
+</blockquote>
+<h2 id="👨‍💻-个人用户能用它做什么" tabindex="-1">👨‍💻 个人用户能用它做什么？ <a class="header-anchor" href="#👨‍💻-个人用户能用它做什么" aria-label="Permalink to &quot;👨‍💻 个人用户能用它做什么？&quot;">&ZeroWidthSpace;</a></h2>
+<ul>
+<li>💬 <strong>私人AI助手</strong>：为你自动解决电脑、网络等 IT 难题</li>
+<li>📰 <strong>自动资讯简报</strong>：每天自动帮你刷资讯，生成你关心的领域简报</li>
+<li>📅 <strong>日程管理</strong>：待办提醒、邮件自动分类处理</li>
+<li>🎓 <strong>学习辅助</strong>：论文阅读、知识整理、笔记生成</li>
+<li>🛒 <strong>电商追踪</strong>：比价跟踪、优惠预警、自动抢购提醒</li>
+<li>📱 <strong>自媒体运营</strong>：小红书、抖音、视频号、微博等平台自动养号</li>
+<li>💰 <strong>金融追踪</strong>：股票分析、行情预警、紧急通知等</li>
+</ul>
+<h2 id="🏢-企业-团队能用它做什么" tabindex="-1">🏢 企业/团队能用它做什么？ <a class="header-anchor" href="#🏢-企业-团队能用它做什么" aria-label="Permalink to &quot;🏢 企业/团队能用它做什么？&quot;">&ZeroWidthSpace;</a></h2>
+<ul>
+<li>📊 <strong>竞品监控</strong>：自动追踪对手动态，每天出分析报告</li>
+<li>🔔 <strong>舆情预警</strong>：关键词实时监控，负面信息秒级通知</li>
+<li>📝 <strong>内容生产</strong>：自动写文案、生成图片、剪辑视频</li>
+<li>📨 <strong>多渠道推送</strong>：结果自动发邮件 / 飞书 / 钉钉 / Telegram / WeChat</li>
+<li>🤖 <strong>智能客服</strong>：7×24在线自动应答，降本增效</li>
+<li>📈 <strong>数据采集</strong>：定时爬取行业数据，自动汇总分析</li>
+<li>🔗 <strong>系统对接</strong>：打通内部 OA/ERP/CRM，流程自动化</li>
+</ul>
+<blockquote>
+<p>不限行业 — 电商、金融、教育、医疗、制造、媒体、地产、法律……
+<strong>你说场景，我来实现。</strong></p>
+</blockquote>
+<hr>
+<h2 id="🎁-部署赠送-限时福利" tabindex="-1">🎁 部署赠送（限时福利） <a class="header-anchor" href="#🎁-部署赠送-限时福利" aria-label="Permalink to &quot;🎁 部署赠送（限时福利）&quot;">&ZeroWidthSpace;</a></h2>
+<p>部署即送<strong>同价值的顶级AI模型使用额度</strong>！！！</p>
+<p>包含 Claude Opus/Sonnet、Gemini Pro、GPT 等全球最强AI大模型，<strong>开箱即用，无需自己注册海外账号、无需自备 API Key，国内网络直接使用</strong>。目前国内各大模型限时免费使用。</p>
+<h2 id="💰-收费说明" tabindex="-1">💰 收费说明 <a class="header-anchor" href="#💰-收费说明" aria-label="Permalink to &quot;💰 收费说明&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li><strong>部署安装（送套餐等额全球最顶级大模型 token）</strong>：
+<ul>
+<li>🐧 Linux / 🍎 macOS：<strong>¥399</strong></li>
+<li>🪟 Windows：<strong>¥499</strong></li>
+</ul>
+</li>
+<li><strong>场景定制开发</strong>：根据你的业务需求，定制专属自动化工作流/AI技能脚本，按项目报价</li>
+<li><strong>后期维护</strong>：按月/按年，可选</li>
+<li>🔒 <strong>安全承诺</strong>：全部部署在你自己的设备上，数据 100% 自主可控，不上传任何第三方。</li>
+</ol>
+<hr>
+<h2 id="⚡-准备与联系方式" tabindex="-1">⚡ 准备与联系方式 <a class="header-anchor" href="#⚡-准备与联系方式" aria-label="Permalink to &quot;⚡ 准备与联系方式&quot;">&ZeroWidthSpace;</a></h2>
+<ul>
+<li><strong>⚡ 给自己安排一个不休息的AI员工。</strong></li>
+<li><strong>⚡ 远程安装</strong>：请提前备好远程桌面软件（RustDesk / TeamViewer / 向日葵等）</li>
+<li><strong>⚡ 预约部署</strong>：提前沟通（可选填写需求调研表）</li>
+</ul>
+<p><strong>👇 私聊我，聊聊你的场景，方案免费出。</strong><br>
+需提前注册 <code>api.884819.xyz</code>，生成专属 API-Key。</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tools/cloudflare-cdn.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tools/cloudflare-cdn.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="域名托管与-cdn-加速避坑指南" tabindex="-1">域名托管与 CDN 加速避坑指南 <a class="header-anchor" href="#域名托管与-cdn-加速避坑指南" aria-label="Permalink to &quot;域名托管与 CDN 加速避坑指南&quot;">&ZeroWidthSpace;</a></h1>
+<p>本文总结了基于 VitePress、GitHub Pages 和 Cloudflare CDN 建站时的常见坑点。</p>
+<h2 id="cloudflare-pages-部署大坑" tabindex="-1">Cloudflare Pages 部署大坑 <a class="header-anchor" href="#cloudflare-pages-部署大坑" aria-label="Permalink to &quot;Cloudflare Pages 部署大坑&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li>
+<p><strong>极其容易走错入口（千万别选 Workers）</strong>：
+在 Cloudflare 绑定 GitHub 代码仓库时，必须进入 <strong>Pages</strong> 选项卡下点击“连接到 Git”。切忌点进 <strong>Workers</strong> 流程，因为 Workers 没有静态网站目录配置选项。</p>
+</li>
+<li>
+<p><strong>输出目录必须精确匹配</strong>：
+如果你的 VitePress 是初始化在代码仓库的 <code>docs</code> 目录下的，那么在 Cloudflare 设置里：</p>
+<ul>
+<li><strong>构建命令</strong>: <code>npm run docs:build</code></li>
+<li><strong>构建输出目录必须是</strong>: <code>docs/.vitepress/dist</code>
+如果你误写为 <code>.vitepress/dist</code> 或者少写了前置目录，Cloudflare 在部署完后会找不到产物，直接报错 <code>522 Connection Timed Out</code> 或 <code>404</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>语法错误检查</strong>：
+你的本地 <code>config.js</code> 必须确保没有语法错误。若不小心多加了一个转义符或者逗号，会导致 <code>npm run docs:build</code> 直接编译失败。</p>
+</li>
+</ol>
+<h2 id="免费二级域名与-cdn-托管的冲突" tabindex="-1">免费二级域名与 CDN 托管的冲突 <a class="header-anchor" href="#免费二级域名与-cdn-托管的冲突" aria-label="Permalink to &quot;免费二级域名与 CDN 托管的冲突&quot;">&ZeroWidthSpace;</a></h2>
+<p>很多新手想用免费的二级子域名（如 ClouDNS 提供的 <code>.abrdns.com</code>）绑定 Cloudflare 加速，但实测会<strong>直接被拦截报错</strong>。</p>
+<ul>
+<li><strong>原因</strong>：这类免费二级域名平台通常会锁死 <strong>NS（名称服务器）</strong> 修改权限。</li>
+<li><strong>正解</strong>：Cloudflare 接管域名必须要修改根域名的 NS。因此，如果需要用 CDN 加速、防 DDoS，<strong>必须购买顶级域名（如 .xyz、.top 等，首年极低，通常仅需 5-10 元）</strong>，才能完美挂载到 Cloudflare。</li>
+<li><em>备注</em>：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。</li>
+</ul>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="域名托管与-cdn-加速避坑指南" tabindex="-1">域名托管与 CDN 加速避坑指南 <a class="header-anchor" href="#域名托管与-cdn-加速避坑指南" aria-label="Permalink to &quot;域名托管与 CDN 加速避坑指南&quot;">&ZeroWidthSpace;</a></h1>
+<p>本文总结了基于 VitePress、GitHub Pages 和 Cloudflare CDN 建站时的常见坑点。</p>
+<h2 id="cloudflare-pages-部署大坑" tabindex="-1">Cloudflare Pages 部署大坑 <a class="header-anchor" href="#cloudflare-pages-部署大坑" aria-label="Permalink to &quot;Cloudflare Pages 部署大坑&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li>
+<p><strong>极其容易走错入口（千万别选 Workers）</strong>：
+在 Cloudflare 绑定 GitHub 代码仓库时，必须进入 <strong>Pages</strong> 选项卡下点击“连接到 Git”。切忌点进 <strong>Workers</strong> 流程，因为 Workers 没有静态网站目录配置选项。</p>
+</li>
+<li>
+<p><strong>输出目录必须精确匹配</strong>：
+如果你的 VitePress 是初始化在代码仓库的 <code>docs</code> 目录下的，那么在 Cloudflare 设置里：</p>
+<ul>
+<li><strong>构建命令</strong>: <code>npm run docs:build</code></li>
+<li><strong>构建输出目录必须是</strong>: <code>docs/.vitepress/dist</code>
+如果你误写为 <code>.vitepress/dist</code> 或者少写了前置目录，Cloudflare 在部署完后会找不到产物，直接报错 <code>522 Connection Timed Out</code> 或 <code>404</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>语法错误检查</strong>：
+你的本地 <code>config.js</code> 必须确保没有语法错误。若不小心多加了一个转义符或者逗号，会导致 <code>npm run docs:build</code> 直接编译失败。</p>
+</li>
+</ol>
+<h2 id="免费二级域名与-cdn-托管的冲突" tabindex="-1">免费二级域名与 CDN 托管的冲突 <a class="header-anchor" href="#免费二级域名与-cdn-托管的冲突" aria-label="Permalink to &quot;免费二级域名与 CDN 托管的冲突&quot;">&ZeroWidthSpace;</a></h2>
+<p>很多新手想用免费的二级子域名（如 ClouDNS 提供的 <code>.abrdns.com</code>）绑定 Cloudflare 加速，但实测会<strong>直接被拦截报错</strong>。</p>
+<ul>
+<li><strong>原因</strong>：这类免费二级域名平台通常会锁死 <strong>NS（名称服务器）</strong> 修改权限。</li>
+<li><strong>正解</strong>：Cloudflare 接管域名必须要修改根域名的 NS。因此，如果需要用 CDN 加速、防 DDoS，<strong>必须购买顶级域名（如 .xyz、.top 等，首年极低，通常仅需 5-10 元）</strong>，才能完美挂载到 Cloudflare。</li>
+<li><em>备注</em>：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。</li>
+</ul>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tools/domain-migration.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tools/domain-migration.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="实战-如何优雅地更换博客域名-附-301-权重转移指南" tabindex="-1">实战：如何优雅地更换博客域名（附 301 权重转移指南） <a class="header-anchor" href="#实战-如何优雅地更换博客域名-附-301-权重转移指南" aria-label="Permalink to &quot;实战：如何优雅地更换博客域名（附 301 权重转移指南）&quot;">&ZeroWidthSpace;</a></h1>
+<p>搭建完独立博客后，很多朋友一开始可能只是随便买了个便宜的“练手域名”（比如纯数字的 <code>.xyz</code>），等网站慢慢有了起色，就想换一个更正规、更好记的长线域名。</p>
+<p>但这带来了一个棘手的问题：<strong>换了新域名，老域名的流量和搜索引擎（SEO）收录的权重不就白白流失了吗？</strong></p>
+<p>今天这篇教程，就带你实战演示如何通过 Cloudflare 完美实现<strong>新旧域名无缝交接，并利用 301 永久重定向把老域名的权重全部转移到新家。</strong></p>
+<h2 id="第一步-选购心仪的长线域名" tabindex="-1">第一步：选购心仪的长线域名 <a class="header-anchor" href="#第一步-选购心仪的长线域名" aria-label="Permalink to &quot;第一步：选购心仪的长线域名&quot;">&ZeroWidthSpace;</a></h2>
+<p>挑域名是个技术活，核心原则就三个：</p>
+<ol>
+<li><strong>辨识度高</strong>：首选 <code>.com</code> / <code>.net</code>，或者代表极客属性的 <code>.dev</code> / <code>.me</code>。如果预算有限，选一个不带“溢价词”的普通双拼字母 <code>.xyz</code> 也是不错的选择（比如我的 <code>leechbox.xyz</code>）。</li>
+<li><strong>避开天价续费坑</strong>：购买时千万不要只看“首年 1 刀”的噱头，付款前必须确认第二年的 <strong>Renewal Price (续费价格)</strong>。通常几十块钱以内属于正常，上百甚至几千的直接 pass。</li>
+<li><strong>海外注册商优先</strong>：如果是用来做 IT 实验和挂载节点，推荐使用 Spaceship、Namecheap 或直接在 Cloudflare 购买，免除繁琐的备案环节。</li>
+</ol>
+<h2 id="第二步-cloudflare-接管与绑定新域名" tabindex="-1">第二步：Cloudflare 接管与绑定新域名 <a class="header-anchor" href="#第二步-cloudflare-接管与绑定新域名" aria-label="Permalink to &quot;第二步：Cloudflare 接管与绑定新域名&quot;">&ZeroWidthSpace;</a></h2>
+<p>在注册商买下域名后，我们需要把它接入 Cloudflare 的强大网络中。</p>
+<ol>
+<li><strong>修改 Nameservers</strong>：在 Cloudflare 添加你的新域名，获取它分配给你的两条 NS 记录。回到域名购买平台（如 Spaceship），将默认 DNS 改为 Custom DNS，填入这两条记录并保存。</li>
+<li><strong>绑定至博客</strong>：进入 Cloudflare 的 <strong>Workers &amp; Pages</strong>，找到你的博客项目。点击 <strong>自定义域 (Custom Domains)</strong>，将新域名添加进去。等待几分钟变成绿色的“Active”，你的新域名就能打开网站了！</li>
+</ol>
+<h2 id="第三步-老域名-301-重定向-最核心一步" tabindex="-1">第三步：老域名 301 重定向（最核心一步！） <a class="header-anchor" href="#第三步-老域名-301-重定向-最核心一步" aria-label="Permalink to &quot;第三步：老域名 301 重定向（最核心一步！）&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>绝对不要</strong>把新旧两个域名同时绑在博客上不管，这会导致搜索引擎判定你恶意制造“重复内容 (Duplicate Content)”，双双降权！</p>
+<p>正确的做法是：设定新域名为唯一主域名，把老域名的流量瞬间“弹射”到新域名上。</p>
+<p><strong>具体操作如下：</strong></p>
+<ol>
+<li>
+<p>进入老域名的 Cloudflare 控制面板。</p>
+</li>
+<li>
+<p>点击左侧菜单的 <strong>规则 (Rules)</strong> -&gt; <strong>页面规则 (Page Rules)</strong>。</p>
+</li>
+<li>
+<p>点击“创建页面规则”，按以下格式填写：</p>
+<ul>
+<li><strong>URL 匹配</strong>：<code>*老域名.xyz/*</code> （比如：<code>*912480160.xyz/*</code>，注意前后的星号不能漏）</li>
+<li><strong>选取设置</strong>：选择 <strong>转发 URL (Forwarding URL)</strong></li>
+<li><strong>状态代码</strong>：选择 <strong>301 - 永久重定向</strong></li>
+<li><strong>目标 URL</strong>：<code>https://你的新域名.xyz/$1</code> （比如：<code>https://leechbox.xyz/$1</code>，末尾的 <code>$1</code> 是为了确保文章路径精确对应跳回）。</li>
+</ul>
+</li>
+<li>
+<p>忽略可能弹出的 DNS 警告提示，直接点击保存并部署。</p>
+</li>
+</ol>
+<h2 id="最终效果" tabindex="-1">最终效果 <a class="header-anchor" href="#最终效果" aria-label="Permalink to &quot;最终效果&quot;">&ZeroWidthSpace;</a></h2>
+<p>现在，任何试图访问你老域名文章的人（或者爬虫），都会被 HTTP 301 状态码瞬间传送到你的新域名对应文章下。老链接依然存活，SEO 权重完美继承，你的网站也终于换上了高大上的新招牌！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="实战-如何优雅地更换博客域名-附-301-权重转移指南" tabindex="-1">实战：如何优雅地更换博客域名（附 301 权重转移指南） <a class="header-anchor" href="#实战-如何优雅地更换博客域名-附-301-权重转移指南" aria-label="Permalink to &quot;实战：如何优雅地更换博客域名（附 301 权重转移指南）&quot;">&ZeroWidthSpace;</a></h1>
+<p>搭建完独立博客后，很多朋友一开始可能只是随便买了个便宜的“练手域名”（比如纯数字的 <code>.xyz</code>），等网站慢慢有了起色，就想换一个更正规、更好记的长线域名。</p>
+<p>但这带来了一个棘手的问题：<strong>换了新域名，老域名的流量和搜索引擎（SEO）收录的权重不就白白流失了吗？</strong></p>
+<p>今天这篇教程，就带你实战演示如何通过 Cloudflare 完美实现<strong>新旧域名无缝交接，并利用 301 永久重定向把老域名的权重全部转移到新家。</strong></p>
+<h2 id="第一步-选购心仪的长线域名" tabindex="-1">第一步：选购心仪的长线域名 <a class="header-anchor" href="#第一步-选购心仪的长线域名" aria-label="Permalink to &quot;第一步：选购心仪的长线域名&quot;">&ZeroWidthSpace;</a></h2>
+<p>挑域名是个技术活，核心原则就三个：</p>
+<ol>
+<li><strong>辨识度高</strong>：首选 <code>.com</code> / <code>.net</code>，或者代表极客属性的 <code>.dev</code> / <code>.me</code>。如果预算有限，选一个不带“溢价词”的普通双拼字母 <code>.xyz</code> 也是不错的选择（比如我的 <code>leechbox.xyz</code>）。</li>
+<li><strong>避开天价续费坑</strong>：购买时千万不要只看“首年 1 刀”的噱头，付款前必须确认第二年的 <strong>Renewal Price (续费价格)</strong>。通常几十块钱以内属于正常，上百甚至几千的直接 pass。</li>
+<li><strong>海外注册商优先</strong>：如果是用来做 IT 实验和挂载节点，推荐使用 Spaceship、Namecheap 或直接在 Cloudflare 购买，免除繁琐的备案环节。</li>
+</ol>
+<h2 id="第二步-cloudflare-接管与绑定新域名" tabindex="-1">第二步：Cloudflare 接管与绑定新域名 <a class="header-anchor" href="#第二步-cloudflare-接管与绑定新域名" aria-label="Permalink to &quot;第二步：Cloudflare 接管与绑定新域名&quot;">&ZeroWidthSpace;</a></h2>
+<p>在注册商买下域名后，我们需要把它接入 Cloudflare 的强大网络中。</p>
+<ol>
+<li><strong>修改 Nameservers</strong>：在 Cloudflare 添加你的新域名，获取它分配给你的两条 NS 记录。回到域名购买平台（如 Spaceship），将默认 DNS 改为 Custom DNS，填入这两条记录并保存。</li>
+<li><strong>绑定至博客</strong>：进入 Cloudflare 的 <strong>Workers &amp; Pages</strong>，找到你的博客项目。点击 <strong>自定义域 (Custom Domains)</strong>，将新域名添加进去。等待几分钟变成绿色的“Active”，你的新域名就能打开网站了！</li>
+</ol>
+<h2 id="第三步-老域名-301-重定向-最核心一步" tabindex="-1">第三步：老域名 301 重定向（最核心一步！） <a class="header-anchor" href="#第三步-老域名-301-重定向-最核心一步" aria-label="Permalink to &quot;第三步：老域名 301 重定向（最核心一步！）&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>绝对不要</strong>把新旧两个域名同时绑在博客上不管，这会导致搜索引擎判定你恶意制造“重复内容 (Duplicate Content)”，双双降权！</p>
+<p>正确的做法是：设定新域名为唯一主域名，把老域名的流量瞬间“弹射”到新域名上。</p>
+<p><strong>具体操作如下：</strong></p>
+<ol>
+<li>
+<p>进入老域名的 Cloudflare 控制面板。</p>
+</li>
+<li>
+<p>点击左侧菜单的 <strong>规则 (Rules)</strong> -&gt; <strong>页面规则 (Page Rules)</strong>。</p>
+</li>
+<li>
+<p>点击“创建页面规则”，按以下格式填写：</p>
+<ul>
+<li><strong>URL 匹配</strong>：<code>*老域名.xyz/*</code> （比如：<code>*912480160.xyz/*</code>，注意前后的星号不能漏）</li>
+<li><strong>选取设置</strong>：选择 <strong>转发 URL (Forwarding URL)</strong></li>
+<li><strong>状态代码</strong>：选择 <strong>301 - 永久重定向</strong></li>
+<li><strong>目标 URL</strong>：<code>https://你的新域名.xyz/$1</code> （比如：<code>https://leechbox.xyz/$1</code>，末尾的 <code>$1</code> 是为了确保文章路径精确对应跳回）。</li>
+</ul>
+</li>
+<li>
+<p>忽略可能弹出的 DNS 警告提示，直接点击保存并部署。</p>
+</li>
+</ol>
+<h2 id="最终效果" tabindex="-1">最终效果 <a class="header-anchor" href="#最终效果" aria-label="Permalink to &quot;最终效果&quot;">&ZeroWidthSpace;</a></h2>
+<p>现在，任何试图访问你老域名文章的人（或者爬虫），都会被 HTTP 301 状态码瞬间传送到你的新域名对应文章下。老链接依然存活，SEO 权重完美继承，你的网站也终于换上了高大上的新招牌！</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tools/feishu-bot-setup.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tools/feishu-bot-setup.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="飞书机器人注册与配置全通关指南-图文保姆级" tabindex="-1">飞书机器人注册与配置全通关指南（图文保姆级） <a class="header-anchor" href="#飞书机器人注册与配置全通关指南-图文保姆级" aria-label="Permalink to &quot;飞书机器人注册与配置全通关指南（图文保姆级）&quot;">&ZeroWidthSpace;</a></h1>
+<p>这份指南将手把手、图文并茂地教你如何从零开始配置一个专属的机器人。全程免费，不需要你懂代码，也不需要公网 IP！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="飞书机器人注册与配置全通关指南-图文保姆级" tabindex="-1">飞书机器人注册与配置全通关指南（图文保姆级） <a class="header-anchor" href="#飞书机器人注册与配置全通关指南-图文保姆级" aria-label="Permalink to &quot;飞书机器人注册与配置全通关指南（图文保姆级）&quot;">&ZeroWidthSpace;</a></h1>
+<p>这份指南将手把手、图文并茂地教你如何从零开始配置一个专属的机器人。全程免费，不需要你懂代码，也不需要公网 IP！</p>
+<hr>
+<h3 id="第一步-注册飞书与创建企业" tabindex="-1">第一步：注册飞书与创建企业 <a class="header-anchor" href="#第一步-注册飞书与创建企业" aria-label="Permalink to &quot;第一步：注册飞书与创建企业&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>打开官网</strong>：首先在浏览器打开 <a href="https://www.feishu.cn/" target="_blank" rel="noreferrer">飞书官网</a>。</li>
+<li><strong>手机号登录</strong>：点击右上角的“登录”，直接用你的手机号接收验证码登录。</li>
+<li><strong>创建企业</strong>：登录后，选择 <strong>“创建企业”</strong>（企业名称随便填，基础版永久免费）。</li>
+</ol>
+<hr>
+<h3 id="第二步-在开放平台创建你的-机器人应用" tabindex="-1">第二步：在开放平台创建你的“机器人应用” <a class="header-anchor" href="#第二步-在开放平台创建你的-机器人应用" aria-label="Permalink to &quot;第二步：在开放平台创建你的“机器人应用”&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>进入开发者后台</strong>：在浏览器打开 <a href="https://open.feishu.cn/app" target="_blank" rel="noreferrer">飞书开放平台 (open.feishu.cn/app)</a>。</li>
+<li><strong>创建自建应用</strong>：点击 <strong>「创建企业自建应用」</strong> 这个大按钮。</li>
+<li><strong>填写应用信息</strong>：填好应用名称和描述，上传头像，点击 <strong>「创建」</strong>。</li>
+</ol>
+<hr>
+<h3 id="第三步-给应用添加-机器人-灵魂" tabindex="-1">第三步：给应用添加“机器人”灵魂 <a class="header-anchor" href="#第三步-给应用添加-机器人-灵魂" aria-label="Permalink to &quot;第三步：给应用添加“机器人”灵魂&quot;">&ZeroWidthSpace;</a></h3>
+<p>刚创建好的应用只是个名字，我们需要赋予它作为“聊天机器人”的能力，它才能在飞书里出现。</p>
+<ol>
+<li>在应用的管理后台，看左侧菜单栏，找到并点击 <strong>「添加应用能力」</strong>。</li>
+<li>在右侧出现的卡片列表中，找到 <strong>「机器人」</strong>，然后点击它下面的 <strong>「添加」</strong> 按钮。</li>
+</ol>
+<p><img src="/images/feishu/step3_1.jpg" alt="添加机器人能力"></p>
+<ol start="3">
+<li>添加完成后，左侧菜单会多出一个 <strong>「机器人」</strong> 的子选项。点击它，你就会看到机器人的专属配置面板，并且上方会提示你需要去开通权限。</li>
+</ol>
+<p><img src="/images/feishu/step3_2.jpg" alt="机器人配置面板"></p>
+<hr>
+<h3 id="第四步-配置核心权限-🔥极易踩坑-必看" tabindex="-1">第四步：配置核心权限（🔥极易踩坑，必看！） <a class="header-anchor" href="#第四步-配置核心权限-🔥极易踩坑-必看" aria-label="Permalink to &quot;第四步：配置核心权限（🔥极易踩坑，必看！）&quot;">&ZeroWidthSpace;</a></h3>
+<p>机器人要能看懂你发的消息、能给你发图片，必须要有相应的“权限”。</p>
+<ol>
+<li>看左侧菜单栏，点击 <strong>「权限管理」</strong>。</li>
+<li>此时你可以通过点击中间的 <strong>「开通权限」</strong> 按钮，唤出右侧的权限搜索抽屉。</li>
+</ol>
+<p><img src="/images/feishu/step4_1.jpg" alt="开通权限总览"></p>
+<ol start="3">
+<li>
+<p><strong>【核心避坑】</strong>：在右侧抽屉的右上角搜索框里，依次搜索以下英文代码，并在下方出现的选项中<strong>打上勾</strong>。对于日常手机聊天、群组互动，<strong>以下是核心必开权限（缺一不可）</strong>：</p>
+<p><strong>【核心聊天能力】</strong></p>
+<ul>
+<li>🔍 <code>im:message:send_as_bot</code>（获取单聊、群组消息 —— <strong>最重要，必须开！</strong>）</li>
+<li>🔍 <code>im:message.p2p_msg:readonly</code>（接收单聊消息）</li>
+<li>🔍 <code>im:message.group_at_msg:readonly</code>（接收群聊中@我的消息）</li>
+<li>🔍 <code>im:message:readonly</code>（获取消息内容）</li>
+<li>🔍 <code>im:message</code>（获取和发送单聊、群组消息）</li>
+<li>🔍 <code>im:resource</code>（获取消息中的图片、文件）</li>
+</ul>
+<p><strong>【可选：如果你需要在群里拉它】</strong></p>
+<ul>
+<li>🔍 <code>im:chat</code>（获取和更新群组信息）</li>
+<li>🔍 <code>im:chat:read</code>（读取群组信息）</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step4_2.jpg" alt="搜索并添加权限"></p>
+<p>⚠️ <strong>【史诗级巨坑警告】</strong>：在飞书后台，你在这里勾选的权限只是<strong>暂存状态</strong>！如果不进行第六步的“发布新版本”，新权限永远不会生效！</p>
+<hr>
+<h3 id="第五步-开启-websocket-长连接-小白免公网-ip-秘籍" tabindex="-1">第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍） <a class="header-anchor" href="#第五步-开启-websocket-长连接-小白免公网-ip-秘籍" aria-label="Permalink to &quot;第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍）&quot;">&ZeroWidthSpace;</a></h3>
+<p>为了让机器人能秒回你的消息，并且<strong>完全不需要你去搞复杂的公网 IP 和内网穿透</strong>，我们需要开启飞书的 WebSocket 模式。</p>
+<ol>
+<li>看左侧菜单栏，找到并点击 <strong>「事件与回调」</strong>。</li>
+<li>在右侧的“事件配置”页面中，点击“订阅方式”旁边的小铅笔图标，<strong>将其修改为：「长连接（推荐）」</strong>。
+<em>正如官方提示：只要选了这个，你的局域网旧电脑或虚拟机就能直接秒收消息！</em></li>
+</ol>
+<p><img src="/images/feishu/step5_1.jpg" alt="切换为长连接"></p>
+<ol start="3">
+<li>模式切换好后，向下滚动页面，点击蓝色的 <strong>「添加事件」</strong> 按钮。</li>
+<li>在弹出的搜索框里，搜索并勾选你要让机器人监听的事件。
+<ul>
+<li><strong>必选核心事件：</strong> 搜索 <code>im.message.receive_v1</code>（中文名叫：接收消息 v1.0）。<strong>只有勾了这个，机器人才知道你说话了。</strong></li>
+<li>其他群组相关的事件可以按需添加。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step5_2.jpg" alt="添加接收消息事件"></p>
+<hr>
+<h3 id="第六步-发布应用-让所有配置真正生效" tabindex="-1">第六步：发布应用（让所有配置真正生效！） <a class="header-anchor" href="#第六步-发布应用-让所有配置真正生效" aria-label="Permalink to &quot;第六步：发布应用（让所有配置真正生效！）&quot;">&ZeroWidthSpace;</a></h3>
+<p><strong>⚠️ 再次警告：你刚才勾选的任何权限、配置的任何长连接，如果不发布新版本，统统是废纸！</strong></p>
+<ol>
+<li>看左侧菜单栏，一直向下滚，找到 <strong>「应用发布」</strong> 下的 <strong>「版本管理与发布」</strong>。</li>
+<li>点击页面右上角大大的蓝色 <strong>「创建版本」</strong> 按钮。</li>
+</ol>
+<p><img src="/images/feishu/step6.jpg" alt="创建版本并发布"></p>
+<ol start="3">
+<li><strong>应用版本号</strong>：随便填（如 <code>1.0.0</code> 或递增 <code>1.0.1</code>）。</li>
+<li><strong>更新说明</strong>：随便填（如“更新基础聊天权限”）。</li>
+<li><strong>可用范围</strong>：选择你自己，或直接选“全部成员”。</li>
+<li>点击最下方的 <strong>「保存并申请发布」</strong>。</li>
+<li>因为你是超级管理员，系统会直接提示审核通过。<strong>至此，你配的所有权限才真正刻进机器人的灵魂里！</strong></li>
+</ol>
+<hr>
+<h3 id="第七步-拿到机器人的-身份证-并启动配置" tabindex="-1">第七步：拿到机器人的“身份证”并启动配置 <a class="header-anchor" href="#第七步-拿到机器人的-身份证-并启动配置" aria-label="Permalink to &quot;第七步：拿到机器人的“身份证”并启动配置&quot;">&ZeroWidthSpace;</a></h3>
+<p>当你完成上一步的版本发布后，你的机器人已经是一个健全的灵魂了！现在我们只需要拿到它的“身份证”和“密码”。</p>
+<ol>
+<li>看左侧菜单栏，回到最上面的 <strong>「凭证与基础信息」</strong>。</li>
+<li>此时页面顶部应该会显示绿色的“当前修改均已发布”。在页面中间的“应用凭证”区域，你会看到两个核心信息：
+<ul>
+<li><strong>App ID</strong> (机器人的账号，一般是 <code>cli_</code> 开头)</li>
+<li><strong>App Secret</strong> (机器人的密码，点击旁边的小眼睛可以显示出来)</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step7.jpg" alt="获取应用凭证"></p>
+<ol start="3">
+<li>点击旁边的小图标，把这两串字符复制下来。</li>
+<li>将它们填入到你的 AI 框架（如 OpenClaw）对应的 <code>feishu</code> 配置文件中即可。</li>
+</ol>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tools/risk-control.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tools/risk-control.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="telegram-与服务器风控的血与泪" tabindex="-1">Telegram 与服务器风控的血与泪 <a class="header-anchor" href="#telegram-与服务器风控的血与泪" aria-label="Permalink to &quot;Telegram 与服务器风控的血与泪&quot;">&ZeroWidthSpace;</a></h1>
+<p>在折腾各种 VPS 和社交平台的自动机器人的时候，封号风控是我们遇到最大的拦路虎。这一篇专门讲讲被封和解封的坑。</p>
+<h2 id="_1-telegram-注册即死-秒封号" tabindex="-1">1. Telegram 注册即死（秒封号） <a class="header-anchor" href="#_1-telegram-注册即死-秒封号" aria-label="Permalink to &quot;1. Telegram 注册即死（秒封号）&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>场景还原</strong>：
+想用国内手机号注册一个 Telegram 小号用来挂机测试，刚收到验证码填进去，页面一转，账号被提示 <code>Your phone number is banned</code>。</p>
+<p><strong>排查过程</strong>：
+这通常有两个原因：</p>
+<ul>
+<li>注册 IP 环境被污染（常见的机场梯子节点被大量滥用，IP 在黑名单）。</li>
+<li>号段本身被重点关照。国内号码注册，默认就会被系统高度风控。</li>
+</ul>
+<p><strong>避坑与解封指南</strong>：</p>
+<ul>
+<li><strong>注册新号，尽量购买独立原生 IP 的 VPS 自建节点</strong>，或者使用家宽环境，千万不要用万人骑的机场代理去注册。</li>
+<li><strong>解封路径</strong>：别慌。用邮箱直接发送申诉邮件给 <code>recover@telegram.org</code>。
+<ul>
+<li><strong>邮件标题</strong>：<code>Please unban my account</code></li>
+<li><strong>正文</strong>：写清楚你的完整手机号（一定要带 <code>+86</code> 国家区号），表明自己是个正常的用户（&quot;I am a normal user...&quot;），不是发垃圾广告的机器。通常几天后就会自动解封。</li>
+</ul>
+</li>
+<li><strong>刚解封的新号</strong>：别立刻跑去私信陌生人，别疯狂加几千人的大群，最好先养号 3 天。</li>
+</ul>
+<h2 id="_2-网站备案与服务器拉黑-神秘的-403-拦截页" tabindex="-1">2. 网站备案与服务器拉黑：神秘的 403 / 拦截页 <a class="header-anchor" href="#_2-网站备案与服务器拉黑-神秘的-403-拦截页" aria-label="Permalink to &quot;2. 网站备案与服务器拉黑：神秘的 403 / 拦截页&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>场景还原</strong>：
+把个人建站的 Web 服务跑在了国内云服务器（比如阿里云、腾讯云等），自己测试的时候可以通过 IP 加端口正常访问。
+然后高高兴兴地去域名服务商那里买了域名，刚解析到这个 IP，用浏览器一打开，立刻变成了一个大大的提示页：“该网站未备案...阻断访问”。</p>
+<p><strong>排查过程</strong>：
+国内服务商对 HTTP 流量查得很严，凡是挂载在 80/443 端口的域名请求，只要检测出未备案的 host 头，机房的防火墙就会立刻拦截。</p>
+<p><strong>避坑指南</strong>：
+如果你仅仅是自己折腾、或者搭建小范围的工具站，不想走长达两三周的备案流程：</p>
+<ul>
+<li><strong>方案A</strong>：将服务器换到海外节点（如香港、新加坡或美国）。</li>
+<li><strong>方案B</strong>：如果你非要用国内服务器，那就在 Cloudflare 上搭建内网穿透隧道（Cloudflare Tunnel，即 <code>cloudflared</code>），让 Cloudflare 直接把国外的请求转发给你内网服务器的任意端口，完美绕过国内云服务商的域名白名单阻断。这招对于不想暴露服务器真实 IP 防 DDoS 也非常好用。</li>
+</ul>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="telegram-与服务器风控的血与泪" tabindex="-1">Telegram 与服务器风控的血与泪 <a class="header-anchor" href="#telegram-与服务器风控的血与泪" aria-label="Permalink to &quot;Telegram 与服务器风控的血与泪&quot;">&ZeroWidthSpace;</a></h1>
+<p>在折腾各种 VPS 和社交平台的自动机器人的时候，封号风控是我们遇到最大的拦路虎。这一篇专门讲讲被封和解封的坑。</p>
+<h2 id="_1-telegram-注册即死-秒封号" tabindex="-1">1. Telegram 注册即死（秒封号） <a class="header-anchor" href="#_1-telegram-注册即死-秒封号" aria-label="Permalink to &quot;1. Telegram 注册即死（秒封号）&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>场景还原</strong>：
+想用国内手机号注册一个 Telegram 小号用来挂机测试，刚收到验证码填进去，页面一转，账号被提示 <code>Your phone number is banned</code>。</p>
+<p><strong>排查过程</strong>：
+这通常有两个原因：</p>
+<ul>
+<li>注册 IP 环境被污染（常见的机场梯子节点被大量滥用，IP 在黑名单）。</li>
+<li>号段本身被重点关照。国内号码注册，默认就会被系统高度风控。</li>
+</ul>
+<p><strong>避坑与解封指南</strong>：</p>
+<ul>
+<li><strong>注册新号，尽量购买独立原生 IP 的 VPS 自建节点</strong>，或者使用家宽环境，千万不要用万人骑的机场代理去注册。</li>
+<li><strong>解封路径</strong>：别慌。用邮箱直接发送申诉邮件给 <code>recover@telegram.org</code>。
+<ul>
+<li><strong>邮件标题</strong>：<code>Please unban my account</code></li>
+<li><strong>正文</strong>：写清楚你的完整手机号（一定要带 <code>+86</code> 国家区号），表明自己是个正常的用户（&quot;I am a normal user...&quot;），不是发垃圾广告的机器。通常几天后就会自动解封。</li>
+</ul>
+</li>
+<li><strong>刚解封的新号</strong>：别立刻跑去私信陌生人，别疯狂加几千人的大群，最好先养号 3 天。</li>
+</ul>
+<h2 id="_2-网站备案与服务器拉黑-神秘的-403-拦截页" tabindex="-1">2. 网站备案与服务器拉黑：神秘的 403 / 拦截页 <a class="header-anchor" href="#_2-网站备案与服务器拉黑-神秘的-403-拦截页" aria-label="Permalink to &quot;2. 网站备案与服务器拉黑：神秘的 403 / 拦截页&quot;">&ZeroWidthSpace;</a></h2>
+<p><strong>场景还原</strong>：
+把个人建站的 Web 服务跑在了国内云服务器（比如阿里云、腾讯云等），自己测试的时候可以通过 IP 加端口正常访问。
+然后高高兴兴地去域名服务商那里买了域名，刚解析到这个 IP，用浏览器一打开，立刻变成了一个大大的提示页：“该网站未备案...阻断访问”。</p>
+<p><strong>排查过程</strong>：
+国内服务商对 HTTP 流量查得很严，凡是挂载在 80/443 端口的域名请求，只要检测出未备案的 host 头，机房的防火墙就会立刻拦截。</p>
+<p><strong>避坑指南</strong>：
+如果你仅仅是自己折腾、或者搭建小范围的工具站，不想走长达两三周的备案流程：</p>
+<ul>
+<li><strong>方案A</strong>：将服务器换到海外节点（如香港、新加坡或美国）。</li>
+<li><strong>方案B</strong>：如果你非要用国内服务器，那就在 Cloudflare 上搭建内网穿透隧道（Cloudflare Tunnel，即 <code>cloudflared</code>），让 Cloudflare 直接把国外的请求转发给你内网服务器的任意端口，完美绕过国内云服务商的域名白名单阻断。这招对于不想暴露服务器真实 IP 防 DDoS 也非常好用。</li>
+</ul>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tools/vitepress-publish.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tools/vitepress-publish.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="📝-小白实操-如何给自己的独立博客-vitepress-发布新文章" tabindex="-1">📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？ <a class="header-anchor" href="#📝-小白实操-如何给自己的独立博客-vitepress-发布新文章" aria-label="Permalink to &quot;📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？&quot;">&ZeroWidthSpace;</a></h1>
+<p>当你成功搭建了像我一样极简清爽的独立博客（基于 VitePress + GitHub + Cloudflare Pages），肯定会面临一个问题：“我自己平时怎么发新文章呢？”</p>
+<p>不用懂代码，不用懂运维。你只需要像写日记一样准备 <code>.md</code> 文件，然后靠 <strong>3 句魔法命令</strong>，你的网站就会全自动更新上线！</p>
+<p>下面就是极简的发帖教程，小白一学就会！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="📝-小白实操-如何给自己的独立博客-vitepress-发布新文章" tabindex="-1">📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？ <a class="header-anchor" href="#📝-小白实操-如何给自己的独立博客-vitepress-发布新文章" aria-label="Permalink to &quot;📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？&quot;">&ZeroWidthSpace;</a></h1>
+<p>当你成功搭建了像我一样极简清爽的独立博客（基于 VitePress + GitHub + Cloudflare Pages），肯定会面临一个问题：“我自己平时怎么发新文章呢？”</p>
+<p>不用懂代码，不用懂运维。你只需要像写日记一样准备 <code>.md</code> 文件，然后靠 <strong>3 句魔法命令</strong>，你的网站就会全自动更新上线！</p>
+<p>下面就是极简的发帖教程，小白一学就会！</p>
+<hr>
+<h2 id="📌-核心思路-你需要动哪几个文件夹" tabindex="-1">📌 核心思路：你需要动哪几个文件夹？ <a class="header-anchor" href="#📌-核心思路-你需要动哪几个文件夹" aria-label="Permalink to &quot;📌 核心思路：你需要动哪几个文件夹？&quot;">&ZeroWidthSpace;</a></h2>
+<p>在动手之前，我们先搞懂博客源码的结构。每次发帖，你只需要和下面这 <strong>3 个文件夹（或文件）</strong> 打交道：</p>
+<p><img src="/vp_step1.png" alt="第一步：理清三个核心位置"></p>
+<h3 id="_1-准备你的文章-放在分类文件夹里" tabindex="-1">1. 准备你的文章（放在分类文件夹里） <a class="header-anchor" href="#_1-准备你的文章-放在分类文件夹里" aria-label="Permalink to &quot;1. 准备你的文章（放在分类文件夹里）&quot;">&ZeroWidthSpace;</a></h3>
+<ul>
+<li><strong>文章格式</strong>：用任何编辑器（记事本、VS Code、Typora 等）写文章，保存为 <code>.md</code> 格式。例如：<code>my-new-post.md</code>。</li>
+<li><strong>保存位置</strong>：把你写好的文章放到 <code>docs/</code> 下的某个分类文件夹里，比如 <code>docs/tools/</code>。</li>
+</ul>
+<h3 id="_2-把配图放进-public-文件夹" tabindex="-1">2. 把配图放进 <code>public</code> 文件夹 <a class="header-anchor" href="#_2-把配图放进-public-文件夹" aria-label="Permalink to &quot;2. 把配图放进 `public` 文件夹&quot;">&ZeroWidthSpace;</a></h3>
+<ul>
+<li><strong>放图片</strong>：如果你的文章里带有截图，把所有的图片（如 <code>pic1.png</code>）一股脑扔进 <code>docs/public/</code> 文件夹里。</li>
+<li><strong>引用图片</strong>：在文章里插入图片时，写这行代码：<code>![图注文字](/pic1.png)</code>。（记住斜杠 <code>/</code> 开头）。</li>
+</ul>
+<hr>
+<h2 id="📌-核心操作-修改配置文件-让菜单显示你的文章" tabindex="-1">📌 核心操作：修改配置文件，让菜单显示你的文章 <a class="header-anchor" href="#📌-核心操作-修改配置文件-让菜单显示你的文章" aria-label="Permalink to &quot;📌 核心操作：修改配置文件，让菜单显示你的文章&quot;">&ZeroWidthSpace;</a></h2>
+<p>这一步很关键！文章放进去后，如果不在配置文件里“打个招呼”，网站左侧的菜单是不会显示它的。</p>
+<ol>
+<li>打开 <code>docs/.vitepress/config.js</code>（或 <code>config.mts</code>）。</li>
+<li>往下翻，找到 <code>sidebar</code>（侧边栏）配置的地方。</li>
+<li>照着下面这张图里的方法，在 <code>items</code> 中加入一行新文章的链接：</li>
+</ol>
+<p><img src="/vp_step2.png" alt="第二步：让左侧菜单显示你的新文章"></p>
+<blockquote>
+<p><strong>⚠️ 注意事项</strong>：</p>
+<ul>
+<li><code>text</code> 是网站侧边栏显示的文字标题。</li>
+<li><code>link</code> 是你文章的存放路径，前面加 <code>/</code>，后面<strong>不需要写 <code>.md</code> 后缀</strong>！</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="📌-魔法命令-一键推送到云端全自动发布" tabindex="-1">📌 魔法命令：一键推送到云端全自动发布 <a class="header-anchor" href="#📌-魔法命令-一键推送到云端全自动发布" aria-label="Permalink to &quot;📌 魔法命令：一键推送到云端全自动发布&quot;">&ZeroWidthSpace;</a></h2>
+<p>当你把文章写好了、图片放好了、配置文件也改好了，接下来就是见证奇迹的时刻！</p>
+<p>打开你的终端（比如 SSH 连上你的虚拟机），进入博客根目录（<code>cd ~/vitepress-demo</code>），依次敲击下面这 <strong>3 行 Git 魔法命令</strong>：</p>
+<p><img src="/vp_step3.png" alt="第三步：命令行三连，一键全自动发布"></p>
+<p>命令总结（直接复制粘贴执行即可）：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> .</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> commit</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -m</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "发布了一篇新文章"</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> push</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> origin</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> main</span></span></code></pre>
+</div><p><strong>✅ 大功告成！</strong>
+只要这三行命令执行成功没有报错，一切就交给 Cloudflare 去全自动处理了。去泡杯咖啡，大约 1 到 2 分钟后，刷新你的网站网址，你的最新大作就已经成功上线啦！是不是超简单？</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tutorials/docker-install.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tutorials/docker-install.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="docker-安装与配置" tabindex="-1">Docker 安装与配置 <a class="header-anchor" href="#docker-安装与配置" aria-label="Permalink to &quot;Docker 安装与配置&quot;">&ZeroWidthSpace;</a></h1>
+<p>这是我在B站刚发布的《3分钟装好Docker》视频配套代码。</p>
+<h2 id="一键安装命令" tabindex="-1">一键安装命令 <a class="header-anchor" href="#一键安装命令" aria-label="Permalink to &quot;一键安装命令&quot;">&ZeroWidthSpace;</a></h2>
+<p>由于网络原因，我推荐大家使用下面这条国内镜像源的一键安装脚本：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">curl</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -fsSL</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> https://get.docker.com</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> bash</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -s</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --mirror</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Aliyun</span></span></code></pre>
+</div><h2 id="启动并设置开机自启" tabindex="-1">启动并设置开机自启 <a class="header-anchor" href="#启动并设置开机自启" aria-label="Permalink to &quot;启动并设置开机自启&quot;">&ZeroWidthSpace;</a></h2>
+<p>装完之后别忘了把它跑起来，并且设置为每次开机都自动运行：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> start</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> enable</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span></code></pre>
+</div><p>你只要点一下上面代码块右上角的<strong>复制按钮</strong>，然后直接粘贴到终端回车就行了！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="docker-安装与配置" tabindex="-1">Docker 安装与配置 <a class="header-anchor" href="#docker-安装与配置" aria-label="Permalink to &quot;Docker 安装与配置&quot;">&ZeroWidthSpace;</a></h1>
+<p>这是我在B站刚发布的《3分钟装好Docker》视频配套代码。</p>
+<h2 id="一键安装命令" tabindex="-1">一键安装命令 <a class="header-anchor" href="#一键安装命令" aria-label="Permalink to &quot;一键安装命令&quot;">&ZeroWidthSpace;</a></h2>
+<p>由于网络原因，我推荐大家使用下面这条国内镜像源的一键安装脚本：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">curl</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -fsSL</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> https://get.docker.com</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> |</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> bash</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -s</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --mirror</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> Aliyun</span></span></code></pre>
+</div><h2 id="启动并设置开机自启" tabindex="-1">启动并设置开机自启 <a class="header-anchor" href="#启动并设置开机自启" aria-label="Permalink to &quot;启动并设置开机自启&quot;">&ZeroWidthSpace;</a></h2>
+<p>装完之后别忘了把它跑起来，并且设置为每次开机都自动运行：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> start</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> enable</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span></code></pre>
+</div><p>你只要点一下上面代码块右上角的<strong>复制按钮</strong>，然后直接粘贴到终端回车就行了！</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tutorials/feishu-bot-setup.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tutorials/feishu-bot-setup.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="飞书机器人注册与配置全通关指南-图文保姆级" tabindex="-1">飞书机器人注册与配置全通关指南（图文保姆级） <a class="header-anchor" href="#飞书机器人注册与配置全通关指南-图文保姆级" aria-label="Permalink to &quot;飞书机器人注册与配置全通关指南（图文保姆级）&quot;">&ZeroWidthSpace;</a></h1>
+<p>这份指南将手把手、图文并茂地教你如何从零开始配置一个专属的机器人。全程免费，不需要你懂代码，也不需要公网 IP！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="飞书机器人注册与配置全通关指南-图文保姆级" tabindex="-1">飞书机器人注册与配置全通关指南（图文保姆级） <a class="header-anchor" href="#飞书机器人注册与配置全通关指南-图文保姆级" aria-label="Permalink to &quot;飞书机器人注册与配置全通关指南（图文保姆级）&quot;">&ZeroWidthSpace;</a></h1>
+<p>这份指南将手把手、图文并茂地教你如何从零开始配置一个专属的机器人。全程免费，不需要你懂代码，也不需要公网 IP！</p>
+<hr>
+<h3 id="第一步-注册飞书与创建企业" tabindex="-1">第一步：注册飞书与创建企业 <a class="header-anchor" href="#第一步-注册飞书与创建企业" aria-label="Permalink to &quot;第一步：注册飞书与创建企业&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>打开官网</strong>：首先在浏览器打开 <a href="https://www.feishu.cn/" target="_blank" rel="noreferrer">飞书官网</a>。</li>
+<li><strong>手机号登录</strong>：点击右上角的“登录”，直接用你的手机号接收验证码登录。</li>
+<li><strong>创建企业</strong>：登录后，选择 <strong>“创建企业”</strong>（企业名称随便填，基础版永久免费）。</li>
+</ol>
+<hr>
+<h3 id="第二步-在开放平台创建你的-机器人应用" tabindex="-1">第二步：在开放平台创建你的“机器人应用” <a class="header-anchor" href="#第二步-在开放平台创建你的-机器人应用" aria-label="Permalink to &quot;第二步：在开放平台创建你的“机器人应用”&quot;">&ZeroWidthSpace;</a></h3>
+<ol>
+<li><strong>进入开发者后台</strong>：在浏览器打开 <a href="https://open.feishu.cn/app" target="_blank" rel="noreferrer">飞书开放平台 (open.feishu.cn/app)</a>。</li>
+<li><strong>创建自建应用</strong>：点击 <strong>「创建企业自建应用」</strong> 这个大按钮。</li>
+<li><strong>填写应用信息</strong>：填好应用名称和描述，上传头像，点击 <strong>「创建」</strong>。</li>
+</ol>
+<hr>
+<h3 id="第三步-给应用添加-机器人-灵魂" tabindex="-1">第三步：给应用添加“机器人”灵魂 <a class="header-anchor" href="#第三步-给应用添加-机器人-灵魂" aria-label="Permalink to &quot;第三步：给应用添加“机器人”灵魂&quot;">&ZeroWidthSpace;</a></h3>
+<p>刚创建好的应用只是个名字，我们需要赋予它作为“聊天机器人”的能力，它才能在飞书里出现。</p>
+<ol>
+<li>在应用的管理后台，看左侧菜单栏，找到并点击 <strong>「添加应用能力」</strong>。</li>
+<li>在右侧出现的卡片列表中，找到 <strong>「机器人」</strong>，然后点击它下面的 <strong>「添加」</strong> 按钮。</li>
+</ol>
+<p><img src="/images/feishu/step3_1.jpg" alt="添加机器人能力"></p>
+<ol start="3">
+<li>添加完成后，左侧菜单会多出一个 <strong>「机器人」</strong> 的子选项。点击它，你就会看到机器人的专属配置面板，并且上方会提示你需要去开通权限。</li>
+</ol>
+<p><img src="/images/feishu/step3_2.jpg" alt="机器人配置面板"></p>
+<hr>
+<h3 id="第四步-配置核心权限-🔥极易踩坑-必看" tabindex="-1">第四步：配置核心权限（🔥极易踩坑，必看！） <a class="header-anchor" href="#第四步-配置核心权限-🔥极易踩坑-必看" aria-label="Permalink to &quot;第四步：配置核心权限（🔥极易踩坑，必看！）&quot;">&ZeroWidthSpace;</a></h3>
+<p>机器人要能看懂你发的消息、能给你发图片，必须要有相应的“权限”。</p>
+<ol>
+<li>看左侧菜单栏，点击 <strong>「权限管理」</strong>。</li>
+<li>此时你可以通过点击中间的 <strong>「开通权限」</strong> 按钮，唤出右侧的权限搜索抽屉。</li>
+</ol>
+<p><img src="/images/feishu/step4_1.jpg" alt="开通权限总览"></p>
+<ol start="3">
+<li>
+<p><strong>【核心避坑】</strong>：在右侧抽屉的右上角搜索框里，依次搜索以下英文代码，并在下方出现的选项中<strong>打上勾</strong>。对于日常手机聊天、群组互动，<strong>以下是核心必开权限（缺一不可）</strong>：</p>
+<p><strong>【核心聊天能力】</strong></p>
+<ul>
+<li>🔍 <code>im:message:send_as_bot</code>（获取单聊、群组消息 —— <strong>最重要，必须开！</strong>）</li>
+<li>🔍 <code>im:message.p2p_msg:readonly</code>（接收单聊消息）</li>
+<li>🔍 <code>im:message.group_at_msg:readonly</code>（接收群聊中@我的消息）</li>
+<li>🔍 <code>im:message:readonly</code>（获取消息内容）</li>
+<li>🔍 <code>im:message</code>（获取和发送单聊、群组消息）</li>
+<li>🔍 <code>im:resource</code>（获取消息中的图片、文件）</li>
+</ul>
+<p><strong>【可选：如果你需要在群里拉它】</strong></p>
+<ul>
+<li>🔍 <code>im:chat</code>（获取和更新群组信息）</li>
+<li>🔍 <code>im:chat:read</code>（读取群组信息）</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step4_2.jpg" alt="搜索并添加权限"></p>
+<p>⚠️ <strong>【史诗级巨坑警告】</strong>：在飞书后台，你在这里勾选的权限只是<strong>暂存状态</strong>！如果不进行第六步的“发布新版本”，新权限永远不会生效！</p>
+<hr>
+<h3 id="第五步-开启-websocket-长连接-小白免公网-ip-秘籍" tabindex="-1">第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍） <a class="header-anchor" href="#第五步-开启-websocket-长连接-小白免公网-ip-秘籍" aria-label="Permalink to &quot;第五步：开启 WebSocket 长连接（小白免公网 IP 秘籍）&quot;">&ZeroWidthSpace;</a></h3>
+<p>为了让机器人能秒回你的消息，并且<strong>完全不需要你去搞复杂的公网 IP 和内网穿透</strong>，我们需要开启飞书的 WebSocket 模式。</p>
+<ol>
+<li>看左侧菜单栏，找到并点击 <strong>「事件与回调」</strong>。</li>
+<li>在右侧的“事件配置”页面中，点击“订阅方式”旁边的小铅笔图标，<strong>将其修改为：「长连接（推荐）」</strong>。
+<em>正如官方提示：只要选了这个，你的局域网旧电脑或虚拟机就能直接秒收消息！</em></li>
+</ol>
+<p><img src="/images/feishu/step5_1.jpg" alt="切换为长连接"></p>
+<ol start="3">
+<li>模式切换好后，向下滚动页面，点击蓝色的 <strong>「添加事件」</strong> 按钮。</li>
+<li>在弹出的搜索框里，搜索并勾选你要让机器人监听的事件。
+<ul>
+<li><strong>必选核心事件：</strong> 搜索 <code>im.message.receive_v1</code>（中文名叫：接收消息 v1.0）。<strong>只有勾了这个，机器人才知道你说话了。</strong></li>
+<li>其他群组相关的事件可以按需添加。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step5_2.jpg" alt="添加接收消息事件"></p>
+<hr>
+<h3 id="第六步-发布应用-让所有配置真正生效" tabindex="-1">第六步：发布应用（让所有配置真正生效！） <a class="header-anchor" href="#第六步-发布应用-让所有配置真正生效" aria-label="Permalink to &quot;第六步：发布应用（让所有配置真正生效！）&quot;">&ZeroWidthSpace;</a></h3>
+<p><strong>⚠️ 再次警告：你刚才勾选的任何权限、配置的任何长连接，如果不发布新版本，统统是废纸！</strong></p>
+<ol>
+<li>看左侧菜单栏，一直向下滚，找到 <strong>「应用发布」</strong> 下的 <strong>「版本管理与发布」</strong>。</li>
+<li>点击页面右上角大大的蓝色 <strong>「创建版本」</strong> 按钮。</li>
+</ol>
+<p><img src="/images/feishu/step6.jpg" alt="创建版本并发布"></p>
+<ol start="3">
+<li><strong>应用版本号</strong>：随便填（如 <code>1.0.0</code> 或递增 <code>1.0.1</code>）。</li>
+<li><strong>更新说明</strong>：随便填（如“更新基础聊天权限”）。</li>
+<li><strong>可用范围</strong>：选择你自己，或直接选“全部成员”。</li>
+<li>点击最下方的 <strong>「保存并申请发布」</strong>。</li>
+<li>因为你是超级管理员，系统会直接提示审核通过。<strong>至此，你配的所有权限才真正刻进机器人的灵魂里！</strong></li>
+</ol>
+<hr>
+<h3 id="第七步-拿到机器人的-身份证-并启动配置" tabindex="-1">第七步：拿到机器人的“身份证”并启动配置 <a class="header-anchor" href="#第七步-拿到机器人的-身份证-并启动配置" aria-label="Permalink to &quot;第七步：拿到机器人的“身份证”并启动配置&quot;">&ZeroWidthSpace;</a></h3>
+<p>当你完成上一步的版本发布后，你的机器人已经是一个健全的灵魂了！现在我们只需要拿到它的“身份证”和“密码”。</p>
+<ol>
+<li>看左侧菜单栏，回到最上面的 <strong>「凭证与基础信息」</strong>。</li>
+<li>此时页面顶部应该会显示绿色的“当前修改均已发布”。在页面中间的“应用凭证”区域，你会看到两个核心信息：
+<ul>
+<li><strong>App ID</strong> (机器人的账号，一般是 <code>cli_</code> 开头)</li>
+<li><strong>App Secret</strong> (机器人的密码，点击旁边的小眼睛可以显示出来)</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/feishu/step7.jpg" alt="获取应用凭证"></p>
+<ol start="3">
+<li>点击旁边的小图标，把这两串字符复制下来。</li>
+<li>将它们填入到你的 AI 框架（如 OpenClaw）对应的 <code>feishu</code> 配置文件中即可。</li>
+</ol>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tutorials/nas-phone-access.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tutorials/nas-phone-access.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" tabindex="-1">🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇） <a class="header-anchor" href="#🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" aria-label="Permalink to &quot;🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇）&quot;">&ZeroWidthSpace;</a></h1>
+<p>很多朋友搭建好 CasaOS 之后，都想知道怎么在手机上也能看到硬盘里的照片和文件。今天教大家一个超级简单的方法！</p>
+<h2 id="📌-第一步-进入易有云后台" tabindex="-1">📌 第一步：进入易有云后台 <a class="header-anchor" href="#📌-第一步-进入易有云后台" aria-label="Permalink to &quot;📌 第一步：进入易有云后台&quot;">&ZeroWidthSpace;</a></h2>
+<p>打开你的 CasaOS 主界面，往下滑一点找到「<strong>旧应用程序（待重建）</strong>」区域，看到那个<strong>带有蓝色云朵的 linkease（易有云）</strong> 图标了吗？（如下图所示），点击它进入易有云后台！</p>
+<p><img src="/casaos_final.png" alt="第一步：进入易有云后台"></p>
+<h2 id="📌-第二步-下载手机-app-并绑定设备" tabindex="-1">📌 第二步：下载手机 App 并绑定设备 <a class="header-anchor" href="#📌-第二步-下载手机-app-并绑定设备" aria-label="Permalink to &quot;📌 第二步：下载手机 App 并绑定设备&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li>进入易有云网页后台后，看屏幕的最<strong>右上角</strong>！</li>
+<li>看到红框圈出来的那个<strong>像手机一样的小图标</strong>了吗？（如下图所示），点它！</li>
+<li>这时屏幕上会弹出一个二维码。拿出你的手机扫码，就能下载易有云的官方 App。</li>
+<li>安装好 App 后，根据提示扫码完成设备绑定。</li>
+</ol>
+<p><img src="/linkease_final.png" alt="第二步：下载手机 App 并绑定设备"></p>
+<h2 id="✅-大功告成" tabindex="-1">✅ 大功告成！ <a class="header-anchor" href="#✅-大功告成" aria-label="Permalink to &quot;✅ 大功告成！&quot;">&ZeroWidthSpace;</a></h2>
+<p>现在打开手机上的易有云 App，你的 NAS 硬盘（Storage1）里的所有照片、视频和文件，随时随地都能访问啦！赶紧去试试吧！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" tabindex="-1">🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇） <a class="header-anchor" href="#🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" aria-label="Permalink to &quot;🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇）&quot;">&ZeroWidthSpace;</a></h1>
+<p>很多朋友搭建好 CasaOS 之后，都想知道怎么在手机上也能看到硬盘里的照片和文件。今天教大家一个超级简单的方法！</p>
+<h2 id="📌-第一步-进入易有云后台" tabindex="-1">📌 第一步：进入易有云后台 <a class="header-anchor" href="#📌-第一步-进入易有云后台" aria-label="Permalink to &quot;📌 第一步：进入易有云后台&quot;">&ZeroWidthSpace;</a></h2>
+<p>打开你的 CasaOS 主界面，往下滑一点找到「<strong>旧应用程序（待重建）</strong>」区域，看到那个<strong>带有蓝色云朵的 linkease（易有云）</strong> 图标了吗？（如下图所示），点击它进入易有云后台！</p>
+<p><img src="/casaos_final.png" alt="第一步：进入易有云后台"></p>
+<h2 id="📌-第二步-下载手机-app-并绑定设备" tabindex="-1">📌 第二步：下载手机 App 并绑定设备 <a class="header-anchor" href="#📌-第二步-下载手机-app-并绑定设备" aria-label="Permalink to &quot;📌 第二步：下载手机 App 并绑定设备&quot;">&ZeroWidthSpace;</a></h2>
+<ol>
+<li>进入易有云网页后台后，看屏幕的最<strong>右上角</strong>！</li>
+<li>看到红框圈出来的那个<strong>像手机一样的小图标</strong>了吗？（如下图所示），点它！</li>
+<li>这时屏幕上会弹出一个二维码。拿出你的手机扫码，就能下载易有云的官方 App。</li>
+<li>安装好 App 后，根据提示扫码完成设备绑定。</li>
+</ol>
+<p><img src="/linkease_final.png" alt="第二步：下载手机 App 并绑定设备"></p>
+<h2 id="✅-大功告成" tabindex="-1">✅ 大功告成！ <a class="header-anchor" href="#✅-大功告成" aria-label="Permalink to &quot;✅ 大功告成！&quot;">&ZeroWidthSpace;</a></h2>
+<p>现在打开手机上的易有云 App，你的 NAS 硬盘（Storage1）里的所有照片、视频和文件，随时随地都能访问啦！赶紧去试试吧！</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tutorials/nas-remote.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tutorials/nas-remote.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="零基础搞定-nas-外网访问-小白也能看硬盘里的电影" tabindex="-1">零基础搞定 NAS 外网访问！小白也能看硬盘里的电影 <a class="header-anchor" href="#零基础搞定-nas-外网访问-小白也能看硬盘里的电影" aria-label="Permalink to &quot;零基础搞定 NAS 外网访问！小白也能看硬盘里的电影&quot;">&ZeroWidthSpace;</a></h1>
+<p><img src="/images/nas-remote-guide.jpg" alt="操作指引"></p>
+<h2 id="为什么你的硬盘带不出门" tabindex="-1">为什么你的硬盘带不出门？ <a class="header-anchor" href="#为什么你的硬盘带不出门" aria-label="Permalink to &quot;为什么你的硬盘带不出门？&quot;">&ZeroWidthSpace;</a></h2>
+<p>很多人把旧电脑或者硬盘做成了 NAS（局域网存储），在家看电影、备份照片爽得很。但是一旦出了家门，手机流量就死活连不上家里的数据了，这就很让人抓狂。</p>
+<p>其实，你不需要去折腾什么公网 IP，也不用去路由器里搞复杂的端口映射。今天我们就用最简单、最“傻瓜”的方式，一招打通外网访问！</p>
+<h2 id="实操步骤-只需三步" tabindex="-1">实操步骤：只需三步！ <a class="header-anchor" href="#实操步骤-只需三步" aria-label="Permalink to &quot;实操步骤：只需三步！&quot;">&ZeroWidthSpace;</a></h2>
+<h3 id="_1-找到穿透神器入口" tabindex="-1">1. 找到穿透神器入口 <a class="header-anchor" href="#_1-找到穿透神器入口" aria-label="Permalink to &quot;1. 找到穿透神器入口&quot;">&ZeroWidthSpace;</a></h3>
+<p>在你的 CasaOS 主控台界面，目光往下看。
+找到屏幕中间偏下，那个叫 <code>linkease</code>（易有云）的蓝色小云朵图标（如上图红框所示）。
+不要犹豫，直接鼠标左键点进去！</p>
+<h3 id="_2-登录你的专属账号" tabindex="-1">2. 登录你的专属账号 <a class="header-anchor" href="#_2-登录你的专属账号" aria-label="Permalink to &quot;2. 登录你的专属账号&quot;">&ZeroWidthSpace;</a></h3>
+<p>进入易有云的后台后，按照提示用微信扫码或者账号密码登录。
+这相当于给你的 NAS 绑定了一把“远程大门”的钥匙。</p>
+<h3 id="_3-见证奇迹的断网测试" tabindex="-1">3. 见证奇迹的断网测试 <a class="header-anchor" href="#_3-见证奇迹的断网测试" aria-label="Permalink to &quot;3. 见证奇迹的断网测试&quot;">&ZeroWidthSpace;</a></h3>
+<p>这是最爽的一步！
+拿起你的手机，<strong>关掉家里的 WiFi 连接</strong>，确保只使用 5G/4G 移动网络。然后打开手机上的“易有云”App。</p>
+<p>🎉 <strong>结果：</strong> 你会发现，哪怕你不在家，家里的 2T 大硬盘也已经老老实实躺在你的手机里了！点开照片秒加载，看剧随便拖进度条。</p>
+<p>这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="零基础搞定-nas-外网访问-小白也能看硬盘里的电影" tabindex="-1">零基础搞定 NAS 外网访问！小白也能看硬盘里的电影 <a class="header-anchor" href="#零基础搞定-nas-外网访问-小白也能看硬盘里的电影" aria-label="Permalink to &quot;零基础搞定 NAS 外网访问！小白也能看硬盘里的电影&quot;">&ZeroWidthSpace;</a></h1>
+<p><img src="/images/nas-remote-guide.jpg" alt="操作指引"></p>
+<h2 id="为什么你的硬盘带不出门" tabindex="-1">为什么你的硬盘带不出门？ <a class="header-anchor" href="#为什么你的硬盘带不出门" aria-label="Permalink to &quot;为什么你的硬盘带不出门？&quot;">&ZeroWidthSpace;</a></h2>
+<p>很多人把旧电脑或者硬盘做成了 NAS（局域网存储），在家看电影、备份照片爽得很。但是一旦出了家门，手机流量就死活连不上家里的数据了，这就很让人抓狂。</p>
+<p>其实，你不需要去折腾什么公网 IP，也不用去路由器里搞复杂的端口映射。今天我们就用最简单、最“傻瓜”的方式，一招打通外网访问！</p>
+<h2 id="实操步骤-只需三步" tabindex="-1">实操步骤：只需三步！ <a class="header-anchor" href="#实操步骤-只需三步" aria-label="Permalink to &quot;实操步骤：只需三步！&quot;">&ZeroWidthSpace;</a></h2>
+<h3 id="_1-找到穿透神器入口" tabindex="-1">1. 找到穿透神器入口 <a class="header-anchor" href="#_1-找到穿透神器入口" aria-label="Permalink to &quot;1. 找到穿透神器入口&quot;">&ZeroWidthSpace;</a></h3>
+<p>在你的 CasaOS 主控台界面，目光往下看。
+找到屏幕中间偏下，那个叫 <code>linkease</code>（易有云）的蓝色小云朵图标（如上图红框所示）。
+不要犹豫，直接鼠标左键点进去！</p>
+<h3 id="_2-登录你的专属账号" tabindex="-1">2. 登录你的专属账号 <a class="header-anchor" href="#_2-登录你的专属账号" aria-label="Permalink to &quot;2. 登录你的专属账号&quot;">&ZeroWidthSpace;</a></h3>
+<p>进入易有云的后台后，按照提示用微信扫码或者账号密码登录。
+这相当于给你的 NAS 绑定了一把“远程大门”的钥匙。</p>
+<h3 id="_3-见证奇迹的断网测试" tabindex="-1">3. 见证奇迹的断网测试 <a class="header-anchor" href="#_3-见证奇迹的断网测试" aria-label="Permalink to &quot;3. 见证奇迹的断网测试&quot;">&ZeroWidthSpace;</a></h3>
+<p>这是最爽的一步！
+拿起你的手机，<strong>关掉家里的 WiFi 连接</strong>，确保只使用 5G/4G 移动网络。然后打开手机上的“易有云”App。</p>
+<p>🎉 <strong>结果：</strong> 你会发现，哪怕你不在家，家里的 2T 大硬盘也已经老老实实躺在你的手机里了！点开照片秒加载，看剧随便拖进度条。</p>
+<p>这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[leechbox 更新]]></title>
+            <link>https://leechbox.xyz/tutorials/openclaw-recovery.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/tutorials/openclaw-recovery.html</guid>
+            <pubDate>Sat, 04 Apr 2026 20:37:23 GMT</pubDate>
+            <description><![CDATA[<h1 id="ai-助理失联怎么办-openclaw-本地部署的灾备与急救指南" tabindex="-1">AI 助理失联怎么办？OpenClaw 本地部署的灾备与急救指南 <a class="header-anchor" href="#ai-助理失联怎么办-openclaw-本地部署的灾备与急救指南" aria-label="Permalink to &quot;AI 助理失联怎么办？OpenClaw 本地部署的灾备与急救指南&quot;">&ZeroWidthSpace;</a></h1>
+<p>当你深度依赖一个运行在本地局域网的 AI 助理（比如 OpenClaw），并且赋予了它各种自动化脚本和系统级权限后，难免会遇到这样一个终极恐慌时刻：<strong>某次调试技能代码或改错了底层配置，导致 AI 助理进程崩溃，彻底失联。</strong></p>
+<p>此时，千万不要慌张。只要物理服务器还在通电，我们就可以通过以下「急救协议」迅速将其拉回正常状态。</p>
+<h2 id="第一阶段-常规急救-排查与除错" tabindex="-1">第一阶段：常规急救（排查与除错） <a class="header-anchor" href="#第一阶段-常规急救-排查与除错" aria-label="Permalink to &quot;第一阶段：常规急救（排查与除错）&quot;">&ZeroWidthSpace;</a></h2>
+<p>如果 AI 助理突然不响应了，第一步是直捣黄龙，通过 SSH 连入运行 OpenClaw 的宿主机。</p>
+<h3 id="_1-检查服务状态与尸检报告" tabindex="-1">1. 检查服务状态与尸检报告 <a class="header-anchor" href="#_1-检查服务状态与尸检报告" aria-label="Permalink to &quot;1. 检查服务状态与尸检报告&quot;">&ZeroWidthSpace;</a></h3>
+<p>进入宿主机后，执行以下命令查看 Gateway 服务的状态和最新报错日志：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> status</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> logs</span></span></code></pre>
+</div><p>通常情况下，日志的最后几行会明确指出导致崩溃的原因。例如：某段刚写好的自定义 Skill 脚本里少了一个逗号，或者是某个 YAML 配置文件格式缩进错误。</p>
+<h3 id="_2-就地修复并复苏" tabindex="-1">2. 就地修复并复苏 <a class="header-anchor" href="#_2-就地修复并复苏" aria-label="Permalink to &quot;2. 就地修复并复苏&quot;">&ZeroWidthSpace;</a></h3>
+<p>如果你能看懂报错，并且明确知道是刚才修改的哪个文件闯了祸，直接用文本编辑器（如 <code>nano</code> 或 <code>vim</code>）修改对应的文件，把错误的语法修正。</p>
+<p>修复完成后，执行心脏复苏：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
+</div><p>不出意外的话，几秒钟后你的 AI 助理就会在通讯软件（如飞书/Telegram/微信）上重新上线并跟你打招呼了。</p>
+<h2 id="第二阶段-终极回滚-时光机协议" tabindex="-1">第二阶段：终极回滚（时光机协议） <a class="header-anchor" href="#第二阶段-终极回滚-时光机协议" aria-label="Permalink to &quot;第二阶段：终极回滚（时光机协议）&quot;">&ZeroWidthSpace;</a></h2>
+<p>如果你面对一堆报错毫无头绪，或者刚才改动的文件太多已经彻底乱套，这时候就需要动用我们在搭建之初就该设计好的**“每日自动化备份机制”**了。</p>
+<h3 id="_1-建立自动化备份机制-前置要求" tabindex="-1">1. 建立自动化备份机制（前置要求） <a class="header-anchor" href="#_1-建立自动化备份机制-前置要求" aria-label="Permalink to &quot;1. 建立自动化备份机制（前置要求）&quot;">&ZeroWidthSpace;</a></h3>
+<p>一个成熟的家庭数据中心架构，绝不能把鸡蛋放在同一个篮子里。你需要配置一个定时任务（Cron），每天凌晨业务低谷期，将 OpenClaw 的核心工作目录（包含配置、记忆、状态等）打包，并推送到另一台物理 NAS 上。</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 示例核心打包命令（排除媒体和日志等大体积废弃文件）</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">tar</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -czf</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> openclaw_backup_2026.tar.gz</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  --exclude=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.openclaw/logs/*'</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  --exclude=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.openclaw/media/*'</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  .openclaw/</span></span></code></pre>
+</div><h3 id="_2-执行时光机覆盖操作" tabindex="-1">2. 执行时光机覆盖操作 <a class="header-anchor" href="#_2-执行时光机覆盖操作" aria-label="Permalink to &quot;2. 执行时光机覆盖操作&quot;">&ZeroWidthSpace;</a></h3>
+<p>当 AI 助理彻底无可救药时，直接去你的异地备份盘（NAS）中找到最近一次健康的完整备份压缩包。</p>
+<p>将其传回 OpenClaw 宿主机的根目录（或安装所在的对应目录），然后执行无情地覆盖：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">tar</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -xzf</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> openclaw_backup_xxx.tar.gz</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -C</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /</span></span></code></pre>
+</div><p>这步操作会将 AI 的“大脑”瞬间恢复到当天凌晨的完美健康状态。虽然可能会丢失白天刚产生的几条零星对话记忆，但这对于恢复整个核心系统来说，代价微乎其微。</p>
+<h3 id="_3-重启见证奇迹" tabindex="-1">3. 重启见证奇迹 <a class="header-anchor" href="#_3-重启见证奇迹" aria-label="Permalink to &quot;3. 重启见证奇迹&quot;">&ZeroWidthSpace;</a></h3>
+<p>数据覆盖完成后，重新启动网关进程：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
+</div><h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
+<p>折腾本地化 AI 和 HomeLab 的乐趣就在于此：你不仅是一个使用者，更是整个架构的“造物主”。只要做好了完善的异地容灾与定时备份预案，你就可以肆无忌惮地去修改配置、测试新技能。毕竟，最坏的结果，也不过就是一次读档重来罢了。</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="ai-助理失联怎么办-openclaw-本地部署的灾备与急救指南" tabindex="-1">AI 助理失联怎么办？OpenClaw 本地部署的灾备与急救指南 <a class="header-anchor" href="#ai-助理失联怎么办-openclaw-本地部署的灾备与急救指南" aria-label="Permalink to &quot;AI 助理失联怎么办？OpenClaw 本地部署的灾备与急救指南&quot;">&ZeroWidthSpace;</a></h1>
+<p>当你深度依赖一个运行在本地局域网的 AI 助理（比如 OpenClaw），并且赋予了它各种自动化脚本和系统级权限后，难免会遇到这样一个终极恐慌时刻：<strong>某次调试技能代码或改错了底层配置，导致 AI 助理进程崩溃，彻底失联。</strong></p>
+<p>此时，千万不要慌张。只要物理服务器还在通电，我们就可以通过以下「急救协议」迅速将其拉回正常状态。</p>
+<h2 id="第一阶段-常规急救-排查与除错" tabindex="-1">第一阶段：常规急救（排查与除错） <a class="header-anchor" href="#第一阶段-常规急救-排查与除错" aria-label="Permalink to &quot;第一阶段：常规急救（排查与除错）&quot;">&ZeroWidthSpace;</a></h2>
+<p>如果 AI 助理突然不响应了，第一步是直捣黄龙，通过 SSH 连入运行 OpenClaw 的宿主机。</p>
+<h3 id="_1-检查服务状态与尸检报告" tabindex="-1">1. 检查服务状态与尸检报告 <a class="header-anchor" href="#_1-检查服务状态与尸检报告" aria-label="Permalink to &quot;1. 检查服务状态与尸检报告&quot;">&ZeroWidthSpace;</a></h3>
+<p>进入宿主机后，执行以下命令查看 Gateway 服务的状态和最新报错日志：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> status</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> logs</span></span></code></pre>
+</div><p>通常情况下，日志的最后几行会明确指出导致崩溃的原因。例如：某段刚写好的自定义 Skill 脚本里少了一个逗号，或者是某个 YAML 配置文件格式缩进错误。</p>
+<h3 id="_2-就地修复并复苏" tabindex="-1">2. 就地修复并复苏 <a class="header-anchor" href="#_2-就地修复并复苏" aria-label="Permalink to &quot;2. 就地修复并复苏&quot;">&ZeroWidthSpace;</a></h3>
+<p>如果你能看懂报错，并且明确知道是刚才修改的哪个文件闯了祸，直接用文本编辑器（如 <code>nano</code> 或 <code>vim</code>）修改对应的文件，把错误的语法修正。</p>
+<p>修复完成后，执行心脏复苏：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
+</div><p>不出意外的话，几秒钟后你的 AI 助理就会在通讯软件（如飞书/Telegram/微信）上重新上线并跟你打招呼了。</p>
+<h2 id="第二阶段-终极回滚-时光机协议" tabindex="-1">第二阶段：终极回滚（时光机协议） <a class="header-anchor" href="#第二阶段-终极回滚-时光机协议" aria-label="Permalink to &quot;第二阶段：终极回滚（时光机协议）&quot;">&ZeroWidthSpace;</a></h2>
+<p>如果你面对一堆报错毫无头绪，或者刚才改动的文件太多已经彻底乱套，这时候就需要动用我们在搭建之初就该设计好的**“每日自动化备份机制”**了。</p>
+<h3 id="_1-建立自动化备份机制-前置要求" tabindex="-1">1. 建立自动化备份机制（前置要求） <a class="header-anchor" href="#_1-建立自动化备份机制-前置要求" aria-label="Permalink to &quot;1. 建立自动化备份机制（前置要求）&quot;">&ZeroWidthSpace;</a></h3>
+<p>一个成熟的家庭数据中心架构，绝不能把鸡蛋放在同一个篮子里。你需要配置一个定时任务（Cron），每天凌晨业务低谷期，将 OpenClaw 的核心工作目录（包含配置、记忆、状态等）打包，并推送到另一台物理 NAS 上。</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 示例核心打包命令（排除媒体和日志等大体积废弃文件）</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">tar</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -czf</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> openclaw_backup_2026.tar.gz</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  --exclude=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.openclaw/logs/*'</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  --exclude=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'.openclaw/media/*'</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  .openclaw/</span></span></code></pre>
+</div><h3 id="_2-执行时光机覆盖操作" tabindex="-1">2. 执行时光机覆盖操作 <a class="header-anchor" href="#_2-执行时光机覆盖操作" aria-label="Permalink to &quot;2. 执行时光机覆盖操作&quot;">&ZeroWidthSpace;</a></h3>
+<p>当 AI 助理彻底无可救药时，直接去你的异地备份盘（NAS）中找到最近一次健康的完整备份压缩包。</p>
+<p>将其传回 OpenClaw 宿主机的根目录（或安装所在的对应目录），然后执行无情地覆盖：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">tar</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -xzf</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> openclaw_backup_xxx.tar.gz</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -C</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /</span></span></code></pre>
+</div><p>这步操作会将 AI 的“大脑”瞬间恢复到当天凌晨的完美健康状态。虽然可能会丢失白天刚产生的几条零星对话记忆，但这对于恢复整个核心系统来说，代价微乎其微。</p>
+<h3 id="_3-重启见证奇迹" tabindex="-1">3. 重启见证奇迹 <a class="header-anchor" href="#_3-重启见证奇迹" aria-label="Permalink to &quot;3. 重启见证奇迹&quot;">&ZeroWidthSpace;</a></h3>
+<p>数据覆盖完成后，重新启动网关进程：</p>
+<div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
+</div><h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
+<p>折腾本地化 AI 和 HomeLab 的乐趣就在于此：你不仅是一个使用者，更是整个架构的“造物主”。只要做好了完善的异地容灾与定时备份预案，你就可以肆无忌惮地去修改配置、测试新技能。毕竟，最坏的结果，也不过就是一次读档重来罢了。</p>
+]]></content:encoded>
+        </item>
+    </channel>
+</rss>

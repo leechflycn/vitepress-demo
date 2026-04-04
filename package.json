@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "vitepress": "^1.0.0"
+  },
+  "dependencies": {
+    "feed": "^5.2.0",
+    "twikoo": "^1.7.7"
   }
 }
