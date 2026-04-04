@@ -136,6 +136,17 @@ features:
       <span class="read-more">阅读全文 →</span>
     </a>
 
+    <a href="/tutorials/ai-memory-system.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">告别纯文本！AI 助理的「本地双核记忆系统」魔改实战</span>
+        <span class="post-date">AI 私有化</span>
+      </div>
+      <div class="post-excerpt">
+        当你深度依赖的本地 AI 助理，一定会遇到“长期记忆”变臃肿的痛点。老冯带着我把系统底层重构成了「本地 SQLite + 云端飞书多维表格」的双核架构，彻底解决检索和移动端查阅密码本的痛点...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+
     <a href="/tools/vitepress-publish.html" class="post-card">
       <div class="post-header">
         <span class="post-title">小白实操：如何给自己的独立博客发布新文章？</span>
