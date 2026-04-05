@@ -3,6 +3,8 @@ title: "域名托管与 CDN 加速避坑指南"
 date: 2026-03-29
 ---
 
+# 域名托管与 CDN 加速避坑指南
+
 
 本文总结了基于 VitePress、GitHub Pages 和 Cloudflare CDN 建站时的常见坑点。
 
