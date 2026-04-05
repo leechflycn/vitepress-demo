@@ -191,6 +191,17 @@ features:
       <span class="read-more">阅读全文 →</span>
     </a>
 
+    <a href="/tools/agent-compliance.html" class="post-card">
+      <div class="post-header">
+        <span class="post-title">AI Agent 开发者避坑指南与免责声明模板</span>
+        <span class="post-date">账号风控</span>
+      </div>
+      <div class="post-excerpt">
+        AI 监管新规出台，草莽时代结束。本文提炼了普通开发者必须避开的医疗金融红线，以及必备的 AI 身份标识原则，并附赠了一套可以直接复制使用的通用型 Agent 用户免责声明模板...
+      </div>
+      <span class="read-more">阅读全文 →</span>
+    </a>
+
     <a href="/tools/cloudflare-cdn.html" class="post-card">
       <div class="post-header">
         <span class="post-title">Cloudflare CDN 加速与防封指南</span>

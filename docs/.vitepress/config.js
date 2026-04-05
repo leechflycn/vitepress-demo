@@ -60,6 +60,7 @@ export default defineConfig({
         {
           text: '网络与建站',
           items: [
+            { text: 'AI 开发者合规避坑与免责声明', link: '/tools/agent-compliance' },
             { text: '账号风控：TG与服务器', link: '/tools/risk-control' },
             { text: '域名托管与 CDN 加速', link: '/tools/cloudflare-cdn' },
             { text: '给静态博客加上灵魂：Twikoo 评论系统实战', link: '/tools/twikoo-rss' },
