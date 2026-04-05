@@ -10,6 +10,6 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }) {
-    // Custom enhancements
+    // 可以在这里扩展全局组件，例如文章头部信息（阅读量）
   }
 }
