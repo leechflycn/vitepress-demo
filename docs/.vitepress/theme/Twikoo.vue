@@ -1,7 +1,7 @@
 <template>
   <div class="article-meta-container" v-if="frontmatter.layout !== 'home'">
     <div class="busuanzi-stats">
-      <span>👁️‍🗨️ 本文被围观了 <span id="busuanzi_value_page_pv"></span> 次</span>
+      <span>👁️🗨️ 本文被围观了 <span id="busuanzi_value_page_pv"></span> 次</span>
     </div>
   </div>
   <div class="twikoo-container" v-if="frontmatter.layout !== 'home'">
@@ -28,29 +28,13 @@ const initTwikoo = () => {
   }
 }
 
-const initBusuanzi = () => {
-  if (typeof window !== 'undefined') {
-    let script = document.getElementById('busuanzi_script')
-    if (script) {
-      document.head.removeChild(script)
-    }
-    script = document.createElement('script')
-    script.id = 'busuanzi_script'
-    script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
-    script.async = true
-    document.head.appendChild(script)
-  }
-}
-
 onMounted(() => {
   initTwikoo()
-  initBusuanzi()
 })
 
 watch(() => route.path, () => {
   setTimeout(() => {
     initTwikoo()
-    initBusuanzi()
   }, 500)
 })
 </script>
