@@ -29,3 +29,10 @@ date: 2026-03-29
 - **原因**：这类免费二级域名平台通常会锁死 **NS（名称服务器）** 修改权限。
 - **正解**：Cloudflare 接管域名必须要修改根域名的 NS。因此，如果需要用 CDN 加速、防 DDoS，**必须购买顶级域名（如 .xyz、.top 等，首年极低，通常仅需 5-10 元）**，才能完美挂载到 Cloudflare。
 - *备注*：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

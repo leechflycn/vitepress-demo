@@ -75,3 +75,10 @@ sudo udevadm trigger
 折腾完之后，现在这块 2T 西数硬盘终于学会了“劳逸结合”。平时安安静静地待机停转，到了凌晨 4、5 点接收备份任务时再自动苏醒干活。
 
 废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

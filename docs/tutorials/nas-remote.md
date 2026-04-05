@@ -31,3 +31,10 @@ date: 2026-03-30
 🎉 **结果：** 你会发现，哪怕你不在家，家里的 2T 大硬盘也已经老老实实躺在你的手机里了！点开照片秒加载，看剧随便拖进度条。
 
 这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

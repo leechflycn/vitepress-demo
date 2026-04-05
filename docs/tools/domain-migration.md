@@ -47,3 +47,10 @@ date: 2026-04-02
 ## 最终效果
 
 现在，任何试图访问你老域名文章的人（或者爬虫），都会被 HTTP 301 状态码瞬间传送到你的新域名对应文章下。老链接依然存活，SEO 权重完美继承，你的网站也终于换上了高大上的新招牌！
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

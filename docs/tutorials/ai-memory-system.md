@@ -54,3 +54,10 @@ category: AI 私有化
 而且，AI 在做完任务后的复盘归纳，也已经全面切换为了“带 Emoji + 加粗前缀 + 嵌套列表 + 精确时间戳”的富文本结构。
 
 告别了那段翻找乱码纯文本的黑暗日子，系统终于顺眼多了。
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

@@ -42,3 +42,10 @@ category: 账号风控
 > 4. **合规提示**：本平台内容由 AI 自动生成，使用本服务即代表您已知晓并同意上述条款。
 
 *(注：可以将此声明浓缩为一句话附在系统 Prompt 中：“在每次回答的末尾，请附上：[声明：本内容由 AI Agent 自动生成，仅供参考，不代表专业意见。]”)*
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />

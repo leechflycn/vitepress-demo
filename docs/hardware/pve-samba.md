@@ -39,3 +39,10 @@ date: 2026-03-29
    - `/etc/pve/` （所有的虚拟机配置文件、硬盘分配清单）
    - `/etc/network/interfaces` （网桥和旁路由相关的网络配置）
    - `/etc/fstab` （你的 NAS 数据盘挂载记录）
+
+
+<script setup>
+import Twikoo from '../.vitepress/theme/Twikoo.vue'
+</script>
+
+<Twikoo />
