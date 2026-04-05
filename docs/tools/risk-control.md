@@ -40,8 +40,3 @@ date: 2026-03-29
 - **方案B**：如果你非要用国内服务器，那就在 Cloudflare 上搭建内网穿透隧道（Cloudflare Tunnel，即 `cloudflared`），让 Cloudflare 直接把国外的请求转发给你内网服务器的任意端口，完美绕过国内云服务商的域名白名单阻断。这招对于不想暴露服务器真实 IP 防 DDoS 也非常好用。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

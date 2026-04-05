@@ -62,8 +62,3 @@ openclaw gateway restart
 折腾本地化 AI 和 HomeLab 的乐趣就在于此：你不仅是一个使用者，更是整个架构的“造物主”。只要做好了完善的异地容灾与定时备份预案，你就可以肆无忌惮地去修改配置、测试新技能。毕竟，最坏的结果，也不过就是一次读档重来罢了。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

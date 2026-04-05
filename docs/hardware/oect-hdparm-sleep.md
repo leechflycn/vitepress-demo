@@ -77,8 +77,3 @@ sudo udevadm trigger
 废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

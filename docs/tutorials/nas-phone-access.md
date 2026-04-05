@@ -25,8 +25,3 @@ date: 2026-03-31
 现在打开手机上的易有云 App，你的 NAS 硬盘（Storage1）里的所有照片、视频和文件，随时随地都能访问啦！赶紧去试试吧！
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

@@ -28,8 +28,3 @@ systemctl enable docker
 你只要点一下上面代码块右上角的**复制按钮**，然后直接粘贴到终端回车就行了！
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

@@ -33,8 +33,3 @@ date: 2026-03-30
 这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

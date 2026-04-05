@@ -121,8 +121,3 @@ date: 2026-04-02
 4. 将它们填入到你的 AI 框架（如 OpenClaw）对应的 `feishu` 配置文件中即可。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

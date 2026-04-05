@@ -65,8 +65,3 @@ git push origin main
 只要这三行命令执行成功没有报错，一切就交给 Cloudflare 去全自动处理了。去泡杯咖啡，大约 1 到 2 分钟后，刷新你的网站网址，你的最新大作就已经成功上线啦！是不是超简单？
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

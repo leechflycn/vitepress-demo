@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Sun, 05 Apr 2026 15:38:19 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 05 Apr 2026 19:07:53 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -57,7 +57,7 @@
 <h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
 <p>折腾完之后，现在这块 2T 西数硬盘终于学会了“劳逸结合”。平时安安静静地待机停转，到了凌晨 4、5 点接收备份任务时再自动苏醒干活。</p>
 <p>废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="oect-armbian-挂载外置硬盘不休眠的排障与修复实战" tabindex="-1">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战 <a class="header-anchor" href="#oect-armbian-挂载外置硬盘不休眠的排障与修复实战" aria-label="Permalink to &quot;OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战&quot;">&ZeroWidthSpace;</a></h1>
 <p>前几天搞定了一台闲置的网心云 OECT，底层刷入了 Armbian 25.5.1，并在上面跑起了 CasaOS。为了把它改造成家用轻量 NAS 和备份中心，我将一块 2T 西数硬盘外挂了上去（目前作为 PVE 和 OpenClaw 的滚动备份盘）。</p>
 <p>但很快发现一个问题：这块 2T 硬盘它<strong>不休眠</strong>。不管有没有数据读写，它就像打了鸡血一样全天候运转。虽然做 NAS 的盘本该如此，但这毕竟是家用闲置设备的废物利用，没必要让它 24 小时空转消耗寿命，听着也烦。</p>
@@ -101,7 +101,7 @@
 <h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
 <p>折腾完之后，现在这块 2T 西数硬盘终于学会了“劳逸结合”。平时安安静静地待机停转，到了凌晨 4、5 点接收备份任务时再自动苏醒干活。</p>
 <p>废物利用的精髓不仅在于“能用”，更在于“好用”和“稳定”。希望这篇排障记录能帮到同样在玩 Armbian / CasaOS 外挂硬盘的朋友。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[PVE 与 NAS 数据中心折腾日记]]></title>
@@ -146,7 +146,7 @@
 </ul>
 </li>
 </ol>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="pve-与-nas-数据中心折腾日记" tabindex="-1">PVE 与 NAS 数据中心折腾日记 <a class="header-anchor" href="#pve-与-nas-数据中心折腾日记" aria-label="Permalink to &quot;PVE 与 NAS 数据中心折腾日记&quot;">&ZeroWidthSpace;</a></h1>
 <p>本文记录了我将主控机硬盘转移到 PVE 宿主机上，通过 Samba 进行网络共享的心路历程和避坑指南。</p>
 <h2 id="需求" tabindex="-1">需求 <a class="header-anchor" href="#需求" aria-label="Permalink to &quot;需求&quot;">&ZeroWidthSpace;</a></h2>
@@ -185,14 +185,19 @@
 </ul>
 </li>
 </ol>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Sun, 05 Apr 2026 15:38:19 GMT</pubDate>
-            <description><![CDATA[<div class="recent-posts">
+            <pubDate>Sun, 05 Apr 2026 19:07:53 GMT</pubDate>
+            <description><![CDATA[<div id="qrcode" class="qrcode-section">
+  <h3>📱 关注公众号获取最新动态</h3>
+  <p>扫描下方二维码，关注我的公众号，获取最新更新！</p>
+  <img src="/qrcode.jpg" alt="公众号二维码" style="max-width: 200px; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+</div>
+<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
@@ -293,7 +298,12 @@
 <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
 </div>
 ]]></description>
-            <content:encoded><![CDATA[<div class="recent-posts">
+            <content:encoded><![CDATA[<div id="qrcode" class="qrcode-section">
+  <h3>📱 关注公众号获取最新动态</h3>
+  <p>扫描下方二维码，关注我的公众号，获取最新更新！</p>
+  <img src="/qrcode.jpg" alt="公众号二维码" style="max-width: 200px; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+</div>
+<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
@@ -454,7 +464,7 @@
 </ol>
 </blockquote>
 <p><em>(注：可以将此声明浓缩为一句话附在系统 Prompt 中：“在每次回答的末尾，请附上：[声明：本内容由 AI Agent 自动生成，仅供参考，不代表专业意见。]”)</em></p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战]]></title>
@@ -510,7 +520,7 @@
 <p>最后，执行了一把 <code>git commit</code> 和 <code>push</code>。眼看着 Cloudflare Pages 的流水线跑完，绿灯亮起。去线上刷一下，评论框和 RSS 订阅完美上线！</p>
 <hr>
 <p>至此，这个博客才算是一座真正的“数字驿站”。欢迎大家留言踩一踩。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[告别纯文本！AI 助理的「本地双核记忆系统」魔改实战]]></title>
@@ -555,7 +565,7 @@
 <p>折腾完这套**“底层数据库 + 移动端看板”**之后，现在我在手机上只要打开飞书，那个排版清晰、随时可以筛选和隐藏列的密码本看板就静静躺在那里。</p>
 <p>而且，AI 在做完任务后的复盘归纳，也已经全面切换为了“带 Emoji + 加粗前缀 + 嵌套列表 + 精确时间戳”的富文本结构。</p>
 <p>告别了那段翻找乱码纯文本的黑暗日子，系统终于顺眼多了。</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="告别纯文本-ai-助理的「本地双核记忆系统」魔改实战" tabindex="-1">告别纯文本！AI 助理的「本地双核记忆系统」魔改实战 <a class="header-anchor" href="#告别纯文本-ai-助理的「本地双核记忆系统」魔改实战" aria-label="Permalink to &quot;告别纯文本！AI 助理的「本地双核记忆系统」魔改实战&quot;">&ZeroWidthSpace;</a></h1>
 <h2 id="痛点-纯文本记忆的极限" tabindex="-1">痛点：纯文本记忆的极限 <a class="header-anchor" href="#痛点-纯文本记忆的极限" aria-label="Permalink to &quot;痛点：纯文本记忆的极限&quot;">&ZeroWidthSpace;</a></h2>
 <p>当你深度使用本地部署的 AI 助理（比如 OpenClaw），一定会遇到一个痛点：<strong>长期记忆</strong>。</p>
@@ -594,7 +604,7 @@
 <p>折腾完这套**“底层数据库 + 移动端看板”**之后，现在我在手机上只要打开飞书，那个排版清晰、随时可以筛选和隐藏列的密码本看板就静静躺在那里。</p>
 <p>而且，AI 在做完任务后的复盘归纳，也已经全面切换为了“带 Emoji + 加粗前缀 + 嵌套列表 + 精确时间戳”的富文本结构。</p>
 <p>告别了那段翻找乱码纯文本的黑暗日子，系统终于顺眼多了。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[零基础配置飞书机器人：内网穿透时代的终结（保姆级避坑指南）]]></title>
@@ -725,7 +735,7 @@
 <h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
 <p>其实搞定基础设施只是第一步。当这只“急救龙虾”在我的内网虚拟机里苏醒，并通过长连接向我发送第一条飞书消息时，那种闭环的爽感是难以言喻的。</p>
 <p>如果你也苦于微信的封禁和公网 IP 的昂贵，不妨试试这套方案。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[AI 助理失联怎么办？OpenClaw 本地部署的灾备与急救指南]]></title>
@@ -765,7 +775,7 @@
 <div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
 </div><h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
 <p>折腾本地化 AI 和 HomeLab 的乐趣就在于此：你不仅是一个使用者，更是整个架构的“造物主”。只要做好了完善的异地容灾与定时备份预案，你就可以肆无忌惮地去修改配置、测试新技能。毕竟，最坏的结果，也不过就是一次读档重来罢了。</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<p>当你深度依赖一个运行在本地局域网的 AI 助理（比如 OpenClaw），并且赋予了它各种自动化脚本和系统级权限后，难免会遇到这样一个终极恐慌时刻：<strong>某次调试技能代码或改错了底层配置，导致 AI 助理进程崩溃，彻底失联。</strong></p>
 <p>此时，千万不要慌张。只要物理服务器还在通电，我们就可以通过以下「急救协议」迅速将其拉回正常状态。</p>
 <h2 id="第一阶段-常规急救-排查与除错" tabindex="-1">第一阶段：常规急救（排查与除错） <a class="header-anchor" href="#第一阶段-常规急救-排查与除错" aria-label="Permalink to &quot;第一阶段：常规急救（排查与除错）&quot;">&ZeroWidthSpace;</a></h2>
@@ -799,7 +809,7 @@
 <div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span></span></code></pre>
 </div><h2 id="结语" tabindex="-1">结语 <a class="header-anchor" href="#结语" aria-label="Permalink to &quot;结语&quot;">&ZeroWidthSpace;</a></h2>
 <p>折腾本地化 AI 和 HomeLab 的乐趣就在于此：你不仅是一个使用者，更是整个架构的“造物主”。只要做好了完善的异地容灾与定时备份预案，你就可以肆无忌惮地去修改配置、测试新技能。毕竟，最坏的结果，也不过就是一次读档重来罢了。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[实战：如何优雅地更换博客域名（附 301 权重转移指南）]]></title>
@@ -849,7 +859,7 @@
 </ol>
 <h2 id="最终效果" tabindex="-1">最终效果 <a class="header-anchor" href="#最终效果" aria-label="Permalink to &quot;最终效果&quot;">&ZeroWidthSpace;</a></h2>
 <p>现在，任何试图访问你老域名文章的人（或者爬虫），都会被 HTTP 301 状态码瞬间传送到你的新域名对应文章下。老链接依然存活，SEO 权重完美继承，你的网站也终于换上了高大上的新招牌！</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="实战-如何优雅地更换博客域名-附-301-权重转移指南" tabindex="-1">实战：如何优雅地更换博客域名（附 301 权重转移指南） <a class="header-anchor" href="#实战-如何优雅地更换博客域名-附-301-权重转移指南" aria-label="Permalink to &quot;实战：如何优雅地更换博客域名（附 301 权重转移指南）&quot;">&ZeroWidthSpace;</a></h1>
 <p>搭建完独立博客后，很多朋友一开始可能只是随便买了个便宜的“练手域名”（比如纯数字的 <code>.xyz</code>），等网站慢慢有了起色，就想换一个更正规、更好记的长线域名。</p>
 <p>但这带来了一个棘手的问题：<strong>换了新域名，老域名的流量和搜索引擎（SEO）收录的权重不就白白流失了吗？</strong></p>
@@ -893,7 +903,7 @@
 </ol>
 <h2 id="最终效果" tabindex="-1">最终效果 <a class="header-anchor" href="#最终效果" aria-label="Permalink to &quot;最终效果&quot;">&ZeroWidthSpace;</a></h2>
 <p>现在，任何试图访问你老域名文章的人（或者爬虫），都会被 HTTP 301 状态码瞬间传送到你的新域名对应文章下。老链接依然存活，SEO 权重完美继承，你的网站也终于换上了高大上的新招牌！</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[飞书机器人注册与配置全通关指南（图文保姆级）]]></title>
@@ -1011,7 +1021,7 @@
 <li>点击旁边的小图标，把这两串字符复制下来。</li>
 <li>将它们填入到你的 AI 框架（如 OpenClaw）对应的 <code>feishu</code> 配置文件中即可。</li>
 </ol>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[飞书机器人注册与配置全通关指南（图文保姆级）]]></title>
@@ -1129,7 +1139,7 @@
 <li>点击旁边的小图标，把这两串字符复制下来。</li>
 <li>将它们填入到你的 AI 框架（如 OpenClaw）对应的 <code>feishu</code> 配置文件中即可。</li>
 </ol>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[📝 小白实操：如何给自己的独立博客（VitePress）发布新文章？]]></title>
@@ -1186,7 +1196,7 @@
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">git</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> push</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> origin</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> main</span></span></code></pre>
 </div><p><strong>✅ 大功告成！</strong>
 只要这三行命令执行成功没有报错，一切就交给 Cloudflare 去全自动处理了。去泡杯咖啡，大约 1 到 2 分钟后，刷新你的网站网址，你的最新大作就已经成功上线啦！是不是超简单？</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇）]]></title>
@@ -1208,7 +1218,7 @@
 <p><img src="/linkease_final.png" alt="第二步：下载手机 App 并绑定设备"></p>
 <h2 id="✅-大功告成" tabindex="-1">✅ 大功告成！ <a class="header-anchor" href="#✅-大功告成" aria-label="Permalink to &quot;✅ 大功告成！&quot;">&ZeroWidthSpace;</a></h2>
 <p>现在打开手机上的易有云 App，你的 NAS 硬盘（Storage1）里的所有照片、视频和文件，随时随地都能访问啦！赶紧去试试吧！</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" tabindex="-1">🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇） <a class="header-anchor" href="#🚀-小白必看-如何用手机随时随地访问家里的硬盘-易有云篇" aria-label="Permalink to &quot;🚀 小白必看：如何用手机随时随地访问家里的硬盘？（易有云篇）&quot;">&ZeroWidthSpace;</a></h1>
 <p>很多朋友搭建好 CasaOS 之后，都想知道怎么在手机上也能看到硬盘里的照片和文件。今天教大家一个超级简单的方法！</p>
 <h2 id="📌-第一步-进入易有云后台" tabindex="-1">📌 第一步：进入易有云后台 <a class="header-anchor" href="#📌-第一步-进入易有云后台" aria-label="Permalink to &quot;📌 第一步：进入易有云后台&quot;">&ZeroWidthSpace;</a></h2>
@@ -1224,7 +1234,7 @@
 <p><img src="/linkease_final.png" alt="第二步：下载手机 App 并绑定设备"></p>
 <h2 id="✅-大功告成" tabindex="-1">✅ 大功告成！ <a class="header-anchor" href="#✅-大功告成" aria-label="Permalink to &quot;✅ 大功告成！&quot;">&ZeroWidthSpace;</a></h2>
 <p>现在打开手机上的易有云 App，你的 NAS 硬盘（Storage1）里的所有照片、视频和文件，随时随地都能访问啦！赶紧去试试吧！</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[零基础搞定 NAS 外网访问！小白也能看硬盘里的电影]]></title>
@@ -1249,7 +1259,7 @@
 拿起你的手机，<strong>关掉家里的 WiFi 连接</strong>，确保只使用 5G/4G 移动网络。然后打开手机上的“易有云”App。</p>
 <p>🎉 <strong>结果：</strong> 你会发现，哪怕你不在家，家里的 2T 大硬盘也已经老老实实躺在你的手机里了！点开照片秒加载，看剧随便拖进度条。</p>
 <p>这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="零基础搞定-nas-外网访问-小白也能看硬盘里的电影" tabindex="-1">零基础搞定 NAS 外网访问！小白也能看硬盘里的电影 <a class="header-anchor" href="#零基础搞定-nas-外网访问-小白也能看硬盘里的电影" aria-label="Permalink to &quot;零基础搞定 NAS 外网访问！小白也能看硬盘里的电影&quot;">&ZeroWidthSpace;</a></h1>
 <p><img src="/images/nas-remote-guide.jpg" alt="操作指引"></p>
 <h2 id="为什么你的硬盘带不出门" tabindex="-1">为什么你的硬盘带不出门？ <a class="header-anchor" href="#为什么你的硬盘带不出门" aria-label="Permalink to &quot;为什么你的硬盘带不出门？&quot;">&ZeroWidthSpace;</a></h2>
@@ -1268,7 +1278,7 @@
 拿起你的手机，<strong>关掉家里的 WiFi 连接</strong>，确保只使用 5G/4G 移动网络。然后打开手机上的“易有云”App。</p>
 <p>🎉 <strong>结果：</strong> 你会发现，哪怕你不在家，家里的 2T 大硬盘也已经老老实实躺在你的手机里了！点开照片秒加载，看剧随便拖进度条。</p>
 <p>这就是 P2P 直连打洞的魅力，完全不需要折腾复杂的网络配置，小白也能轻松拥有自己的私有云！</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[域名托管与 CDN 加速避坑指南]]></title>
@@ -1304,7 +1314,7 @@
 <li><strong>正解</strong>：Cloudflare 接管域名必须要修改根域名的 NS。因此，如果需要用 CDN 加速、防 DDoS，<strong>必须购买顶级域名（如 .xyz、.top 等，首年极低，通常仅需 5-10 元）</strong>，才能完美挂载到 Cloudflare。</li>
 <li><em>备注</em>：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。</li>
 </ul>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="域名托管与-cdn-加速避坑指南" tabindex="-1">域名托管与 CDN 加速避坑指南 <a class="header-anchor" href="#域名托管与-cdn-加速避坑指南" aria-label="Permalink to &quot;域名托管与 CDN 加速避坑指南&quot;">&ZeroWidthSpace;</a></h1>
 <p>本文总结了基于 VitePress、GitHub Pages 和 Cloudflare CDN 建站时的常见坑点。</p>
 <h2 id="cloudflare-pages-部署大坑" tabindex="-1">Cloudflare Pages 部署大坑 <a class="header-anchor" href="#cloudflare-pages-部署大坑" aria-label="Permalink to &quot;Cloudflare Pages 部署大坑&quot;">&ZeroWidthSpace;</a></h2>
@@ -1334,7 +1344,7 @@
 <li><strong>正解</strong>：Cloudflare 接管域名必须要修改根域名的 NS。因此，如果需要用 CDN 加速、防 DDoS，<strong>必须购买顶级域名（如 .xyz、.top 等，首年极低，通常仅需 5-10 元）</strong>，才能完美挂载到 Cloudflare。</li>
 <li><em>备注</em>：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。</li>
 </ul>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[Telegram 与服务器风控的血与泪]]></title>
@@ -1375,7 +1385,7 @@
 <li><strong>方案A</strong>：将服务器换到海外节点（如香港、新加坡或美国）。</li>
 <li><strong>方案B</strong>：如果你非要用国内服务器，那就在 Cloudflare 上搭建内网穿透隧道（Cloudflare Tunnel，即 <code>cloudflared</code>），让 Cloudflare 直接把国外的请求转发给你内网服务器的任意端口，完美绕过国内云服务商的域名白名单阻断。这招对于不想暴露服务器真实 IP 防 DDoS 也非常好用。</li>
 </ul>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="telegram-与服务器风控的血与泪" tabindex="-1">Telegram 与服务器风控的血与泪 <a class="header-anchor" href="#telegram-与服务器风控的血与泪" aria-label="Permalink to &quot;Telegram 与服务器风控的血与泪&quot;">&ZeroWidthSpace;</a></h1>
 <p>在折腾各种 VPS 和社交平台的自动机器人的时候，封号风控是我们遇到最大的拦路虎。这一篇专门讲讲被封和解封的坑。</p>
 <h2 id="_1-telegram-注册即死-秒封号" tabindex="-1">1. Telegram 注册即死（秒封号） <a class="header-anchor" href="#_1-telegram-注册即死-秒封号" aria-label="Permalink to &quot;1. Telegram 注册即死（秒封号）&quot;">&ZeroWidthSpace;</a></h2>
@@ -1410,7 +1420,7 @@
 <li><strong>方案A</strong>：将服务器换到海外节点（如香港、新加坡或美国）。</li>
 <li><strong>方案B</strong>：如果你非要用国内服务器，那就在 Cloudflare 上搭建内网穿透隧道（Cloudflare Tunnel，即 <code>cloudflared</code>），让 Cloudflare 直接把国外的请求转发给你内网服务器的任意端口，完美绕过国内云服务商的域名白名单阻断。这招对于不想暴露服务器真实 IP 防 DDoS 也非常好用。</li>
 </ul>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[🦞 OpenClaw（小龙虾）AI私人助手 — 安装部署 & 场景定制]]></title>
@@ -1499,7 +1509,7 @@
 </ul>
 <p><strong>👇 私聊我，聊聊你的场景，方案免费出。</strong><br>
 需提前注册 <code>api.884819.xyz</code>，生成专属 API-Key。</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[Docker 安装与配置]]></title>
@@ -1516,7 +1526,7 @@
 <div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> start</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span>
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> enable</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span></code></pre>
 </div><p>你只要点一下上面代码块右上角的<strong>复制按钮</strong>，然后直接粘贴到终端回车就行了！</p>
-<Twikoo />]]></description>
+]]></description>
             <content:encoded><![CDATA[<h1 id="docker-安装与配置" tabindex="-1">Docker 安装与配置 <a class="header-anchor" href="#docker-安装与配置" aria-label="Permalink to &quot;Docker 安装与配置&quot;">&ZeroWidthSpace;</a></h1>
 <p>这是我在B站刚发布的《3分钟装好Docker》视频配套代码。</p>
 <h2 id="一键安装命令" tabindex="-1">一键安装命令 <a class="header-anchor" href="#一键安装命令" aria-label="Permalink to &quot;一键安装命令&quot;">&ZeroWidthSpace;</a></h2>
@@ -1527,7 +1537,7 @@
 <div class="language-bash vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">bash</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0" v-pre=""><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> start</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span>
 <span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">systemctl</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> enable</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> docker</span></span></code></pre>
 </div><p>你只要点一下上面代码块右上角的<strong>复制按钮</strong>，然后直接粘贴到终端回车就行了！</p>
-<Twikoo />]]></content:encoded>
+]]></content:encoded>
         </item>
     </channel>
 </rss>

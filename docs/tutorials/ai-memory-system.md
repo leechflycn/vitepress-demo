@@ -56,8 +56,3 @@ category: AI 私有化
 告别了那段翻找乱码纯文本的黑暗日子，系统终于顺眼多了。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

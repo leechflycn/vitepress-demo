@@ -41,8 +41,3 @@ date: 2026-03-29
    - `/etc/fstab` （你的 NAS 数据盘挂载记录）
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />

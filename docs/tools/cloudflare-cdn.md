@@ -31,8 +31,3 @@ date: 2026-03-29
 - *备注*：DuckDNS 只能用于动态 IP 解析直连，也不能托管给 Cloudflare。
 
 
-<script setup>
-import Twikoo from '../.vitepress/theme/Twikoo.vue'
-</script>
-
-<Twikoo />
