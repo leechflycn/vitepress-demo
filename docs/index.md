@@ -13,8 +13,8 @@ hero:
       text: "🚀 开始探索"
       link: /tutorials/docker-install
     - theme: alt
-      text: "🦞 部署服务"
-      link: /openclaw-service
+      text: "关注公众号"
+      link: '#qrcode'
 
 features:
   - title: "📚 避坑指南"
@@ -111,7 +111,36 @@ features:
 }
 </style>
 
+
+<div id="qrcode" class="qrcode-section">
+  <h3>📱 关注公众号获取最新动态</h3>
+  <p>扫描下方二维码，关注我的公众号，获取最新更新！</p>
+  <img src="/qrcode.jpg" alt="公众号二维码" style="max-width: 200px; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+</div>
+
+<style>
+.qrcode-section {
+  max-width: 1152px;
+  margin: 60px auto 20px;
+  padding: 40px 24px;
+  text-align: center;
+  background-color: var(--vp-c-bg-soft);
+  border-radius: 12px;
+}
+.qrcode-section h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--vp-c-text-1);
+}
+.qrcode-section p {
+  font-size: 16px;
+  color: var(--vp-c-text-2);
+}
+</style>
+
 <div class="recent-posts">
+
 <h2>📖 最新文章</h2>
 <div class="post-grid">
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
