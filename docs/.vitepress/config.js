@@ -6,10 +6,12 @@ import path from 'path'
 export default defineConfig({
   title: 'leechbox',
   description: '影子的折腾日常',
+  head: [ ['script', { async: '', src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' }] ],
   buildEnd: async (config) => {
     const feed = new Feed({
       title: 'leechbox',
       description: '影子的折腾日常',
+  head: [ ['script', { async: '', src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' }] ],
       id: 'https://leechbox.xyz/',
       link: 'https://leechbox.xyz/',
       language: 'zh-CN',
