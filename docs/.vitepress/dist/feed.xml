@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Sun, 05 Apr 2026 14:21:36 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 05 Apr 2026 14:36:43 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -191,7 +191,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Sun, 05 Apr 2026 14:21:36 GMT</pubDate>
+            <pubDate>Sun, 05 Apr 2026 14:36:43 GMT</pubDate>
             <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
