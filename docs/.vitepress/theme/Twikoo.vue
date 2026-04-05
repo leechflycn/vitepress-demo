@@ -20,7 +20,7 @@ const initTwikoo = () => {
   if (typeof window !== 'undefined' && frontmatter.value.layout !== 'home') {
     import('twikoo').then(twikoo => {
       twikoo.default.init({
-        envId: 'http://192.168.1.104:8080',
+        envId: 'https://twikoo.leechbox.xyz',
         el: '#twikoo',
         path: route.path
       })
