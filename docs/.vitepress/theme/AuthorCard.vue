@@ -34,7 +34,7 @@
 .author-card {
   margin-top: 3rem;
   margin-bottom: 2rem;
-  padding: 1.5rem;
+  padding: 2rem; /* 增加内边距让空间更宽敞 */
   border-radius: 12px;
   background-color: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
@@ -61,19 +61,20 @@
 
 .author-info {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  align-items: flex-start; /* 改为顶部对齐，避免文字少时整体下坠 */
+  gap: 2rem; /* 拉大二维码和文字的间距 */
 }
 
 .author-avatar {
   flex-shrink: 0;
-  width: 100px;
-  height: 100px;
+  width: 120px; /* 稍微调大一点点二维码 */
+  height: 120px;
   border-radius: 8px;
   overflow: hidden;
-  border: 2px solid var(--vp-c-divider);
+  border: 1px solid var(--vp-c-divider);
   background-color: #fff;
-  padding: 4px;
+  padding: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05); /* 给二维码加个淡淡的投影 */
 }
 
 .author-avatar img {
@@ -84,19 +85,23 @@
 
 .author-text {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 让文字部分在自己的高度里居中 */
+  min-height: 120px; /* 和二维码等高，防止错位 */
 }
 
 .author-title {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
+  margin: 0 0 0.75rem; /* 稍微拉大标题下巴的间距 */
+  font-size: 1.35rem; /* 稍微放大一点点标题 */
+  font-weight: 700;
   color: var(--vp-c-text-1);
 }
 
 .author-desc {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.2rem 0; /* 拉大描述和按钮的间距 */
   font-size: 0.95rem;
-  line-height: 1.6;
+  line-height: 1.7; /* 增加行高让文字更呼吸 */
   color: var(--vp-c-text-2);
 }
 
@@ -138,8 +143,12 @@
 @media (max-width: 640px) {
   .author-info {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center; /* 手机端居中对齐更好看 */
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .author-links {
+    justify-content: center; /* 手机端按钮也居中 */
   }
 }
 </style>
