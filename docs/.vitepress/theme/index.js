@@ -1,12 +1,17 @@
 import DefaultTheme from 'vitepress/theme'
 import Twikoo from './Twikoo.vue'
+import AuthorCard from './AuthorCard.vue'
 import { h } from 'vue'
+import './custom.css'
 
 export default {
   extends: DefaultTheme,
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'doc-after': () => h(Twikoo)
+      'doc-after': () => h('div', [
+        h(AuthorCard),
+        h(Twikoo)
+      ])
     })
   },
   enhanceApp({ app, router, siteData }) {
