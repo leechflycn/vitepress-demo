@@ -1,5 +1,4 @@
 import DefaultTheme from 'vitepress/theme'
-import Twikoo from './Twikoo.vue'
 import AuthorCard from './AuthorCard.vue'
 import { h } from 'vue'
 import './custom.css'
@@ -9,8 +8,7 @@ export default {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       'doc-after': () => h('div', [
-        h(AuthorCard),
-        h(Twikoo)
+        h(AuthorCard)
       ])
     })
   },

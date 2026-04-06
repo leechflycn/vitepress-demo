@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Mon, 06 Apr 2026 17:18:19 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 06 Apr 2026 17:42:07 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -191,13 +191,8 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Mon, 06 Apr 2026 17:18:19 GMT</pubDate>
-            <description><![CDATA[<div id="qrcode" class="qrcode-section">
-  <h3>📱 关注公众号获取最新动态</h3>
-  <p>扫描下方二维码，关注我的公众号，获取最新更新！</p>
-  <img src="/qrcode.jpg" alt="公众号二维码" style="max-width: 200px; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-</div>
-<div class="recent-posts">
+            <pubDate>Mon, 06 Apr 2026 17:42:07 GMT</pubDate>
+            <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
@@ -298,12 +293,7 @@
 <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
 </div>
 ]]></description>
-            <content:encoded><![CDATA[<div id="qrcode" class="qrcode-section">
-  <h3>📱 关注公众号获取最新动态</h3>
-  <p>扫描下方二维码，关注我的公众号，获取最新更新！</p>
-  <img src="/qrcode.jpg" alt="公众号二维码" style="max-width: 200px; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-</div>
-<div class="recent-posts">
+            <content:encoded><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
@@ -402,6 +392,32 @@
 <span id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
 |
 <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
+</div>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[留言板]]></title>
+            <link>https://leechbox.xyz/message-board.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/message-board.html</guid>
+            <pubDate>Mon, 06 Apr 2026 17:42:07 GMT</pubDate>
+            <description><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
+<p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
+<p><em>(留言功能开发中... 敬请期待)</em></p>
+<div class="like-button-container">
+  <button class="like-button" id="like-btn">
+    <span class="like-icon">👍</span>
+    <span class="like-text">点赞支持 (<span id="like-count">0</span>)</span>
+  </button>
+</div>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
+<p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
+<p><em>(留言功能开发中... 敬请期待)</em></p>
+<div class="like-button-container">
+  <button class="like-button" id="like-btn">
+    <span class="like-icon">👍</span>
+    <span class="like-text">点赞支持 (<span id="like-count">0</span>)</span>
+  </button>
 </div>
 ]]></content:encoded>
         </item>
