@@ -6,7 +6,7 @@ hero:
   text: "影子的折腾日常"
   tagline: SHADOWS TECH DIARY
   image:
-    src: https://vitepress.dev/vitepress-logo-large.webp
+    src: /hero.jpg
     alt: Logo
   actions:
     - theme: brand

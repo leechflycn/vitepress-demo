@@ -45,3 +45,23 @@ html.dark div[class*="language-"] {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border-color: rgba(16, 185, 129, 0.2); /* 微弱的绿色边框 */
 }
+
+/* 专门针对首页 Hero 图片的优化 */
+.VPHero .image-src {
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 174, 236, 0.3); /* 蓝色光晕 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.VPHero .image-src:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); /* 悬停绿色光晕 */
+}
+
+html.dark .VPHero .image-src {
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+}
+
+html.dark .VPHero .image-src:hover {
+  box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
+}
