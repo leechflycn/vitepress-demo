@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Mon, 06 Apr 2026 17:42:07 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 06 Apr 2026 17:49:45 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -191,7 +191,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Mon, 06 Apr 2026 17:42:07 GMT</pubDate>
+            <pubDate>Mon, 06 Apr 2026 17:49:45 GMT</pubDate>
             <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
@@ -399,25 +399,51 @@
             <title><![CDATA[留言板]]></title>
             <link>https://leechbox.xyz/message-board.html</link>
             <guid isPermaLink="false">https://leechbox.xyz/message-board.html</guid>
-            <pubDate>Mon, 06 Apr 2026 17:42:07 GMT</pubDate>
+            <pubDate>Mon, 06 Apr 2026 17:49:45 GMT</pubDate>
             <description><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
 <p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
-<p><em>(留言功能开发中... 敬请期待)</em></p>
-<div class="like-button-container">
-  <button class="like-button" id="like-btn">
-    <span class="like-icon">👍</span>
-    <span class="like-text">点赞支持 (<span id="like-count">0</span>)</span>
-  </button>
+<div class="message-board-container">
+  <!-- 留言输入区 -->
+  <div class="message-input-area">
+    <div class="input-group">
+      <input type="text" id="msg-name" placeholder="怎么称呼你？(必填)" maxlength="20">
+    </div>
+    <div class="input-group">
+      <textarea id="msg-content" placeholder="想说点什么... (必填)" rows="4" maxlength="500"></textarea>
+    </div>
+    <button id="submit-msg-btn" class="submit-btn">发送留言</button>
+    <div id="submit-status" class="status-text"></div>
+  </div>
+  <!-- 留言展示区 -->
+  <div class="message-list-area">
+    <h3>最近留言</h3>
+    <div id="message-list" class="message-list">
+      <div class="loading-text">正在加载留言...</div>
+    </div>
+  </div>
 </div>
 ]]></description>
             <content:encoded><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
 <p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
-<p><em>(留言功能开发中... 敬请期待)</em></p>
-<div class="like-button-container">
-  <button class="like-button" id="like-btn">
-    <span class="like-icon">👍</span>
-    <span class="like-text">点赞支持 (<span id="like-count">0</span>)</span>
-  </button>
+<div class="message-board-container">
+  <!-- 留言输入区 -->
+  <div class="message-input-area">
+    <div class="input-group">
+      <input type="text" id="msg-name" placeholder="怎么称呼你？(必填)" maxlength="20">
+    </div>
+    <div class="input-group">
+      <textarea id="msg-content" placeholder="想说点什么... (必填)" rows="4" maxlength="500"></textarea>
+    </div>
+    <button id="submit-msg-btn" class="submit-btn">发送留言</button>
+    <div id="submit-status" class="status-text"></div>
+  </div>
+  <!-- 留言展示区 -->
+  <div class="message-list-area">
+    <h3>最近留言</h3>
+    <div id="message-list" class="message-list">
+      <div class="loading-text">正在加载留言...</div>
+    </div>
+  </div>
 </div>
 ]]></content:encoded>
         </item>
