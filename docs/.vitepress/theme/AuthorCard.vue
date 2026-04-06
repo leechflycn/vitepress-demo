@@ -24,6 +24,14 @@
             </svg>
             <span>个人主页</span>
           </a>
+          <a href="/feed.xml" target="_blank" class="link-item rss">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+            </svg>
+            <span>RSS 订阅</span>
+          </a>
         </div>
       </div>
     </div>
@@ -42,19 +50,6 @@
   position: relative;
   overflow: hidden;
 }
-
-/* 移除左侧的蓝色高亮条 */
-/*
-.author-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background-color: var(--vp-c-brand);
-}
-*/
 
 .author-card:hover {
   transform: translateY(-2px);
@@ -141,6 +136,12 @@
 
 .link-item.website:hover {
   color: var(--vp-c-brand);
+}
+
+.link-item.rss:hover {
+  color: #f26522; /* RSS 经典的橘色 */
+  border-color: #f26522;
+  background-color: rgba(242, 101, 34, 0.1);
 }
 
 @media (max-width: 640px) {
