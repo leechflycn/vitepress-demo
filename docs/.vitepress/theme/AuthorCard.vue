@@ -34,7 +34,7 @@
 .author-card {
   margin-top: 3rem;
   margin-bottom: 2rem;
-  padding: 2rem; /* 增加内边距让空间更宽敞 */
+  padding: 2rem;
   border-radius: 12px;
   background-color: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
@@ -43,6 +43,8 @@
   overflow: hidden;
 }
 
+/* 移除左侧的蓝色高亮条 */
+/*
 .author-card::before {
   content: '';
   position: absolute;
@@ -52,6 +54,7 @@
   height: 100%;
   background-color: var(--vp-c-brand);
 }
+*/
 
 .author-card:hover {
   transform: translateY(-2px);
@@ -61,20 +64,20 @@
 
 .author-info {
   display: flex;
-  align-items: flex-start; /* 改为顶部对齐，避免文字少时整体下坠 */
-  gap: 2rem; /* 拉大二维码和文字的间距 */
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .author-avatar {
   flex-shrink: 0;
-  width: 120px; /* 稍微调大一点点二维码 */
+  width: 120px;
   height: 120px;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--vp-c-divider);
   background-color: #fff;
   padding: 6px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05); /* 给二维码加个淡淡的投影 */
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
 
 .author-avatar img {
@@ -87,21 +90,21 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 让文字部分在自己的高度里居中 */
-  min-height: 120px; /* 和二维码等高，防止错位 */
+  justify-content: center;
+  min-height: 120px;
 }
 
 .author-title {
-  margin: 0 0 0.75rem; /* 稍微拉大标题下巴的间距 */
-  font-size: 1.35rem; /* 稍微放大一点点标题 */
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--vp-c-text-1);
 }
 
 .author-desc {
-  margin: 0 0 1.2rem 0; /* 拉大描述和按钮的间距 */
+  margin: 0 0 1.2rem 0;
   font-size: 0.95rem;
-  line-height: 1.7; /* 增加行高让文字更呼吸 */
+  line-height: 1.7;
   color: var(--vp-c-text-2);
 }
 
@@ -143,12 +146,12 @@
 @media (max-width: 640px) {
   .author-info {
     flex-direction: column;
-    align-items: center; /* 手机端居中对齐更好看 */
+    align-items: center;
     text-align: center;
     gap: 1.5rem;
   }
   .author-links {
-    justify-content: center; /* 手机端按钮也居中 */
+    justify-content: center;
   }
 }
 </style>
