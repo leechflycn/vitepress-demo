@@ -34,7 +34,6 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '留言板', link: '/message-board' },
       { text: 'IT 折腾日记', items: [
         { text: '硬件与 NAS', link: '/hardware/pve-samba' },
         { text: '账号风控', link: '/tools/risk-control' },
