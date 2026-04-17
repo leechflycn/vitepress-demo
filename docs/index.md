@@ -112,6 +112,17 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/istoreos-node-repair.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">一次 iStoreOS 虚拟机故障排查与管理补全实录</span>
+  <span class="post-date">运维</span>
+</div>
+<div class="post-excerpt">
+  记录一次家庭实验室里的深夜抢修：从地址误判、服务异常，到最小修复和 Guest Agent 管理补全，完整复盘一台 iStoreOS 节点的故障闭环。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
