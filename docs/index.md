@@ -112,6 +112,17 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/2026-04-29-ai.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地</span>
+  <span class="post-date">AI 观察</span>
+</div>
+<div class="post-excerpt">
+  从马斯克与奥特曼的冲突切入，拆解 AI 下半场真正的胜负手为何正在转向算力平台、国产芯片与产业落地能力。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/istoreos-node-repair.html" class="post-card">
 <div class="post-header">
   <span class="post-title">一次 iStoreOS 虚拟机故障排查与管理补全实录</span>
