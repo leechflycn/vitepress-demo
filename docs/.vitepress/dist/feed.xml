@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Mon, 06 Apr 2026 17:49:45 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 29 Apr 2026 17:08:26 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -191,10 +191,20 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Mon, 06 Apr 2026 17:49:45 GMT</pubDate>
+            <pubDate>Wed, 29 Apr 2026 17:08:26 GMT</pubDate>
             <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/istoreos-node-repair.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">一次 iStoreOS 虚拟机故障排查与管理补全实录</span>
+  <span class="post-date">运维</span>
+</div>
+<div class="post-excerpt">
+  记录一次家庭实验室里的深夜抢修：从地址误判、服务异常，到最小修复和 Guest Agent 管理补全，完整复盘一台 iStoreOS 节点的故障闭环。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
@@ -296,6 +306,16 @@
             <content:encoded><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/istoreos-node-repair.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">一次 iStoreOS 虚拟机故障排查与管理补全实录</span>
+  <span class="post-date">运维</span>
+</div>
+<div class="post-excerpt">
+  记录一次家庭实验室里的深夜抢修：从地址误判、服务异常，到最小修复和 Guest Agent 管理补全，完整复盘一台 iStoreOS 节点的故障闭环。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
 <a href="/tutorials/openclaw-recovery.html" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
@@ -396,55 +416,429 @@
 ]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[留言板]]></title>
-            <link>https://leechbox.xyz/message-board.html</link>
-            <guid isPermaLink="false">https://leechbox.xyz/message-board.html</guid>
-            <pubDate>Mon, 06 Apr 2026 17:49:45 GMT</pubDate>
-            <description><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
-<p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
-<div class="message-board-container">
-  <!-- 留言输入区 -->
-  <div class="message-input-area">
-    <div class="input-group">
-      <input type="text" id="msg-name" placeholder="怎么称呼你？(必填)" maxlength="20">
-    </div>
-    <div class="input-group">
-      <textarea id="msg-content" placeholder="想说点什么... (必填)" rows="4" maxlength="500"></textarea>
-    </div>
-    <button id="submit-msg-btn" class="submit-btn">发送留言</button>
-    <div id="submit-status" class="status-text"></div>
-  </div>
-  <!-- 留言展示区 -->
-  <div class="message-list-area">
-    <h3>最近留言</h3>
-    <div id="message-list" class="message-list">
-      <div class="loading-text">正在加载留言...</div>
-    </div>
-  </div>
-</div>
+            <title><![CDATA[马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地]]></title>
+            <link>https://leechbox.xyz/posts/2026-04-29-ai.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/posts/2026-04-29-ai.html</guid>
+            <pubDate>Wed, 29 Apr 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[<h1 id="马斯克奥特曼冲突背后-ai竞争为何转向算力平台、国产芯片与产业落地" tabindex="-1">马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地 <a class="header-anchor" href="#马斯克奥特曼冲突背后-ai竞争为何转向算力平台、国产芯片与产业落地" aria-label="Permalink to &quot;马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地&quot;">&ZeroWidthSpace;</a></h1>
+<h2 id="马斯克和奥特曼的冲突-为什么不只是人物新闻" tabindex="-1">马斯克和奥特曼的冲突，为什么不只是人物新闻？ <a class="header-anchor" href="#马斯克和奥特曼的冲突-为什么不只是人物新闻" aria-label="Permalink to &quot;马斯克和奥特曼的冲突，为什么不只是人物新闻？&quot;">&ZeroWidthSpace;</a></h2>
+<p>最近关于马斯克与奥特曼的争议，再次把全球AI行业推到了舆论中心。很多人第一反应是把它当成一次典型的科技圈权力冲突：有人在争控制权，有人在争叙事权，也有人在争未来人工智能路线的解释权。</p>
+<p>但如果只把这件事理解为“人物矛盾”，其实会低估它背后的行业信号。</p>
+<p>因为这场冲突真正说明的是：AI行业正在快速告别“单纯拼模型”的阶段，进入一个更重基础设施、更重产业协同、也更重底层资源掌控力的新周期。也就是说，AI竞争已经从上半场走向下半场。</p>
+<h2 id="ai竞争进入下半场-关键不只是大模型" tabindex="-1">AI竞争进入下半场，关键不只是大模型 <a class="header-anchor" href="#ai竞争进入下半场-关键不只是大模型" aria-label="Permalink to &quot;AI竞争进入下半场，关键不只是大模型&quot;">&ZeroWidthSpace;</a></h2>
+<p>在上半场，大模型能力、融资速度、用户增长和产品热度，确实是最显眼的指标。谁先推出更强的模型、谁更会做演示、谁更容易获得资本支持，往往就能占据话题中心。</p>
+<p>但走到今天，这套逻辑已经开始失效。</p>
+<p>原因很简单：模型能力再强，如果无法稳定供给算力、无法降低部署成本、无法接入真实场景，那它就很难从“炫技产品”变成“基础生产力”。对于企业和产业用户来说，他们最终关心的是三件更现实的事情：</p>
+<ol>
+<li>算力是否稳定可得；</li>
+<li>芯片与底层平台是否可控；</li>
+<li>AI能力能否真正嵌入业务流程并形成产出。</li>
+</ol>
+<p>这意味着，AI竞争正在从单点技术竞争，升级为系统能力竞争。</p>
+<h2 id="为什么算力平台会成为ai竞争的核心变量" tabindex="-1">为什么算力平台会成为AI竞争的核心变量？ <a class="header-anchor" href="#为什么算力平台会成为ai竞争的核心变量" aria-label="Permalink to &quot;为什么算力平台会成为AI竞争的核心变量？&quot;">&ZeroWidthSpace;</a></h2>
+<p>无论是训练还是推理，算力都是大模型时代的基础资源。过去很多讨论把算力理解为“买更多GPU”，但这只是最表层的理解。真正的算力竞争，不只是拥有多少硬件，而是谁能把这些资源做成稳定、可调度、可规模化服务产业的能力。</p>
+<p>这也是为什么，工业级算力平台、智算中心、区域算力基础设施建设，最近会越来越频繁地出现在AI相关新闻里。因为当AI开始走出实验室、走进企业系统后，需求就不再是单次演示，而是持续运行。</p>
+<p>对于制造、客服、政务、医疗辅助、研发提效、园区运营等场景来说，AI如果要真正落地，必须具备：</p>
+<ul>
+<li>可持续的算力供给；</li>
+<li>可接受的单位成本；</li>
+<li>面向行业的调度与交付能力；</li>
+<li>和既有业务系统的稳定连接能力。</li>
+</ul>
+<p>因此，算力平台的意义不是“给AI增加一个概念”，而是让AI从热点变成基础设施。</p>
+<h2 id="国产芯片为什么会在这一轮ai竞争中越来越重要" tabindex="-1">国产芯片为什么会在这一轮AI竞争中越来越重要？ <a class="header-anchor" href="#国产芯片为什么会在这一轮ai竞争中越来越重要" aria-label="Permalink to &quot;国产芯片为什么会在这一轮AI竞争中越来越重要？&quot;">&ZeroWidthSpace;</a></h2>
+<p>当行业进入深水区之后，芯片问题就再也无法回避。</p>
+<p>很多人谈AI时，更关注模型参数、产品体验和应用层创新，但芯片决定了这一切能否长期持续。没有底层芯片能力，再强的上层模型也可能被供应链、成本或可持续性问题反噬。</p>
+<p>所以，国产AI芯片、国产处理器、国产算力生态的重要性，正在被重新认识。它们的价值不只是“替代”，更在于为整个AI产业提供一个更稳的底座。只有底座稳，企业才敢长期投入，平台才敢持续扩张，行业场景才有可能形成真正的复利。</p>
+<p>更现实一点说，未来谁能在AI竞争中占据主动，看的不只是“有没有爆款模型”，还要看：</p>
+<ul>
+<li>有没有相对可控的算力来源；</li>
+<li>有没有逐步成熟的国产芯片生态；</li>
+<li>有没有围绕芯片、框架、调度、应用形成完整链条。</li>
+</ul>
+<p>这恰恰是很多外界在看热闹时最容易忽视的一层。</p>
+<h2 id="产业落地-才是ai竞争最终要回答的问题" tabindex="-1">产业落地，才是AI竞争最终要回答的问题 <a class="header-anchor" href="#产业落地-才是ai竞争最终要回答的问题" aria-label="Permalink to &quot;产业落地，才是AI竞争最终要回答的问题&quot;">&ZeroWidthSpace;</a></h2>
+<p>AI行业今天最需要回答的问题，不是“模型还能不能更强一点”，而是“AI到底怎样才能真正进入产业”。</p>
+<p>如果一个模型只能在发布会上惊艳，但无法进入企业流程、无法服务真实业务、无法在成本和稳定性上通过考验，那么它对产业的价值就会被大幅打折。</p>
+<p>反过来，真正有潜力穿越周期的，不一定是声量最大的一方，而是那些能够把模型能力、算力平台、芯片生态和行业场景打通的参与者。</p>
+<p>这就是为什么今天看AI，不能只看热点新闻，更要看基础设施建设、芯片推进节奏、行业应用密度和交付能力。谁能在这些维度上形成闭环，谁才更可能在未来几年把优势固化下来。</p>
+<h2 id="结语-ai的真正胜负手-正在从-谁更会说-转向-谁更能落地" tabindex="-1">结语：AI的真正胜负手，正在从“谁更会说”转向“谁更能落地” <a class="header-anchor" href="#结语-ai的真正胜负手-正在从-谁更会说-转向-谁更能落地" aria-label="Permalink to &quot;结语：AI的真正胜负手，正在从“谁更会说”转向“谁更能落地”&quot;">&ZeroWidthSpace;</a></h2>
+<p>回到最初的问题：马斯克和奥特曼的冲突，到底说明了什么？</p>
+<p>它说明，AI早就不是一场单纯的理念之争或产品之争，而是一场围绕资源、基础设施、产业协同和长期控制力展开的系统竞争。</p>
+<p>在这个阶段，人物冲突会继续出现，热点会不断切换，模型榜单也还会持续刷新。但这些都只是表层波动。真正决定AI未来格局的，是谁能把大模型、算力平台、国产芯片和产业落地真正串起来。</p>
+<p>所以，AI的上半场拼模型，AI的下半场拼系统；上半场看谁更快，下半场看谁更稳。</p>
+<p>而这，才是今天看AI竞争最值得抓住的主线。</p>
 ]]></description>
-            <content:encoded><![CDATA[<h1 id="💬-留言板" tabindex="-1">💬 留言板 <a class="header-anchor" href="#💬-留言板" aria-label="Permalink to &quot;💬 留言板&quot;">&ZeroWidthSpace;</a></h1>
-<p>欢迎来到 Leechbox 的留言板！有什么想说的、想问的，或者单纯想吐槽的，都可以在这里留下你的足迹。</p>
-<div class="message-board-container">
-  <!-- 留言输入区 -->
-  <div class="message-input-area">
-    <div class="input-group">
-      <input type="text" id="msg-name" placeholder="怎么称呼你？(必填)" maxlength="20">
-    </div>
-    <div class="input-group">
-      <textarea id="msg-content" placeholder="想说点什么... (必填)" rows="4" maxlength="500"></textarea>
-    </div>
-    <button id="submit-msg-btn" class="submit-btn">发送留言</button>
-    <div id="submit-status" class="status-text"></div>
-  </div>
-  <!-- 留言展示区 -->
-  <div class="message-list-area">
-    <h3>最近留言</h3>
-    <div id="message-list" class="message-list">
-      <div class="loading-text">正在加载留言...</div>
-    </div>
-  </div>
-</div>
+            <content:encoded><![CDATA[<h1 id="马斯克奥特曼冲突背后-ai竞争为何转向算力平台、国产芯片与产业落地" tabindex="-1">马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地 <a class="header-anchor" href="#马斯克奥特曼冲突背后-ai竞争为何转向算力平台、国产芯片与产业落地" aria-label="Permalink to &quot;马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地&quot;">&ZeroWidthSpace;</a></h1>
+<h2 id="马斯克和奥特曼的冲突-为什么不只是人物新闻" tabindex="-1">马斯克和奥特曼的冲突，为什么不只是人物新闻？ <a class="header-anchor" href="#马斯克和奥特曼的冲突-为什么不只是人物新闻" aria-label="Permalink to &quot;马斯克和奥特曼的冲突，为什么不只是人物新闻？&quot;">&ZeroWidthSpace;</a></h2>
+<p>最近关于马斯克与奥特曼的争议，再次把全球AI行业推到了舆论中心。很多人第一反应是把它当成一次典型的科技圈权力冲突：有人在争控制权，有人在争叙事权，也有人在争未来人工智能路线的解释权。</p>
+<p>但如果只把这件事理解为“人物矛盾”，其实会低估它背后的行业信号。</p>
+<p>因为这场冲突真正说明的是：AI行业正在快速告别“单纯拼模型”的阶段，进入一个更重基础设施、更重产业协同、也更重底层资源掌控力的新周期。也就是说，AI竞争已经从上半场走向下半场。</p>
+<h2 id="ai竞争进入下半场-关键不只是大模型" tabindex="-1">AI竞争进入下半场，关键不只是大模型 <a class="header-anchor" href="#ai竞争进入下半场-关键不只是大模型" aria-label="Permalink to &quot;AI竞争进入下半场，关键不只是大模型&quot;">&ZeroWidthSpace;</a></h2>
+<p>在上半场，大模型能力、融资速度、用户增长和产品热度，确实是最显眼的指标。谁先推出更强的模型、谁更会做演示、谁更容易获得资本支持，往往就能占据话题中心。</p>
+<p>但走到今天，这套逻辑已经开始失效。</p>
+<p>原因很简单：模型能力再强，如果无法稳定供给算力、无法降低部署成本、无法接入真实场景，那它就很难从“炫技产品”变成“基础生产力”。对于企业和产业用户来说，他们最终关心的是三件更现实的事情：</p>
+<ol>
+<li>算力是否稳定可得；</li>
+<li>芯片与底层平台是否可控；</li>
+<li>AI能力能否真正嵌入业务流程并形成产出。</li>
+</ol>
+<p>这意味着，AI竞争正在从单点技术竞争，升级为系统能力竞争。</p>
+<h2 id="为什么算力平台会成为ai竞争的核心变量" tabindex="-1">为什么算力平台会成为AI竞争的核心变量？ <a class="header-anchor" href="#为什么算力平台会成为ai竞争的核心变量" aria-label="Permalink to &quot;为什么算力平台会成为AI竞争的核心变量？&quot;">&ZeroWidthSpace;</a></h2>
+<p>无论是训练还是推理，算力都是大模型时代的基础资源。过去很多讨论把算力理解为“买更多GPU”，但这只是最表层的理解。真正的算力竞争，不只是拥有多少硬件，而是谁能把这些资源做成稳定、可调度、可规模化服务产业的能力。</p>
+<p>这也是为什么，工业级算力平台、智算中心、区域算力基础设施建设，最近会越来越频繁地出现在AI相关新闻里。因为当AI开始走出实验室、走进企业系统后，需求就不再是单次演示，而是持续运行。</p>
+<p>对于制造、客服、政务、医疗辅助、研发提效、园区运营等场景来说，AI如果要真正落地，必须具备：</p>
+<ul>
+<li>可持续的算力供给；</li>
+<li>可接受的单位成本；</li>
+<li>面向行业的调度与交付能力；</li>
+<li>和既有业务系统的稳定连接能力。</li>
+</ul>
+<p>因此，算力平台的意义不是“给AI增加一个概念”，而是让AI从热点变成基础设施。</p>
+<h2 id="国产芯片为什么会在这一轮ai竞争中越来越重要" tabindex="-1">国产芯片为什么会在这一轮AI竞争中越来越重要？ <a class="header-anchor" href="#国产芯片为什么会在这一轮ai竞争中越来越重要" aria-label="Permalink to &quot;国产芯片为什么会在这一轮AI竞争中越来越重要？&quot;">&ZeroWidthSpace;</a></h2>
+<p>当行业进入深水区之后，芯片问题就再也无法回避。</p>
+<p>很多人谈AI时，更关注模型参数、产品体验和应用层创新，但芯片决定了这一切能否长期持续。没有底层芯片能力，再强的上层模型也可能被供应链、成本或可持续性问题反噬。</p>
+<p>所以，国产AI芯片、国产处理器、国产算力生态的重要性，正在被重新认识。它们的价值不只是“替代”，更在于为整个AI产业提供一个更稳的底座。只有底座稳，企业才敢长期投入，平台才敢持续扩张，行业场景才有可能形成真正的复利。</p>
+<p>更现实一点说，未来谁能在AI竞争中占据主动，看的不只是“有没有爆款模型”，还要看：</p>
+<ul>
+<li>有没有相对可控的算力来源；</li>
+<li>有没有逐步成熟的国产芯片生态；</li>
+<li>有没有围绕芯片、框架、调度、应用形成完整链条。</li>
+</ul>
+<p>这恰恰是很多外界在看热闹时最容易忽视的一层。</p>
+<h2 id="产业落地-才是ai竞争最终要回答的问题" tabindex="-1">产业落地，才是AI竞争最终要回答的问题 <a class="header-anchor" href="#产业落地-才是ai竞争最终要回答的问题" aria-label="Permalink to &quot;产业落地，才是AI竞争最终要回答的问题&quot;">&ZeroWidthSpace;</a></h2>
+<p>AI行业今天最需要回答的问题，不是“模型还能不能更强一点”，而是“AI到底怎样才能真正进入产业”。</p>
+<p>如果一个模型只能在发布会上惊艳，但无法进入企业流程、无法服务真实业务、无法在成本和稳定性上通过考验，那么它对产业的价值就会被大幅打折。</p>
+<p>反过来，真正有潜力穿越周期的，不一定是声量最大的一方，而是那些能够把模型能力、算力平台、芯片生态和行业场景打通的参与者。</p>
+<p>这就是为什么今天看AI，不能只看热点新闻，更要看基础设施建设、芯片推进节奏、行业应用密度和交付能力。谁能在这些维度上形成闭环，谁才更可能在未来几年把优势固化下来。</p>
+<h2 id="结语-ai的真正胜负手-正在从-谁更会说-转向-谁更能落地" tabindex="-1">结语：AI的真正胜负手，正在从“谁更会说”转向“谁更能落地” <a class="header-anchor" href="#结语-ai的真正胜负手-正在从-谁更会说-转向-谁更能落地" aria-label="Permalink to &quot;结语：AI的真正胜负手，正在从“谁更会说”转向“谁更能落地”&quot;">&ZeroWidthSpace;</a></h2>
+<p>回到最初的问题：马斯克和奥特曼的冲突，到底说明了什么？</p>
+<p>它说明，AI早就不是一场单纯的理念之争或产品之争，而是一场围绕资源、基础设施、产业协同和长期控制力展开的系统竞争。</p>
+<p>在这个阶段，人物冲突会继续出现，热点会不断切换，模型榜单也还会持续刷新。但这些都只是表层波动。真正决定AI未来格局的，是谁能把大模型、算力平台、国产芯片和产业落地真正串起来。</p>
+<p>所以，AI的上半场拼模型，AI的下半场拼系统；上半场看谁更快，下半场看谁更稳。</p>
+<p>而这，才是今天看AI竞争最值得抓住的主线。</p>
+<hr>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[一次 iStoreOS 虚拟机故障排查与管理补全实录]]></title>
+            <link>https://leechbox.xyz/posts/istoreos-node-repair.html</link>
+            <guid isPermaLink="false">https://leechbox.xyz/posts/istoreos-node-repair.html</guid>
+            <pubDate>Sat, 18 Apr 2026 02:08:00 GMT</pubDate>
+            <description><![CDATA[<h1 id="一次-istoreos-虚拟机故障排查与管理补全实录" tabindex="-1">一次 iStoreOS 虚拟机故障排查与管理补全实录 <a class="header-anchor" href="#一次-istoreos-虚拟机故障排查与管理补全实录" aria-label="Permalink to &quot;一次 iStoreOS 虚拟机故障排查与管理补全实录&quot;">&ZeroWidthSpace;</a></h1>
+<p>家庭实验室里最烦的，不是服务真挂了，而是<strong>你以为它挂了，实际上只是你看错了地方</strong>。</p>
+<p>这次深夜排障，表面现象是某个站点的媒体内容无法正常播放，但网页本身又能打开，乍一看像前端问题，往深了查才发现，根子其实落在家里那台负责网络转发与分流的 <strong>iStoreOS 虚拟机</strong> 上。</p>
+<p>更要命的是，一开始连它的管理地址都记错了。</p>
+<p>所以这篇文章，我不聊那些花里胡哨的概念，只复盘一件事：<strong>当你的家庭网络节点“半在线半异常”时，到底该怎么一步一步把它救回来。</strong></p>
+<h2 id="故障现象-网页正常-媒体资源异常" tabindex="-1">故障现象：网页正常，媒体资源异常 <a class="header-anchor" href="#故障现象-网页正常-媒体资源异常" aria-label="Permalink to &quot;故障现象：网页正常，媒体资源异常&quot;">&ZeroWidthSpace;</a></h2>
+<p>这类故障特别容易把人带沟里。</p>
+<p>表面看起来：</p>
+<ul>
+<li>首页能打开</li>
+<li>管理页也能访问</li>
+<li>机器本身还能 ping 通或部分端口有响应</li>
+<li>但真正的媒体资源、站内视频或大文件请求会莫名失败</li>
+</ul>
+<p>这种状态很有迷惑性，因为它不是“整个服务全挂”，而是<strong>只有某一类请求异常</strong>。</p>
+<p>如果这时候直接拍脑袋重装、重置或者乱改规则，八成会把问题越修越大。</p>
+<p>正确姿势只有一个：<strong>先确认节点是谁、在哪、跑着什么，再谈修复。</strong></p>
+<h2 id="第一步-别先改配置-先把-真实管理地址-找出来" tabindex="-1">第一步：别先改配置，先把“真实管理地址”找出来 <a class="header-anchor" href="#第一步-别先改配置-先把-真实管理地址-找出来" aria-label="Permalink to &quot;第一步：别先改配置，先把“真实管理地址”找出来&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次第一个坑，就是地址误判。</p>
+<p>前面一度以为目标虚拟机是另一个常见地址，但继续追下去才发现，真正的管理口根本不在原先记忆的位置，而是在控制台里显示的另一个 LAN 地址上。</p>
+<p>这一步给我的提醒很直接：</p>
+<ul>
+<li>不要过度相信旧记忆</li>
+<li>不要只凭 DHCP 猜测虚拟机 IP</li>
+<li><strong>以控制台 / 系统内网卡信息为准</strong></li>
+</ul>
+<p>在虚拟化环境里，尤其是旁路由、网关型、分流型节点，地址漂移、桥接错觉、历史误记都太常见了。</p>
+<p>一旦地址错了，你后面所有判断都会偏。</p>
+<h2 id="第二步-确认这台节点到底在跑什么服务" tabindex="-1">第二步：确认这台节点到底在跑什么服务 <a class="header-anchor" href="#第二步-确认这台节点到底在跑什么服务" aria-label="Permalink to &quot;第二步：确认这台节点到底在跑什么服务&quot;">&ZeroWidthSpace;</a></h2>
+<p>找回真实地址后，接下来就不是“能不能打开网页”这种粗糙判断了，而是要看：</p>
+<ul>
+<li>开了哪些端口</li>
+<li>管理页是什么系统</li>
+<li>控制接口是否在线</li>
+<li>当前实际运行的内核或服务是什么</li>
+</ul>
+<p>结果很快就明确了：</p>
+<ul>
+<li>这是一台 <strong>iStoreOS</strong> 虚拟机</li>
+<li>上面跑着负责分流和转发的服务</li>
+<li>控制接口能正常返回版本信息</li>
+<li>核心服务本身并没有崩</li>
+</ul>
+<p>也就是说：</p>
+<blockquote>
+<p><strong>不是服务没启动，而是规则层出了偏差。</strong></p>
+</blockquote>
+<p>这和“服务挂了”完全不是一个处理思路。</p>
+<h2 id="第三步-用对比法找根因-而不是瞎猜" tabindex="-1">第三步：用对比法找根因，而不是瞎猜 <a class="header-anchor" href="#第三步-用对比法找根因-而不是瞎猜" aria-label="Permalink to &quot;第三步：用对比法找根因，而不是瞎猜&quot;">&ZeroWidthSpace;</a></h2>
+<p>真正让我锁定问题的，不是日志里某一句报错，而是<strong>对比测试</strong>。</p>
+<p>思路很简单：</p>
+<ol>
+<li>测试目标资源在直连路径下是否正常</li>
+<li>再测试同一目标，在经过这台网络节点处理之后是否异常</li>
+<li>两边一对照，问题就会自己浮出来</li>
+</ol>
+<p>最终的结论很清楚：</p>
+<ul>
+<li>目标资源本身可访问</li>
+<li>某些特定域名下的媒体内容，在经过该节点处理后出现异常</li>
+<li>说明不是源站坏了，而是<strong>节点侧的分流/解析策略命中了错误路径</strong></li>
+</ul>
+<p>到这里，根因就基本成立了：</p>
+<p><strong>规则没有完全照顾到媒体资源所依赖的相关域名，导致部分请求被送进了不合适的处理链路。</strong></p>
+<h2 id="第四步-只做最小改动-不要一把梭全改" tabindex="-1">第四步：只做最小改动，不要一把梭全改 <a class="header-anchor" href="#第四步-只做最小改动-不要一把梭全改" aria-label="Permalink to &quot;第四步：只做最小改动，不要一把梭全改&quot;">&ZeroWidthSpace;</a></h2>
+<p>这是家庭运维里特别重要的一条纪律。</p>
+<p>很多人一旦找到大致方向，就喜欢：</p>
+<ul>
+<li>全量重置配置</li>
+<li>换一整套规则集</li>
+<li>直接导入别人的模板</li>
+<li>或者“能直连的全直连，先能用再说”</li>
+</ul>
+<p>短期看似能好，长期一定埋雷。</p>
+<p>这次我采取的就是<strong>最小修复原则</strong>：</p>
+<ul>
+<li>只补充和故障目标直接相关的匹配规则</li>
+<li>同步补解析侧的对应处理</li>
+<li>不碰无关的 LAN、系统、接口和其他业务逻辑</li>
+</ul>
+<p>这样做有两个好处：</p>
+<ol>
+<li><strong>风险低</strong>：不会把原本正常的部分带崩</li>
+<li><strong>可验证</strong>：修完以后能明确知道到底是哪条规则生效了</li>
+</ol>
+<p>家庭网络环境最怕“大修变大炸”，小刀精准下针，反而更稳。</p>
+<h2 id="第五步-修完不能算完-必须现场回测" tabindex="-1">第五步：修完不能算完，必须现场回测 <a class="header-anchor" href="#第五步-修完不能算完-必须现场回测" aria-label="Permalink to &quot;第五步：修完不能算完，必须现场回测&quot;">&ZeroWidthSpace;</a></h2>
+<p>修规则只是过程，<strong>回测通过</strong>才叫结果。</p>
+<p>这一步我盯的不是“配置文件改没改成功”，而是：</p>
+<ul>
+<li>目标资源是否恢复正常响应</li>
+<li>原始异常现象是否消失</li>
+<li>管理侧控制接口是否仍然正常</li>
+</ul>
+<p>只要现场复测闭环，才能确认这次调整不是“碰巧”。</p>
+<p>很多所谓“已修复”的事故，最后复盘一看，根本没做业务验证，只是配置改完没报错就算结束。那不叫修复，那叫碰运气。</p>
+<h2 id="第六步-顺手把管理能力补齐-别等下次再抓瞎" tabindex="-1">第六步：顺手把管理能力补齐，别等下次再抓瞎 <a class="header-anchor" href="#第六步-顺手把管理能力补齐-别等下次再抓瞎" aria-label="Permalink to &quot;第六步：顺手把管理能力补齐，别等下次再抓瞎&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次还有一个很典型的后续动作：<strong>补管理能力</strong>。</p>
+<p>前面之所以在 PVE 里看这台虚拟机的信息不够直观，很大原因是它没有把 Guest Agent 这一层打通。结果就是：</p>
+<ul>
+<li>宿主机侧看到的信息不完整</li>
+<li>IP、状态、交互能力都比较弱</li>
+<li>后续做维护、排障、优雅关机都不够顺手</li>
+</ul>
+<p>所以修完业务问题后，我顺手把这一层也补上了：</p>
+<ul>
+<li>在虚拟机系统内安装 Guest Agent</li>
+<li>在 PVE 侧启用对应选项</li>
+<li>重启后确认通信通道正常出现</li>
+</ul>
+<p>这一步不会直接提升业务性能，但会极大提升<strong>可观测性和可维护性</strong>。</p>
+<p>说白了，很多时候你不是不会修，而是<strong>看不见</strong>，所以才修得累。</p>
+<h2 id="这次排障里最值得记住的-4-个经验" tabindex="-1">这次排障里最值得记住的 4 个经验 <a class="header-anchor" href="#这次排障里最值得记住的-4-个经验" aria-label="Permalink to &quot;这次排障里最值得记住的 4 个经验&quot;">&ZeroWidthSpace;</a></h2>
+<h3 id="_1-先确认身份-再确认问题" tabindex="-1">1）先确认身份，再确认问题 <a class="header-anchor" href="#_1-先确认身份-再确认问题" aria-label="Permalink to &quot;1）先确认身份，再确认问题&quot;">&ZeroWidthSpace;</a></h3>
+<p>别一上来就改配置。</p>
+<p>先确认：</p>
+<ul>
+<li>机器是不是这台</li>
+<li>IP 是不是真的这个</li>
+<li>当前跑的服务是不是你以为的那个</li>
+</ul>
+<p>身份没确认，后面所有操作都可能白干。</p>
+<h3 id="_2-半正常-比-全挂-更值得警惕" tabindex="-1">2）“半正常”比“全挂”更值得警惕 <a class="header-anchor" href="#_2-半正常-比-全挂-更值得警惕" aria-label="Permalink to &quot;2）“半正常”比“全挂”更值得警惕&quot;">&ZeroWidthSpace;</a></h3>
+<p>网页能开、管理页正常，不代表业务链路没问题。</p>
+<p>很多故障根本不是系统崩了，而是<strong>某一种请求类型单独异常</strong>。</p>
+<h3 id="_3-最小改动-比大换血靠谱" tabindex="-1">3）最小改动，比大换血靠谱 <a class="header-anchor" href="#_3-最小改动-比大换血靠谱" aria-label="Permalink to &quot;3）最小改动，比大换血靠谱&quot;">&ZeroWidthSpace;</a></h3>
+<p>尤其是在家庭实验室或已经跑着多个服务的节点上，能局部修就别全量推倒。</p>
+<h3 id="_4-修完业务-别忘了补观测能力" tabindex="-1">4）修完业务，别忘了补观测能力 <a class="header-anchor" href="#_4-修完业务-别忘了补观测能力" aria-label="Permalink to &quot;4）修完业务，别忘了补观测能力&quot;">&ZeroWidthSpace;</a></h3>
+<p>如果一台关键节点没有：</p>
+<ul>
+<li>清晰的管理地址记录</li>
+<li>可靠的登录凭据</li>
+<li>宿主机侧的状态感知能力</li>
+</ul>
+<p>那它迟早还会再坑你一次。</p>
+<h2 id="写在最后" tabindex="-1">写在最后 <a class="header-anchor" href="#写在最后" aria-label="Permalink to &quot;写在最后&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次深夜折腾，表面上是修了一次业务异常，实际上更像是给家庭实验室补了一堂基础课：</p>
+<blockquote>
+<p><strong>一台节点真正的稳定，不只是“现在能用”，而是“出问题时你能快速看清它、接近它、修好它”。</strong></p>
+</blockquote>
+<p>很多时候，排障最浪费时间的并不是技术本身，而是：</p>
+<ul>
+<li>地址记错</li>
+<li>权限不清</li>
+<li>入口不全</li>
+<li>看不到真实状态</li>
+</ul>
+<p>把这些管理层的洞补上，后面很多问题都会轻松不少。</p>
+<p>如果你家里也有类似的虚拟机网关、网络节点或者实验性服务，我真心建议你定期做三件事：</p>
+<ul>
+<li>校准管理地址记录</li>
+<li>补齐宿主机侧可观测性</li>
+<li>对关键规则改动坚持“最小修复”原则</li>
+</ul>
+<p>这样下次半夜出事时，至少不会先被自己坑一轮。</p>
+]]></description>
+            <content:encoded><![CDATA[<h1 id="一次-istoreos-虚拟机故障排查与管理补全实录" tabindex="-1">一次 iStoreOS 虚拟机故障排查与管理补全实录 <a class="header-anchor" href="#一次-istoreos-虚拟机故障排查与管理补全实录" aria-label="Permalink to &quot;一次 iStoreOS 虚拟机故障排查与管理补全实录&quot;">&ZeroWidthSpace;</a></h1>
+<p>家庭实验室里最烦的，不是服务真挂了，而是<strong>你以为它挂了，实际上只是你看错了地方</strong>。</p>
+<p>这次深夜排障，表面现象是某个站点的媒体内容无法正常播放，但网页本身又能打开，乍一看像前端问题，往深了查才发现，根子其实落在家里那台负责网络转发与分流的 <strong>iStoreOS 虚拟机</strong> 上。</p>
+<p>更要命的是，一开始连它的管理地址都记错了。</p>
+<p>所以这篇文章，我不聊那些花里胡哨的概念，只复盘一件事：<strong>当你的家庭网络节点“半在线半异常”时，到底该怎么一步一步把它救回来。</strong></p>
+<h2 id="故障现象-网页正常-媒体资源异常" tabindex="-1">故障现象：网页正常，媒体资源异常 <a class="header-anchor" href="#故障现象-网页正常-媒体资源异常" aria-label="Permalink to &quot;故障现象：网页正常，媒体资源异常&quot;">&ZeroWidthSpace;</a></h2>
+<p>这类故障特别容易把人带沟里。</p>
+<p>表面看起来：</p>
+<ul>
+<li>首页能打开</li>
+<li>管理页也能访问</li>
+<li>机器本身还能 ping 通或部分端口有响应</li>
+<li>但真正的媒体资源、站内视频或大文件请求会莫名失败</li>
+</ul>
+<p>这种状态很有迷惑性，因为它不是“整个服务全挂”，而是<strong>只有某一类请求异常</strong>。</p>
+<p>如果这时候直接拍脑袋重装、重置或者乱改规则，八成会把问题越修越大。</p>
+<p>正确姿势只有一个：<strong>先确认节点是谁、在哪、跑着什么，再谈修复。</strong></p>
+<h2 id="第一步-别先改配置-先把-真实管理地址-找出来" tabindex="-1">第一步：别先改配置，先把“真实管理地址”找出来 <a class="header-anchor" href="#第一步-别先改配置-先把-真实管理地址-找出来" aria-label="Permalink to &quot;第一步：别先改配置，先把“真实管理地址”找出来&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次第一个坑，就是地址误判。</p>
+<p>前面一度以为目标虚拟机是另一个常见地址，但继续追下去才发现，真正的管理口根本不在原先记忆的位置，而是在控制台里显示的另一个 LAN 地址上。</p>
+<p>这一步给我的提醒很直接：</p>
+<ul>
+<li>不要过度相信旧记忆</li>
+<li>不要只凭 DHCP 猜测虚拟机 IP</li>
+<li><strong>以控制台 / 系统内网卡信息为准</strong></li>
+</ul>
+<p>在虚拟化环境里，尤其是旁路由、网关型、分流型节点，地址漂移、桥接错觉、历史误记都太常见了。</p>
+<p>一旦地址错了，你后面所有判断都会偏。</p>
+<h2 id="第二步-确认这台节点到底在跑什么服务" tabindex="-1">第二步：确认这台节点到底在跑什么服务 <a class="header-anchor" href="#第二步-确认这台节点到底在跑什么服务" aria-label="Permalink to &quot;第二步：确认这台节点到底在跑什么服务&quot;">&ZeroWidthSpace;</a></h2>
+<p>找回真实地址后，接下来就不是“能不能打开网页”这种粗糙判断了，而是要看：</p>
+<ul>
+<li>开了哪些端口</li>
+<li>管理页是什么系统</li>
+<li>控制接口是否在线</li>
+<li>当前实际运行的内核或服务是什么</li>
+</ul>
+<p>结果很快就明确了：</p>
+<ul>
+<li>这是一台 <strong>iStoreOS</strong> 虚拟机</li>
+<li>上面跑着负责分流和转发的服务</li>
+<li>控制接口能正常返回版本信息</li>
+<li>核心服务本身并没有崩</li>
+</ul>
+<p>也就是说：</p>
+<blockquote>
+<p><strong>不是服务没启动，而是规则层出了偏差。</strong></p>
+</blockquote>
+<p>这和“服务挂了”完全不是一个处理思路。</p>
+<h2 id="第三步-用对比法找根因-而不是瞎猜" tabindex="-1">第三步：用对比法找根因，而不是瞎猜 <a class="header-anchor" href="#第三步-用对比法找根因-而不是瞎猜" aria-label="Permalink to &quot;第三步：用对比法找根因，而不是瞎猜&quot;">&ZeroWidthSpace;</a></h2>
+<p>真正让我锁定问题的，不是日志里某一句报错，而是<strong>对比测试</strong>。</p>
+<p>思路很简单：</p>
+<ol>
+<li>测试目标资源在直连路径下是否正常</li>
+<li>再测试同一目标，在经过这台网络节点处理之后是否异常</li>
+<li>两边一对照，问题就会自己浮出来</li>
+</ol>
+<p>最终的结论很清楚：</p>
+<ul>
+<li>目标资源本身可访问</li>
+<li>某些特定域名下的媒体内容，在经过该节点处理后出现异常</li>
+<li>说明不是源站坏了，而是<strong>节点侧的分流/解析策略命中了错误路径</strong></li>
+</ul>
+<p>到这里，根因就基本成立了：</p>
+<p><strong>规则没有完全照顾到媒体资源所依赖的相关域名，导致部分请求被送进了不合适的处理链路。</strong></p>
+<h2 id="第四步-只做最小改动-不要一把梭全改" tabindex="-1">第四步：只做最小改动，不要一把梭全改 <a class="header-anchor" href="#第四步-只做最小改动-不要一把梭全改" aria-label="Permalink to &quot;第四步：只做最小改动，不要一把梭全改&quot;">&ZeroWidthSpace;</a></h2>
+<p>这是家庭运维里特别重要的一条纪律。</p>
+<p>很多人一旦找到大致方向，就喜欢：</p>
+<ul>
+<li>全量重置配置</li>
+<li>换一整套规则集</li>
+<li>直接导入别人的模板</li>
+<li>或者“能直连的全直连，先能用再说”</li>
+</ul>
+<p>短期看似能好，长期一定埋雷。</p>
+<p>这次我采取的就是<strong>最小修复原则</strong>：</p>
+<ul>
+<li>只补充和故障目标直接相关的匹配规则</li>
+<li>同步补解析侧的对应处理</li>
+<li>不碰无关的 LAN、系统、接口和其他业务逻辑</li>
+</ul>
+<p>这样做有两个好处：</p>
+<ol>
+<li><strong>风险低</strong>：不会把原本正常的部分带崩</li>
+<li><strong>可验证</strong>：修完以后能明确知道到底是哪条规则生效了</li>
+</ol>
+<p>家庭网络环境最怕“大修变大炸”，小刀精准下针，反而更稳。</p>
+<h2 id="第五步-修完不能算完-必须现场回测" tabindex="-1">第五步：修完不能算完，必须现场回测 <a class="header-anchor" href="#第五步-修完不能算完-必须现场回测" aria-label="Permalink to &quot;第五步：修完不能算完，必须现场回测&quot;">&ZeroWidthSpace;</a></h2>
+<p>修规则只是过程，<strong>回测通过</strong>才叫结果。</p>
+<p>这一步我盯的不是“配置文件改没改成功”，而是：</p>
+<ul>
+<li>目标资源是否恢复正常响应</li>
+<li>原始异常现象是否消失</li>
+<li>管理侧控制接口是否仍然正常</li>
+</ul>
+<p>只要现场复测闭环，才能确认这次调整不是“碰巧”。</p>
+<p>很多所谓“已修复”的事故，最后复盘一看，根本没做业务验证，只是配置改完没报错就算结束。那不叫修复，那叫碰运气。</p>
+<h2 id="第六步-顺手把管理能力补齐-别等下次再抓瞎" tabindex="-1">第六步：顺手把管理能力补齐，别等下次再抓瞎 <a class="header-anchor" href="#第六步-顺手把管理能力补齐-别等下次再抓瞎" aria-label="Permalink to &quot;第六步：顺手把管理能力补齐，别等下次再抓瞎&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次还有一个很典型的后续动作：<strong>补管理能力</strong>。</p>
+<p>前面之所以在 PVE 里看这台虚拟机的信息不够直观，很大原因是它没有把 Guest Agent 这一层打通。结果就是：</p>
+<ul>
+<li>宿主机侧看到的信息不完整</li>
+<li>IP、状态、交互能力都比较弱</li>
+<li>后续做维护、排障、优雅关机都不够顺手</li>
+</ul>
+<p>所以修完业务问题后，我顺手把这一层也补上了：</p>
+<ul>
+<li>在虚拟机系统内安装 Guest Agent</li>
+<li>在 PVE 侧启用对应选项</li>
+<li>重启后确认通信通道正常出现</li>
+</ul>
+<p>这一步不会直接提升业务性能，但会极大提升<strong>可观测性和可维护性</strong>。</p>
+<p>说白了，很多时候你不是不会修，而是<strong>看不见</strong>，所以才修得累。</p>
+<h2 id="这次排障里最值得记住的-4-个经验" tabindex="-1">这次排障里最值得记住的 4 个经验 <a class="header-anchor" href="#这次排障里最值得记住的-4-个经验" aria-label="Permalink to &quot;这次排障里最值得记住的 4 个经验&quot;">&ZeroWidthSpace;</a></h2>
+<h3 id="_1-先确认身份-再确认问题" tabindex="-1">1）先确认身份，再确认问题 <a class="header-anchor" href="#_1-先确认身份-再确认问题" aria-label="Permalink to &quot;1）先确认身份，再确认问题&quot;">&ZeroWidthSpace;</a></h3>
+<p>别一上来就改配置。</p>
+<p>先确认：</p>
+<ul>
+<li>机器是不是这台</li>
+<li>IP 是不是真的这个</li>
+<li>当前跑的服务是不是你以为的那个</li>
+</ul>
+<p>身份没确认，后面所有操作都可能白干。</p>
+<h3 id="_2-半正常-比-全挂-更值得警惕" tabindex="-1">2）“半正常”比“全挂”更值得警惕 <a class="header-anchor" href="#_2-半正常-比-全挂-更值得警惕" aria-label="Permalink to &quot;2）“半正常”比“全挂”更值得警惕&quot;">&ZeroWidthSpace;</a></h3>
+<p>网页能开、管理页正常，不代表业务链路没问题。</p>
+<p>很多故障根本不是系统崩了，而是<strong>某一种请求类型单独异常</strong>。</p>
+<h3 id="_3-最小改动-比大换血靠谱" tabindex="-1">3）最小改动，比大换血靠谱 <a class="header-anchor" href="#_3-最小改动-比大换血靠谱" aria-label="Permalink to &quot;3）最小改动，比大换血靠谱&quot;">&ZeroWidthSpace;</a></h3>
+<p>尤其是在家庭实验室或已经跑着多个服务的节点上，能局部修就别全量推倒。</p>
+<h3 id="_4-修完业务-别忘了补观测能力" tabindex="-1">4）修完业务，别忘了补观测能力 <a class="header-anchor" href="#_4-修完业务-别忘了补观测能力" aria-label="Permalink to &quot;4）修完业务，别忘了补观测能力&quot;">&ZeroWidthSpace;</a></h3>
+<p>如果一台关键节点没有：</p>
+<ul>
+<li>清晰的管理地址记录</li>
+<li>可靠的登录凭据</li>
+<li>宿主机侧的状态感知能力</li>
+</ul>
+<p>那它迟早还会再坑你一次。</p>
+<h2 id="写在最后" tabindex="-1">写在最后 <a class="header-anchor" href="#写在最后" aria-label="Permalink to &quot;写在最后&quot;">&ZeroWidthSpace;</a></h2>
+<p>这次深夜折腾，表面上是修了一次业务异常，实际上更像是给家庭实验室补了一堂基础课：</p>
+<blockquote>
+<p><strong>一台节点真正的稳定，不只是“现在能用”，而是“出问题时你能快速看清它、接近它、修好它”。</strong></p>
+</blockquote>
+<p>很多时候，排障最浪费时间的并不是技术本身，而是：</p>
+<ul>
+<li>地址记错</li>
+<li>权限不清</li>
+<li>入口不全</li>
+<li>看不到真实状态</li>
+</ul>
+<p>把这些管理层的洞补上，后面很多问题都会轻松不少。</p>
+<p>如果你家里也有类似的虚拟机网关、网络节点或者实验性服务，我真心建议你定期做三件事：</p>
+<ul>
+<li>校准管理地址记录</li>
+<li>补齐宿主机侧可观测性</li>
+<li>对关键规则改动坚持“最小修复”原则</li>
+</ul>
+<p>这样下次半夜出事时，至少不会先被自己坑一轮。</p>
+<hr>
+<p><strong>AI 说明</strong>：本文由 AI Agent 协助整理与生成，基于真实运维过程脱敏改写。</p>
+<p><strong>免责声明</strong>：本内容由 AI Agent 自动生成，仅供参考，不代表专业意见。</p>
 ]]></content:encoded>
         </item>
         <item>
@@ -506,62 +900,6 @@
 </ol>
 </blockquote>
 <p><em>(注：可以将此声明浓缩为一句话附在系统 Prompt 中：“在每次回答的末尾，请附上：[声明：本内容由 AI Agent 自动生成，仅供参考，不代表专业意见。]”)</em></p>
-]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战]]></title>
-            <link>https://leechbox.xyz/tools/twikoo-rss.html</link>
-            <guid isPermaLink="false">https://leechbox.xyz/tools/twikoo-rss.html</guid>
-            <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
-            <description><![CDATA[<h1 id="给静态博客加上灵魂-pve-旁路部署-twikoo-评论系统实战" tabindex="-1">给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战 <a class="header-anchor" href="#给静态博客加上灵魂-pve-旁路部署-twikoo-评论系统实战" aria-label="Permalink to &quot;给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战&quot;">&ZeroWidthSpace;</a></h1>
-<p>当你搭好了一个极简的 VitePress 博客，有了独立域名，也写了几篇文章后，你会发现它少了点“人情味”——读者看完了，想吐槽一句，却发现连个评论框都没有。</p>
-<p>纯静态博客天然不支持动态交互，但借助像 Twikoo 这样的无后端评论系统，我们完全可以把这块“动态拼图”补上。</p>
-<h2 id="架构解耦-为什么不在博客宿主机混装" tabindex="-1">架构解耦：为什么不在博客宿主机混装？ <a class="header-anchor" href="#架构解耦-为什么不在博客宿主机混装" aria-label="Permalink to &quot;架构解耦：为什么不在博客宿主机混装？&quot;">&ZeroWidthSpace;</a></h2>
-<p>最初我想图省事，直接在跑着博客源码的虚拟机里（103）用 Docker 跑一个 Twikoo 后端。但后来采纳了老冯的建议：<strong>架构必须解耦</strong>。</p>
-<p>博客宿主机只管前端源码和编译；任何对外的、涉及到数据库读写的后端服务，都应该切分出来。</p>
-<p>于是，我直接在 PVE 宿主机上，一键秒开了一个<strong>专属的 LXC 容器（编号 104，Debian 12系统）</strong>，专门用来跑 Twikoo 后端。哪怕以后评论系统被 D 死了，也绝对不会影响博客主站的稳定。</p>
-<h2 id="踩坑录-那些环境与网络的折磨" tabindex="-1">踩坑录：那些环境与网络的折磨 <a class="header-anchor" href="#踩坑录-那些环境与网络的折磨" aria-label="Permalink to &quot;踩坑录：那些环境与网络的折磨&quot;">&ZeroWidthSpace;</a></h2>
-<p>在 LXC 里跑 Docker 安装 Twikoo 时，遇到了经典的双重网络打击。</p>
-<h3 id="_1-dns-罢工" tabindex="-1">1. DNS 罢工 <a class="header-anchor" href="#_1-dns-罢工" aria-label="Permalink to &quot;1. DNS 罢工&quot;">&ZeroWidthSpace;</a></h3>
-<p>LXC 刚建好，执行 <code>apt update</code> 就全部报错解析失败。排查发现是底层配置没把 DNS 传进来。
-<strong>解法</strong>：直接暴力修改底层的 <code>/etc/resolv.conf</code>，强行注入了公共 DNS（如 <code>223.5.5.5</code>），网络瞬间打通。</p>
-<h3 id="_2-docker-镜像墙" tabindex="-1">2. Docker 镜像墙 <a class="header-anchor" href="#_2-docker-镜像墙" aria-label="Permalink to &quot;2. Docker 镜像墙&quot;">&ZeroWidthSpace;</a></h3>
-<p>国内直连 Docker Hub 的墙越来越高，拉取 Twikoo 的官方镜像一直卡在 <code>waiting</code> 直到超时。
-<strong>解法</strong>：去配了国内的 Docker 镜像加速源（如各大云厂商的镜像库或者代理库），重启 Docker 后，秒级拉取成功并启动。</p>
-<h2 id="前端改造与-rss-订阅附赠" tabindex="-1">前端改造与 RSS 订阅附赠 <a class="header-anchor" href="#前端改造与-rss-订阅附赠" aria-label="Permalink to &quot;前端改造与 RSS 订阅附赠&quot;">&ZeroWidthSpace;</a></h2>
-<p>Twikoo 后端（<code>192.168.1.104:8080</code>）跑起来后，剩下的就是前端的活儿了。</p>
-<p>在 103 虚拟机的 <code>vitepress-demo</code> 源码中：</p>
-<ol>
-<li><strong>注入组件</strong>：我在全局的主题配置里，把 Twikoo 的前端组件给挂载进去了。现在每篇文章底下，都会自动浮现出清爽的评论框。</li>
-<li><strong>顺手加上了 RSS</strong>：既然动了配置，干脆一步到位。引入了 <code>feed</code> 模块，配置了一下 <code>config.js</code>。现在每次触发 <code>docs:build</code> 时，系统不仅会渲染网页，还会自动生成一个 <code>feed.xml</code> 放在根目录。那些喜欢用 RSS 阅读器的大佬，终于可以订阅我的博客了。</li>
-</ol>
-<p>最后，执行了一把 <code>git commit</code> 和 <code>push</code>。眼看着 Cloudflare Pages 的流水线跑完，绿灯亮起。去线上刷一下，评论框和 RSS 订阅完美上线！</p>
-]]></description>
-            <content:encoded><![CDATA[<h1 id="给静态博客加上灵魂-pve-旁路部署-twikoo-评论系统实战" tabindex="-1">给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战 <a class="header-anchor" href="#给静态博客加上灵魂-pve-旁路部署-twikoo-评论系统实战" aria-label="Permalink to &quot;给静态博客加上灵魂：PVE 旁路部署 Twikoo 评论系统实战&quot;">&ZeroWidthSpace;</a></h1>
-<p>当你搭好了一个极简的 VitePress 博客，有了独立域名，也写了几篇文章后，你会发现它少了点“人情味”——读者看完了，想吐槽一句，却发现连个评论框都没有。</p>
-<p>纯静态博客天然不支持动态交互，但借助像 Twikoo 这样的无后端评论系统，我们完全可以把这块“动态拼图”补上。</p>
-<h2 id="架构解耦-为什么不在博客宿主机混装" tabindex="-1">架构解耦：为什么不在博客宿主机混装？ <a class="header-anchor" href="#架构解耦-为什么不在博客宿主机混装" aria-label="Permalink to &quot;架构解耦：为什么不在博客宿主机混装？&quot;">&ZeroWidthSpace;</a></h2>
-<p>最初我想图省事，直接在跑着博客源码的虚拟机里（103）用 Docker 跑一个 Twikoo 后端。但后来采纳了老冯的建议：<strong>架构必须解耦</strong>。</p>
-<p>博客宿主机只管前端源码和编译；任何对外的、涉及到数据库读写的后端服务，都应该切分出来。</p>
-<p>于是，我直接在 PVE 宿主机上，一键秒开了一个<strong>专属的 LXC 容器（编号 104，Debian 12系统）</strong>，专门用来跑 Twikoo 后端。哪怕以后评论系统被 D 死了，也绝对不会影响博客主站的稳定。</p>
-<h2 id="踩坑录-那些环境与网络的折磨" tabindex="-1">踩坑录：那些环境与网络的折磨 <a class="header-anchor" href="#踩坑录-那些环境与网络的折磨" aria-label="Permalink to &quot;踩坑录：那些环境与网络的折磨&quot;">&ZeroWidthSpace;</a></h2>
-<p>在 LXC 里跑 Docker 安装 Twikoo 时，遇到了经典的双重网络打击。</p>
-<h3 id="_1-dns-罢工" tabindex="-1">1. DNS 罢工 <a class="header-anchor" href="#_1-dns-罢工" aria-label="Permalink to &quot;1. DNS 罢工&quot;">&ZeroWidthSpace;</a></h3>
-<p>LXC 刚建好，执行 <code>apt update</code> 就全部报错解析失败。排查发现是底层配置没把 DNS 传进来。
-<strong>解法</strong>：直接暴力修改底层的 <code>/etc/resolv.conf</code>，强行注入了公共 DNS（如 <code>223.5.5.5</code>），网络瞬间打通。</p>
-<h3 id="_2-docker-镜像墙" tabindex="-1">2. Docker 镜像墙 <a class="header-anchor" href="#_2-docker-镜像墙" aria-label="Permalink to &quot;2. Docker 镜像墙&quot;">&ZeroWidthSpace;</a></h3>
-<p>国内直连 Docker Hub 的墙越来越高，拉取 Twikoo 的官方镜像一直卡在 <code>waiting</code> 直到超时。
-<strong>解法</strong>：去配了国内的 Docker 镜像加速源（如各大云厂商的镜像库或者代理库），重启 Docker 后，秒级拉取成功并启动。</p>
-<h2 id="前端改造与-rss-订阅附赠" tabindex="-1">前端改造与 RSS 订阅附赠 <a class="header-anchor" href="#前端改造与-rss-订阅附赠" aria-label="Permalink to &quot;前端改造与 RSS 订阅附赠&quot;">&ZeroWidthSpace;</a></h2>
-<p>Twikoo 后端（<code>192.168.1.104:8080</code>）跑起来后，剩下的就是前端的活儿了。</p>
-<p>在 103 虚拟机的 <code>vitepress-demo</code> 源码中：</p>
-<ol>
-<li><strong>注入组件</strong>：我在全局的主题配置里，把 Twikoo 的前端组件给挂载进去了。现在每篇文章底下，都会自动浮现出清爽的评论框。</li>
-<li><strong>顺手加上了 RSS</strong>：既然动了配置，干脆一步到位。引入了 <code>feed</code> 模块，配置了一下 <code>config.js</code>。现在每次触发 <code>docs:build</code> 时，系统不仅会渲染网页，还会自动生成一个 <code>feed.xml</code> 放在根目录。那些喜欢用 RSS 阅读器的大佬，终于可以订阅我的博客了。</li>
-</ol>
-<p>最后，执行了一把 <code>git commit</code> 和 <code>push</code>。眼看着 Cloudflare Pages 的流水线跑完，绿灯亮起。去线上刷一下，评论框和 RSS 订阅完美上线！</p>
-<hr>
-<p>至此，这个博客才算是一座真正的“数字驿站”。欢迎大家留言踩一踩。</p>
 ]]></content:encoded>
         </item>
         <item>
