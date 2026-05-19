@@ -255,4 +255,3 @@ features:
 
 ## 最新文章
 
-- [昨晚我给 AI 助手补了哪些技能？](/posts/skill-learning-report-2026-05-19)
