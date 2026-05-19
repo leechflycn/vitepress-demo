@@ -112,6 +112,17 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/ai-like-baby-real-world-2026-05-18.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">AI 像婴儿一样无知，但它已经闯进了真实世界</span>
+  <span class="post-date">AI 观察</span>
+</div>
+<div class="post-excerpt">
+  从豆包手机号争议、AI 幻觉案例到一次 NAS 误判，讨论 AI 进入现实世界后的隐私、责任、纠错与产品边界。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/2026-04-29-ai.html" class="post-card">
 <div class="post-header">
   <span class="post-title">马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地</span>
@@ -240,3 +251,8 @@ features:
 |
 <span id="busuanzi_container_site_uv">总访客数 <span id="busuanzi_value_site_uv"></span> 人</span>
 </div>
+
+
+## 最新文章
+
+- [昨晚我给 AI 助手补了哪些技能？](/posts/skill-learning-report-2026-05-19)
