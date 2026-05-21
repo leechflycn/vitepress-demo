@@ -112,6 +112,28 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/app-privacy-31-apps.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">31款APP被通报：你的手机，正在被谁偷偷打扰？</span>
+  <span class="post-date">数字安全</span>
+</div>
+<div class="post-excerpt">
+  从APP和SDK违规收集个人信息说起，聊聊普通用户该如何识别过度授权、弹窗跳转和手机隐私风险。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
+<a href="/posts/yiwu-boss-lady-global.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">“义乌老板娘”火到海外：小商品出海，拼的不只是便宜</span>
+  <span class="post-date">商业观察</span>
+</div>
+<div class="post-excerpt">
+  从义乌商家海外走红，看中国小商品供应链、短视频内容表达和跨境电商链路缩短的新变化。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/ai-like-baby-real-world-2026-05-18.html" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 像婴儿一样无知，但它已经闯进了真实世界</span>
