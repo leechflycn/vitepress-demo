@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Fri, 29 May 2026 15:15:55 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 29 May 2026 15:41:21 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -13,7 +13,7 @@
             <title><![CDATA[关于 leechbox]]></title>
             <link>https://leechbox.xyz/about/</link>
             <guid isPermaLink="false">https://leechbox.xyz/about/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="关于-leechbox" tabindex="-1">关于 leechbox <a class="header-anchor" href="#关于-leechbox" aria-label="Permalink to &quot;关于 leechbox&quot;">&ZeroWidthSpace;</a></h1>
 <p><strong>leechbox</strong> 是一个面向个人数字基建的折腾实验室。</p>
 <p>它记录家庭服务器、PVE 虚拟化、AI Agent、自动化运维、旁路由、存储备份和内容生产工作流的真实实践。</p>
@@ -65,7 +65,7 @@
             <title><![CDATA[AI Agent 自动化]]></title>
             <link>https://leechbox.xyz/ai-agent/</link>
             <guid isPermaLink="false">https://leechbox.xyz/ai-agent/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="ai-agent-自动化" tabindex="-1">AI Agent 自动化 <a class="header-anchor" href="#ai-agent-自动化" aria-label="Permalink to &quot;AI Agent 自动化&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理 leechbox 的 AI Agent 自动化实践。</p>
 <p>重点不是“会聊天”，而是让 AI Agent 真正参与资料整理、内容生产、运维排障、自动发布和长期记忆管理。</p>
@@ -2704,7 +2704,7 @@
             <title><![CDATA[家庭网络与内网服务]]></title>
             <link>https://leechbox.xyz/home-network/</link>
             <guid isPermaLink="false">https://leechbox.xyz/home-network/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="家庭网络与内网服务" tabindex="-1">家庭网络与内网服务 <a class="header-anchor" href="#家庭网络与内网服务" aria-label="Permalink to &quot;家庭网络与内网服务&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理家庭网络、旁路由、NAS、内网穿透和个人数字基建相关内容。</p>
 <p>这些内容来自真实家庭网络环境里的排障和搭建记录，重点是低成本、可复用、能恢复。</p>
@@ -2752,7 +2752,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
@@ -3541,7 +3541,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/posts/ai-like-baby-real-world-2026-05-18.html</link>
             <guid isPermaLink="false">https://leechbox.xyz/posts/ai-like-baby-real-world-2026-05-18.html</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<hr>
 <h2 id="title-ai-像婴儿一样无知-但它已经闯进了真实世界date-2026-05-18description-从豆包手机号、ai碰瓷套路、设备误判与一次误发布事故出发-讨论ai进入现实世界后的责任边界。" tabindex="-1">title: AI 像婴儿一样无知，但它已经闯进了真实世界
 date: 2026-05-18
@@ -3843,7 +3843,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[PVE 盒子实战]]></title>
             <link>https://leechbox.xyz/pve/</link>
             <guid isPermaLink="false">https://leechbox.xyz/pve/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="pve-盒子实战" tabindex="-1">PVE 盒子实战 <a class="header-anchor" href="#pve-盒子实战" aria-label="Permalink to &quot;PVE 盒子实战&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里是 leechbox 的 PVE / 家庭服务器实战索引。</p>
 <p>我们会把虚拟化、容器、快照、备份、存储和故障排查相关内容集中放在这里，方便从公众号导航页直接跳转查阅。</p>
@@ -4018,7 +4018,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[工具清单]]></title>
             <link>https://leechbox.xyz/tools/</link>
             <guid isPermaLink="false">https://leechbox.xyz/tools/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="工具清单" tabindex="-1">工具清单 <a class="header-anchor" href="#工具清单" aria-label="Permalink to &quot;工具清单&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理 leechbox 常用的工具、脚本和工作流。</p>
 <h2 id="建站与发布" tabindex="-1">建站与发布 <a class="header-anchor" href="#建站与发布" aria-label="Permalink to &quot;建站与发布&quot;">&ZeroWidthSpace;</a></h2>
@@ -4098,7 +4098,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[视频内容索引]]></title>
             <link>https://leechbox.xyz/videos/</link>
             <guid isPermaLink="false">https://leechbox.xyz/videos/</guid>
-            <pubDate>Fri, 29 May 2026 15:15:55 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 15:41:21 GMT</pubDate>
             <description><![CDATA[<h1 id="视频内容索引" tabindex="-1">视频内容索引 <a class="header-anchor" href="#视频内容索引" aria-label="Permalink to &quot;视频内容索引&quot;">&ZeroWidthSpace;</a></h1>
 <p>leechbox 后续会采用 <strong>视频 + 图文</strong> 的方式更新。</p>
 <ul>
