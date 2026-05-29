@@ -4,7 +4,7 @@
         <title>leechbox</title>
         <link>https://leechbox.xyz/</link>
         <description>影子的折腾日常</description>
-        <lastBuildDate>Fri, 29 May 2026 16:09:35 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 29 May 2026 16:41:11 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-CN</language>
@@ -603,7 +603,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/</link>
             <guid isPermaLink="false">https://leechbox.xyz/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<div class="recent-posts">
 <h2>📖 最新文章</h2>
 <div class="post-grid">
@@ -3520,7 +3520,7 @@
             <title><![CDATA[leechbox 更新]]></title>
             <link>https://leechbox.xyz/posts/ai-like-baby-real-world-2026-05-18.html</link>
             <guid isPermaLink="false">https://leechbox.xyz/posts/ai-like-baby-real-world-2026-05-18.html</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<hr>
 <h2 id="title-ai-像婴儿一样无知-但它已经闯进了真实世界date-2026-05-18description-从豆包手机号、ai碰瓷套路、设备误判与一次误发布事故出发-讨论ai进入现实世界后的责任边界。" tabindex="-1">title: AI 像婴儿一样无知，但它已经闯进了真实世界
 date: 2026-05-18
@@ -3850,7 +3850,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[关于 leechbox - 公众号说明]]></title>
             <link>https://leechbox.xyz/wechat/about/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/about/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="关于-leechbox" tabindex="-1">关于 leechbox <a class="header-anchor" href="#关于-leechbox" aria-label="Permalink to &quot;关于 leechbox&quot;">&ZeroWidthSpace;</a></h1>
 <p><strong>leechbox</strong> 是一个面向个人数字基建的折腾实验室。</p>
 <p>它记录家庭服务器、PVE 虚拟化、AI Agent、自动化运维、旁路由、存储备份和内容生产工作流的真实实践。</p>
@@ -3880,7 +3880,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[AI Agent 自动化 - leechbox 公众号]]></title>
             <link>https://leechbox.xyz/wechat/ai-agent/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/ai-agent/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="ai-agent-自动化" tabindex="-1">AI Agent 自动化 <a class="header-anchor" href="#ai-agent-自动化" aria-label="Permalink to &quot;AI Agent 自动化&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理公众号 leechbox 的 AI Agent 自动化实践。</p>
 <h2 id="推荐阅读" tabindex="-1">推荐阅读 <a class="header-anchor" href="#推荐阅读" aria-label="Permalink to &quot;推荐阅读&quot;">&ZeroWidthSpace;</a></h2>
@@ -3908,7 +3908,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[家庭网络与内网服务 - leechbox 公众号]]></title>
             <link>https://leechbox.xyz/wechat/home-network/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/home-network/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="家庭网络与内网服务" tabindex="-1">家庭网络与内网服务 <a class="header-anchor" href="#家庭网络与内网服务" aria-label="Permalink to &quot;家庭网络与内网服务&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理公众号 leechbox 的家庭网络、NAS、内网穿透和个人数字基建内容。</p>
 <h2 id="推荐阅读" tabindex="-1">推荐阅读 <a class="header-anchor" href="#推荐阅读" aria-label="Permalink to &quot;推荐阅读&quot;">&ZeroWidthSpace;</a></h2>
@@ -3936,9 +3936,12 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[leechbox 公众号导航]]></title>
             <link>https://leechbox.xyz/wechat/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="leechbox-公众号导航" tabindex="-1">leechbox 公众号导航 <a class="header-anchor" href="#leechbox-公众号导航" aria-label="Permalink to &quot;leechbox 公众号导航&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里是 <strong>公众号 leechbox 专用承接页</strong>，和原本博客栏目分开维护。</p>
+<h2 id="公众号导航文章" tabindex="-1">公众号导航文章 <a class="header-anchor" href="#公众号导航文章" aria-label="Permalink to &quot;公众号导航文章&quot;">&ZeroWidthSpace;</a></h2>
+<p>公众号已发布新版导航文章：<strong>《leechbox 导航页 v2》</strong>。</p>
+<p>后续所有公众号文章、视频号配套内容和工具索引，都统一回流到本页以及下面的分类入口。</p>
 <h2 id="入口" tabindex="-1">入口 <a class="header-anchor" href="#入口" aria-label="Permalink to &quot;入口&quot;">&ZeroWidthSpace;</a></h2>
 <ul>
 <li><a href="/wechat/pve/">PVE 盒子实战</a></li>
@@ -3952,6 +3955,9 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
 ]]></description>
             <content:encoded><![CDATA[<h1 id="leechbox-公众号导航" tabindex="-1">leechbox 公众号导航 <a class="header-anchor" href="#leechbox-公众号导航" aria-label="Permalink to &quot;leechbox 公众号导航&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里是 <strong>公众号 leechbox 专用承接页</strong>，和原本博客栏目分开维护。</p>
+<h2 id="公众号导航文章" tabindex="-1">公众号导航文章 <a class="header-anchor" href="#公众号导航文章" aria-label="Permalink to &quot;公众号导航文章&quot;">&ZeroWidthSpace;</a></h2>
+<p>公众号已发布新版导航文章：<strong>《leechbox 导航页 v2》</strong>。</p>
+<p>后续所有公众号文章、视频号配套内容和工具索引，都统一回流到本页以及下面的分类入口。</p>
 <h2 id="入口" tabindex="-1">入口 <a class="header-anchor" href="#入口" aria-label="Permalink to &quot;入口&quot;">&ZeroWidthSpace;</a></h2>
 <ul>
 <li><a href="/wechat/pve/">PVE 盒子实战</a></li>
@@ -3968,7 +3974,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[PVE 盒子实战 - leechbox 公众号]]></title>
             <link>https://leechbox.xyz/wechat/pve/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/pve/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="pve-盒子实战" tabindex="-1">PVE 盒子实战 <a class="header-anchor" href="#pve-盒子实战" aria-label="Permalink to &quot;PVE 盒子实战&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里是公众号 leechbox 的 PVE / 家庭服务器实战索引。</p>
 <h2 id="推荐阅读" tabindex="-1">推荐阅读 <a class="header-anchor" href="#推荐阅读" aria-label="Permalink to &quot;推荐阅读&quot;">&ZeroWidthSpace;</a></h2>
@@ -3996,7 +4002,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[工具清单 - leechbox 公众号]]></title>
             <link>https://leechbox.xyz/wechat/tools/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/tools/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="工具清单" tabindex="-1">工具清单 <a class="header-anchor" href="#工具清单" aria-label="Permalink to &quot;工具清单&quot;">&ZeroWidthSpace;</a></h1>
 <p>这里整理公众号 leechbox 常用工具、脚本和工作流。</p>
 <h2 id="建站与发布" tabindex="-1">建站与发布 <a class="header-anchor" href="#建站与发布" aria-label="Permalink to &quot;建站与发布&quot;">&ZeroWidthSpace;</a></h2>
@@ -4032,7 +4038,7 @@ description: 从豆包手机号、AI碰瓷套路、设备误判与一次误发�
             <title><![CDATA[视频内容索引 - leechbox 公众号]]></title>
             <link>https://leechbox.xyz/wechat/videos/</link>
             <guid isPermaLink="false">https://leechbox.xyz/wechat/videos/</guid>
-            <pubDate>Fri, 29 May 2026 16:09:35 GMT</pubDate>
+            <pubDate>Fri, 29 May 2026 16:41:11 GMT</pubDate>
             <description><![CDATA[<h1 id="视频内容索引" tabindex="-1">视频内容索引 <a class="header-anchor" href="#视频内容索引" aria-label="Permalink to &quot;视频内容索引&quot;">&ZeroWidthSpace;</a></h1>
 <p>leechbox 后续会采用 <strong>视频 + 图文</strong> 的方式更新。</p>
 <ul>
