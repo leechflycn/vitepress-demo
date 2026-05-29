@@ -34,48 +34,18 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: 'PVE盒子', link: '/pve/' },
-      { text: 'AI自动化', link: '/ai-agent/' },
-      { text: '家庭网络', link: '/home-network/' },
-      { text: '视频内容', link: '/videos/' },
-      { text: '工具清单', link: '/tools/' },
-      { text: '关于', link: '/about/' }
+      { text: 'IT 折腾日记', items: [
+        { text: '硬件与 NAS', link: '/hardware/pve-samba' },
+        { text: '账号风控', link: '/tools/risk-control' },
+        { text: '建站避坑', link: '/tools/cloudflare-cdn' }
+      ]},
+      { text: 'Docker 教程', link: '/tutorials/docker-install' },
+      { text: '零基础搞定 NAS 外网访问！', link: '/tutorials/nas-remote' },
+      { text: '手机随时访问 NAS (易有云)', link: '/tutorials/nas-phone-access' },
+      { text: '飞书机器人 (急救龙虾) 教程', link: '/tutorials/feishu-bot-setup' },
+      { text: '🦞 部署服务', link: '/openclaw-service' }
     ],
     sidebar: {
-      '/pve/': [
-        { text: 'PVE 盒子实战', items: [
-          { text: 'PVE 盒子实战', link: '/pve/' },
-          { text: 'PVE 与 NAS 数据中心实录', link: '/hardware/pve-samba' },
-          { text: 'Ubuntu Server 安装指南', link: '/posts/pve-ubuntu-install-guide-2026-05-01' }
-        ]}
-      ],
-      '/ai-agent/': [
-        { text: 'AI Agent 自动化', items: [
-          { text: 'AI Agent 自动化', link: '/ai-agent/' },
-          { text: 'AI 助理双核记忆系统', link: '/tutorials/ai-memory-system' },
-          { text: 'AI 助理灾备与急救', link: '/tutorials/openclaw-recovery' }
-        ]}
-      ],
-      '/home-network/': [
-        { text: '家庭网络与内网服务', items: [
-          { text: '家庭网络与内网服务', link: '/home-network/' },
-          { text: 'NAS 外网访问', link: '/tutorials/nas-remote' },
-          { text: '手机访问 NAS', link: '/tutorials/nas-phone-access' }
-        ]}
-      ],
-      '/videos/': [
-        { text: '视频内容', items: [
-          { text: '视频内容索引', link: '/videos/' },
-          { text: '关于 leechbox', link: '/about/' }
-        ]}
-      ],
-      '/about/': [
-        { text: '关于 leechbox', items: [
-          { text: '关于 leechbox', link: '/about/' },
-          { text: '工具清单', link: '/tools/' },
-          { text: '视频内容', link: '/videos/' }
-        ]}
-      ],
       '/tutorials/': [
         {
           text: '教程与配套代码',
