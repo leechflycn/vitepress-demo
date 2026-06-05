@@ -112,6 +112,28 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/skill-before-agent-2026-06-05.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">先 Skill 后 Agent：为什么 AI 工作流不能只靠一个聪明模型</span>
+  <span class="post-date">AI 工作流</span>
+</div>
+<div class="post-excerpt">
+  AI Agent 真正可靠的前提，不是模型足够聪明，而是任务流程、责任边界、失败刹车和人工确认机制足够清楚。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
+<a href="/posts/remote-networking-ai-studio-2026-06-05.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">家庭 AI 工作室，为什么先要解决异地组网？</span>
+  <span class="post-date">家庭 AI</span>
+</div>
+<div class="post-excerpt">
+  家庭 AI 工作室不是从模型开始，而是从网络、权限、存储、备份和流程开始。先解决安全稳定的异地组网，后面的自建服务和 AI Agent 才有真正地基。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/app-privacy-31-apps.html" class="post-card">
 <div class="post-header">
   <span class="post-title">31款APP被通报：你的手机，正在被谁偷偷打扰？</span>
