@@ -112,6 +112,28 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/2026-06-09-agent-security-family-ai-studio.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">从数字员工到家庭 AI 工作室：Agent 安全怎么做</span>
+  <span class="post-date">AI 安全</span>
+</div>
+<div class="post-excerpt">
+  从 API 中转站被篡改的脱敏案例说起，聊聊数字员工、Agent 工作流和家庭 AI 工作室必须守住的安全边界。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
+<a href="/posts/2026-06-09-low-cost-tech-middle-east-conflict.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">低成本技术，正在重写中东冲突</span>
+  <span class="post-date">技术观察</span>
+</div>
+<div class="post-excerpt">
+  低成本无人机、廉价传感器和开源软件正在改变冲突里的成本结构，真正被重写的是战争经济学。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/skill-before-agent-2026-06-05.html" class="post-card">
 <div class="post-header">
   <span class="post-title">先 Skill 后 Agent：为什么 AI 工作流不能只靠一个聪明模型</span>
