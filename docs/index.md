@@ -112,6 +112,17 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
+<a href="/posts/ai-automation-small-business-2026-06-17.html" class="post-card">
+<div class="post-header">
+  <span class="post-title">AI 自动化真正的机会：帮小生意少踩坑</span>
+  <span class="post-date">AI 自动化</span>
+</div>
+<div class="post-excerpt">
+  AI 自动化真正适合小生意的入口，不是替代员工，而是先帮老板理顺客户咨询、报价、售后、提醒和资料归档这些容易混乱的环节。
+</div>
+<span class="read-more">阅读全文 →</span>
+</a>
+
 <a href="/posts/2026-06-09-agent-security-family-ai-studio.html" class="post-card">
 <div class="post-header">
   <span class="post-title">从数字员工到家庭 AI 工作室：Agent 安全怎么做</span>
