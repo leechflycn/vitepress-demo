@@ -36,7 +36,9 @@ export default defineConfig({
       { text: '🤖 AI 工具', link: '/ai/' },
       { text: '🔧 折腾日记', link: '/tinkering/' },
       { text: '💰 副业笔记', link: '/side-biz/' },
-      { text: '🦞 部署服务', link: '/openclaw-service' }
+      { text: '🦞 部署服务', link: '/openclaw-service' },
+      { text: '隐私政策', link: '/privacy' },
+      { text: '免责声明', link: '/disclaimer' }
     ],
     sidebar: {
       '/ai/': [

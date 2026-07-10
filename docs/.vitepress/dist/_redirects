@@ -1,0 +1,33 @@
+# 301 Redirects - 博客三分类重构 (2026-07-10)
+# 旧分类 posts/tutorials/tools/hardware -> 新分类 ai/tinkering/side-biz
+
+/posts/2026-04-29-ai /ai/2026-04-29-ai 301
+/posts/2026-06-09-agent-security-family-ai-studio /ai/2026-06-09-agent-security-family-ai-studio 301
+/posts/ai-automation-small-business-2026-06-17 /ai/ai-automation-small-business-2026-06-17 301
+/posts/ai-enterprise-production-2026-05-22 /ai/ai-enterprise-production-2026-05-22 301
+/posts/ai-foreign-language-2026-05-31 /ai/ai-foreign-language-2026-05-31 301
+/posts/ai-like-baby-real-world-2026-05-18 /ai/ai-like-baby-real-world-2026-05-18 301
+/posts/pve-ai-ops-review-2026-05-14 /ai/pve-ai-ops-review-2026-05-14 301
+/posts/skill-before-agent-2026-06-05 /ai/skill-before-agent-2026-06-05 301
+/tutorials/ai-memory-system /ai/ai-memory-system 301
+/tools/agent-compliance /ai/agent-compliance 301
+/posts/2026-06-09-low-cost-tech-middle-east-conflict /side-biz/2026-06-09-low-cost-tech-middle-east-conflict 301
+/posts/app-privacy-31-apps /side-biz/app-privacy-31-apps 301
+/posts/yiwu-boss-lady-global /side-biz/yiwu-boss-lady-global 301
+/tools/cloudflare-cdn /tinkering/cloudflare-cdn 301
+/tools/domain-migration /tinkering/domain-migration 301
+/tools/risk-control /tinkering/risk-control 301
+/tools/vitepress-publish /tinkering/vitepress-publish 301
+/tutorials/docker-install /tinkering/docker-install 301
+/tutorials/nas-phone-access /tinkering/nas-phone-access 301
+/tutorials/nas-remote /tinkering/nas-remote 301
+/tutorials/openclaw-recovery /tinkering/openclaw-recovery 301
+/posts/feishu-bot-tutorial /tinkering/feishu-bot-tutorial 301
+/posts/istoreos-node-repair /tinkering/istoreos-node-repair 301
+/posts/pve-ubuntu-install-guide-2026-05-01 /tinkering/pve-ubuntu-install-guide-2026-05-01 301
+/posts/remote-networking-ai-studio-2026-06-05 /tinkering/remote-networking-ai-studio-2026-06-05 301
+/posts/wireguard-vps-udp-no-packet-2026-05-22 /tinkering/wireguard-vps-udp-no-packet-2026-05-22 301
+/hardware/oect-hdparm-sleep /tinkering/oect-hdparm-sleep 301
+/hardware/pve-samba /tinkering/pve-samba 301
+/tools/feishu-bot-setup /tinkering/feishu-bot-tutorial 301
+/tutorials/feishu-bot-setup /tinkering/feishu-bot-tutorial 301
