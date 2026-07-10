@@ -11,7 +11,6 @@ export default defineConfig({
     const feed = new Feed({
       title: 'leechbox',
       description: '影子的折腾日常',
-  head: [ ['script', { async: '', src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' }] ],
       id: 'https://leechbox.xyz/',
       link: 'https://leechbox.xyz/',
       language: 'zh-CN',
@@ -34,47 +33,58 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: 'IT 折腾日记', items: [
-        { text: '硬件与 NAS', link: '/hardware/pve-samba' },
-        { text: '账号风控', link: '/tools/risk-control' },
-        { text: '建站避坑', link: '/tools/cloudflare-cdn' }
-      ]},
-      { text: 'Docker 教程', link: '/tutorials/docker-install' },
-      { text: '零基础搞定 NAS 外网访问！', link: '/tutorials/nas-remote' },
-      { text: '手机随时访问 NAS (易有云)', link: '/tutorials/nas-phone-access' },
-      { text: '飞书机器人 (急救龙虾) 教程', link: '/tutorials/feishu-bot-setup' },
+      { text: '🤖 AI 工具', link: '/ai/' },
+      { text: '🔧 折腾日记', link: '/tinkering/' },
+      { text: '💰 副业笔记', link: '/side-biz/' },
       { text: '🦞 部署服务', link: '/openclaw-service' }
     ],
     sidebar: {
-      '/tutorials/': [
+      '/ai/': [
         {
-          text: '教程与配套代码',
+          text: 'AI 工具',
           items: [
-            { text: '告别纯文本！AI 助理双核记忆系统实战', link: '/tutorials/ai-memory-system' },
-            { text: 'Docker 安装与配置', link: '/tutorials/docker-install' },
-            { text: '零基础搞定 NAS 外网访问！', link: '/tutorials/nas-remote' },
-            { text: '手机随时访问 NAS (易有云)', link: '/tutorials/nas-phone-access' },
-            { text: '飞书机器人注册与配置全通关指南', link: '/tutorials/feishu-bot-setup' }
+            { text: 'AI 助理双核记忆系统实战', link: '/ai/ai-memory-system' },
+            { text: 'AI 落地企业生产的真实路径', link: '/ai/ai-enterprise-production-2026-05-22' },
+            { text: 'AI 外语学习新范式', link: '/ai/ai-foreign-language-2026-05-31' },
+            { text: 'AI 像婴儿一样理解真实世界', link: '/ai/ai-like-baby-real-world-2026-05-18' },
+            { text: 'AI 自动化与小企业', link: '/ai/ai-automation-small-business-2026-06-17' },
+            { text: '先有技能再谈 Agent', link: '/ai/skill-before-agent-2026-06-05' },
+            { text: 'Agent 安全与家庭 AI 工作室', link: '/ai/2026-06-09-agent-security-family-ai-studio' },
+            { text: 'PVE + AI 运维复盘', link: '/ai/pve-ai-ops-review-2026-05-14' },
+            { text: 'AI 开发者合规避坑', link: '/ai/agent-compliance' },
+            { text: 'AI 初印象', link: '/ai/2026-04-29-ai' }
           ]
         }
       ],
-      '/tools/': [
+      '/tinkering/': [
         {
-          text: '网络与建站',
+          text: '折腾日记',
           items: [
-            { text: 'AI 开发者合规避坑与免责声明', link: '/tools/agent-compliance' },
-            { text: '账号风控：TG与服务器', link: '/tools/risk-control' },
-            { text: '域名托管与 CDN 加速', link: '/tools/cloudflare-cdn' },
-            { text: '小白必看：如何给独立博客发帖', link: '/tools/vitepress-publish' },
-            { text: '实战：如何优雅更换博客域名', link: '/tools/domain-migration' }
+            { text: 'PVE 与 NAS 数据中心实录', link: '/tinkering/pve-samba' },
+            { text: 'OECT 硬盘休眠配置', link: '/tinkering/oect-hdparm-sleep' },
+            { text: 'Docker 安装与配置', link: '/tinkering/docker-install' },
+            { text: 'NAS 外网访问指南', link: '/tinkering/nas-remote' },
+            { text: '手机访问 NAS (易有云)', link: '/tinkering/nas-phone-access' },
+            { text: 'OpenClaw 故障恢复', link: '/tinkering/openclaw-recovery' },
+            { text: '域名托管与 CDN 加速', link: '/tinkering/cloudflare-cdn' },
+            { text: '优雅更换博客域名', link: '/tinkering/domain-migration' },
+            { text: 'VitePress 发布指南', link: '/tinkering/vitepress-publish' },
+            { text: '账号风控：TG 与服务器', link: '/tinkering/risk-control' },
+            { text: 'WireGuard VPS UDP 排障', link: '/tinkering/wireguard-vps-udp-no-packet-2026-05-22' },
+            { text: 'PVE Ubuntu 安装指南', link: '/tinkering/pve-ubuntu-install-guide-2026-05-01' },
+            { text: '远程组网与 AI 工作室', link: '/tinkering/remote-networking-ai-studio-2026-06-05' },
+            { text: 'iStoreOS 节点修复', link: '/tinkering/istoreos-node-repair' },
+            { text: '飞书机器人配置教程', link: '/tinkering/feishu-bot-tutorial' }
           ]
         }
       ],
-      '/hardware/': [
+      '/side-biz/': [
         {
-          text: '硬件与存储系统',
+          text: '副业笔记',
           items: [
-            { text: 'PVE 与 NAS 数据中心实录', link: '/hardware/pve-samba' }
+            { text: '义乌老板娘的全球化之路', link: '/side-biz/yiwu-boss-lady-global' },
+            { text: '低成本科技与中东冲突', link: '/side-biz/2026-06-09-low-cost-tech-middle-east-conflict' },
+            { text: '31 款 App 隐私合规分析', link: '/side-biz/app-privacy-31-apps' }
           ]
         }
       ]
