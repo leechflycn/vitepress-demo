@@ -33,12 +33,10 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '🤖 AI 工具', link: '/ai/' },
-      { text: '🔧 折腾日记', link: '/tinkering/' },
-      { text: '💰 副业笔记', link: '/side-biz/' },
-      { text: '🦞 部署服务', link: '/openclaw-service' },
-      { text: '隐私政策', link: '/privacy' },
-      { text: '免责声明', link: '/disclaimer' }
+      { text: 'AI 工具', link: '/ai/' },
+      { text: '折腾日记', link: '/tinkering/' },
+      { text: '副业笔记', link: '/side-biz/' },
+      { text: '部署服务', link: '/openclaw-service' }
     ],
     sidebar: {
       '/ai/': [
@@ -101,7 +99,7 @@ export default defineConfig({
       } 
     ],
     footer: {
-      message: '本站内容仅供技术分享与学习探讨',
+      message: '本站内容仅供技术分享与学习探讨 · <a href="/privacy-policy">隐私政策</a> · <a href="/disclaimer">免责声明</a>',
       copyright: 'Copyright © 2026 影子的电脑小白技术分享平台'
     }
   }
