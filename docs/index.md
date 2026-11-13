@@ -112,7 +112,7 @@ features:
 
 <h2>📖 最新文章</h2>
 <div class="post-grid">
-<a href="/posts/ai-automation-small-business-2026-06-17.html" class="post-card">
+<a href="/ai/ai-automation-small-business-2026-06-17" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 自动化真正的机会：帮小生意少踩坑</span>
   <span class="post-date">AI 自动化</span>
@@ -123,7 +123,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/2026-06-09-agent-security-family-ai-studio.html" class="post-card">
+<a href="/ai/2026-06-09-agent-security-family-ai-studio" class="post-card">
 <div class="post-header">
   <span class="post-title">从数字员工到家庭 AI 工作室：Agent 安全怎么做</span>
   <span class="post-date">AI 安全</span>
@@ -134,7 +134,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/2026-06-09-low-cost-tech-middle-east-conflict.html" class="post-card">
+<a href="/side-biz/2026-06-09-low-cost-tech-middle-east-conflict" class="post-card">
 <div class="post-header">
   <span class="post-title">低成本技术，正在重写中东冲突</span>
   <span class="post-date">技术观察</span>
@@ -145,7 +145,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/skill-before-agent-2026-06-05.html" class="post-card">
+<a href="/ai/skill-before-agent-2026-06-05" class="post-card">
 <div class="post-header">
   <span class="post-title">先 Skill 后 Agent：为什么 AI 工作流不能只靠一个聪明模型</span>
   <span class="post-date">AI 工作流</span>
@@ -156,7 +156,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/remote-networking-ai-studio-2026-06-05.html" class="post-card">
+<a href="/tinkering/remote-networking-ai-studio-2026-06-05" class="post-card">
 <div class="post-header">
   <span class="post-title">家庭 AI 工作室，为什么先要解决异地组网？</span>
   <span class="post-date">家庭 AI</span>
@@ -167,7 +167,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/app-privacy-31-apps.html" class="post-card">
+<a href="/side-biz/app-privacy-31-apps" class="post-card">
 <div class="post-header">
   <span class="post-title">31款APP被通报：你的手机，正在被谁偷偷打扰？</span>
   <span class="post-date">数字安全</span>
@@ -178,7 +178,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/yiwu-boss-lady-global.html" class="post-card">
+<a href="/side-biz/yiwu-boss-lady-global" class="post-card">
 <div class="post-header">
   <span class="post-title">“义乌老板娘”火到海外：小商品出海，拼的不只是便宜</span>
   <span class="post-date">商业观察</span>
@@ -189,7 +189,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/ai-like-baby-real-world-2026-05-18.html" class="post-card">
+<a href="/ai/ai-like-baby-real-world-2026-05-18" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 像婴儿一样无知，但它已经闯进了真实世界</span>
   <span class="post-date">AI 观察</span>
@@ -200,7 +200,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/2026-04-29-ai.html" class="post-card">
+<a href="/ai/2026-04-29-ai" class="post-card">
 <div class="post-header">
   <span class="post-title">马斯克奥特曼冲突背后：AI竞争为何转向算力平台、国产芯片与产业落地</span>
   <span class="post-date">AI 观察</span>
@@ -211,7 +211,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/posts/istoreos-node-repair.html" class="post-card">
+<a href="/tinkering/istoreos-node-repair" class="post-card">
 <div class="post-header">
   <span class="post-title">一次 iStoreOS 虚拟机故障排查与管理补全实录</span>
   <span class="post-date">运维</span>
@@ -222,7 +222,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/tutorials/openclaw-recovery.html" class="post-card">
+<a href="/tinkering/openclaw-recovery" class="post-card">
 <div class="post-header">
   <span class="post-title">AI 助理失联怎么办？本地部署灾备与急救指南</span>
   <span class="post-date">AI 私有化</span>
@@ -233,7 +233,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/hardware/oect-hdparm-sleep.html" class="post-card">
+<a href="/tinkering/oect-hdparm-sleep" class="post-card">
 <div class="post-header">
   <span class="post-title">OECT (Armbian) 挂载外置硬盘不休眠的排障与修复实战</span>
   <span class="post-date">硬件</span>
@@ -244,7 +244,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/tutorials/ai-memory-system.html" class="post-card">
+<a href="/ai/ai-memory-system" class="post-card">
 <div class="post-header">
   <span class="post-title">告别纯文本！AI 助理的「本地双核记忆系统」魔改实战</span>
   <span class="post-date">AI 私有化</span>
@@ -256,7 +256,7 @@ features:
 </a>
 
 
-<a href="/tools/vitepress-publish.html" class="post-card">
+<a href="/tinkering/vitepress-publish" class="post-card">
 <div class="post-header">
   <span class="post-title">小白实操：如何给自己的独立博客发布新文章？</span>
   <span class="post-date">建站</span>
@@ -267,7 +267,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/tutorials/docker-install.html" class="post-card">
+<a href="/tinkering/docker-install" class="post-card">
 <div class="post-header">
   <span class="post-title">3分钟装好 Docker (附国内可用镜像源)</span>
   <span class="post-date">Docker</span>
@@ -278,7 +278,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/hardware/pve-samba.html" class="post-card">
+<a href="/tinkering/pve-samba" class="post-card">
 <div class="post-header">
   <span class="post-title">PVE 虚拟机搭建与 NAS 存储架构避坑</span>
   <span class="post-date">硬件</span>
@@ -289,7 +289,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/tools/agent-compliance.html" class="post-card">
+<a href="/ai/agent-compliance" class="post-card">
 <div class="post-header">
   <span class="post-title">AI Agent 开发者避坑指南与免责声明模板</span>
   <span class="post-date">账号风控</span>
@@ -300,7 +300,7 @@ features:
 <span class="read-more">阅读全文 →</span>
 </a>
 
-<a href="/tools/cloudflare-cdn.html" class="post-card">
+<a href="/tinkering/cloudflare-cdn" class="post-card">
 <div class="post-header">
   <span class="post-title">Cloudflare CDN 加速与防封指南</span>
   <span class="post-date">网络</span>
